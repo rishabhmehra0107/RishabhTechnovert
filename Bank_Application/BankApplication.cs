@@ -13,7 +13,7 @@ namespace Bank_Application
 			this.Bank = new Bank();
         }
 
-		Admin ad = new Admin();
+		Admin ad;
 		
 		public void MainMenu()
 		{
@@ -48,13 +48,13 @@ namespace Bank_Application
 			Console.WriteLine("Enter location: ");
 			this.Bank.Location = GetStringInput(Console.ReadLine());
 			Console.WriteLine("Bank setup is completed. Please provide admin details");
-			Admin admin = new Admin() { Type = "Admin" };
+			ad = new Admin() { Type = "Admin" };
 			Console.WriteLine("Enter Admin username: ");
-			var name= admin.UserName = GetStringInput(Console.ReadLine());
+			var name= ad.UserName = GetStringInput(Console.ReadLine());
 			Console.WriteLine("Enter Admin password: ");
-			var password=admin.Password = Console.ReadLine();
+			var password=ad.Password = Console.ReadLine();
 
-			this.Bank.admin.Add(ad);
+			this.Bank.Admins.Add(ad);
 			
 
 			string GetStringInput(string str)
@@ -140,13 +140,15 @@ namespace Bank_Application
 				Console.WriteLine("Enter Admin password: ");
 				pass = Console.ReadLine();
 
-				
-					
-						StaffAccount newStaff = new StaffAccount(bankk, user, pass);
-					
-						
-				
-			
+				if (ad.UserName == user && ad.Password == pass)
+				{
+					StaffAccount newStaff = new StaffAccount(bankk, user, pass);
+				}
+				else
+				{
+					Console.WriteLine("Wrong Username or Password for Admin");
+				}
+
 				MainMenu();
 			}
 

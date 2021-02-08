@@ -8,6 +8,6 @@ namespace Bank_Application
         public string Location { get; set; }
         public List<User> Users { get; set; }
         public List<Branch> Branches = new List<Branch>();
-        public List<Admin> admin = new List<Admin>();
+        public List<Admin> Admins = new List<Admin>();
     }
 }
