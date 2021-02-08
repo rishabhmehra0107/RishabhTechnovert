@@ -146,14 +146,14 @@ namespace Bank_Application
 		public void updateCharges()
 		{
 			Console.WriteLine("Select account from the list");
-			foreach (User user in getUser)
+			foreach (User user in this.Bank.Users)
 			{
 				Console.WriteLine(user.UserName+" "+user.Id);
 			}
 
 			Console.WriteLine("Enter username: ");
 			string strname = Convert.ToString(Console.ReadLine());
-			foreach (User user in getUser)
+			foreach (User user in this.Bank.Users)
 			{
 				if (user.UserName == strname)
 				{
@@ -178,7 +178,7 @@ namespace Bank_Application
 					}
 					this.Bank.Branches.Add(Branch);
 					int flag = 0;
-					foreach (Branch branch1 in GetBranches)
+					foreach (Branch branch1 in this.Bank.Branches)
 					{
 						if (branch1.BankId== bname.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy"))
 						{
