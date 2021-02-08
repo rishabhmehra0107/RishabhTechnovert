@@ -1,18 +1,11 @@
 ﻿using System;
-namespace BankApplication
+namespace Bank_Application
 {
     public class Branch
     {
-        public Branch()
-        {
-        }
-        public string bankName { get; set; }
-        public string bankLocation { get; set; }
+        public string Id { get; set; }
+        public string BankId { get; set; }
+        public string BankLocation { get; set; }
        
-        public Branch(string bankName, string bankLocation)
-        {
-            this.bankName = bankName;
-            this.bankLocation = bankLocation;
-        }
     }
 }

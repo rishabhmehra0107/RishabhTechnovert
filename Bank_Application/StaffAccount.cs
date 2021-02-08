@@ -1,29 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-namespace BankApplication
+namespace Bank_Application
 {
     public class StaffAccount
     {
 		public List<Staff> getStaff = new List<Staff>();
+		public List<Branch> GetBranches = new List<Branch>();
 		public List<User> getUser = new List<User>();
-		public List<Branch> getBranch = new List<Branch>();
+		
 		public string bankk { get; set; }
 		public string user { get; set; }
 		public string pass { get; set; }
 		public string role = "Bank Staff";
 		public string accountId { get; set; }
 
-
-
+		Bank bank = new Bank();
+		Branch branch = new Branch();
+		Staff staff;
 		public StaffAccount(string bankk, string user, string pass)
 		{
 			this.bankk = bankk;
 			this.user = user;
 			this.pass = pass;
+			branch.BankId= this.bankk.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
+			branch.BankLocation= GetStringInput(Console.ReadLine());
+			branch.Id= GetStringInput(Console.ReadLine());
 
-			var branchDetails = new Branch(bankk,"Delhi");
-			getBranch.Add(branchDetails);
+			this.bank.Branches.Add(branch);
+
+			string GetStringInput(string str)
+			{
+				if (Regex.IsMatch(str, "^[a-zA-Z]+$"))
+				{
+					return str;
+				}
+				else
+				{
+					return "Invalid Input";
+				}
+			}
+
+			
 
 			Console.WriteLine("Admin{0} present in the system ", user);
 			NextMenu();
@@ -80,8 +98,10 @@ namespace BankApplication
 			}
 	
 			this.accountId = user.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
-			var staffDetails = new Staff(Staffuser, Staffpass, role, accountId);
-			getStaff.Add(staffDetails);
+
+			staff = new Staff() { UserName = Staffuser, Password = Staffpass, Type = "Bank Staff", Id = accountId };
+
+			this.bank.Users.Add(staff);
 			Console.WriteLine("Username {0} staff account created", Staffuser);
 			NextMenu();
 
@@ -102,8 +122,8 @@ namespace BankApplication
 			}
 
 			this.accountId = holderUser.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
-			var userDetails = new User(holderUser, holderPass, "Account Holder", accountId);
-			getUser.Add(userDetails);
+			User user = new User() { Id = accountId, Password = holderPass, Type = "Account Holder", UserName = holderUser };
+			this.bank.Users.Add(user);
 			Console.WriteLine("Username {0} Account Holder account created", holderUser);
 			NextMenu();
 
@@ -113,12 +133,12 @@ namespace BankApplication
 			Console.WriteLine("Bank Staff Users");
 			foreach (Staff staff in getStaff)
 			{
-				Console.WriteLine(staff.userName);
+				Console.WriteLine(staff.UserName);
 			}
 			Console.WriteLine("Bank Account Holders");
 			foreach (User user in getUser)
 			{
-				Console.WriteLine(user.userName);
+				Console.WriteLine(user.UserName);
 			}
 			NextMenu();
 		}
@@ -127,25 +147,39 @@ namespace BankApplication
 			Console.WriteLine("Select account from the list");
 			foreach (User user in getUser)
 			{
-				Console.WriteLine(user.userName+" "+user.Id);
+				Console.WriteLine(user.UserName+" "+user.Id);
 			}
 
 			Console.WriteLine("Enter username: ");
 			string strname = Convert.ToString(Console.ReadLine());
 			foreach (User user in getUser)
 			{
-				if (user.userName == strname)
+				if (user.UserName == strname)
 				{
 					Console.WriteLine("Username: {0} \nDefault RTGS for same bank: 0%, Default RTGS for different bank: 2%, Default IMPS for same bank: 5%, Default IMPS for different bank: 6%, ", strname);
 					Console.WriteLine("Enter bankname of user: ");
 					string bname = Console.ReadLine();
 					Console.WriteLine("Enter Bank Location: ");
 					string location = Console.ReadLine();
-					Branch branch = new Branch(bname, location);
-					int flag = 0;
-					foreach (Branch branch1 in getBranch)
+					this.branch.BankId = bname.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
+					this.branch.BankLocation = GetStringInput(Console.ReadLine());
+					this.branch.Id = GetStringInput(Console.ReadLine());
+					string GetStringInput(string str)
 					{
-						if (branch1.bankName==bname)
+						if (Regex.IsMatch(str, "^[a-zA-Z]+$"))
+						{
+							return str;
+						}
+						else
+						{
+							return "Invalid Input";
+						}
+					}
+					this.bank.Branches.Add(branch);
+					int flag = 0;
+					foreach (Branch branch1 in GetBranches)
+					{
+						if (branch1.BankId== bname.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy"))
 						{
 							Console.WriteLine("Since same bank, the new charges are:-");
 							Console.WriteLine("RTGS: ");
@@ -186,6 +220,7 @@ namespace BankApplication
 				if (Regex.IsMatch(currencyName, "^[a-zA-Z]*$"))
 				{
 					Console.WriteLine("Enter Currency Value Cnoverted To INR:");
+					
 					try
 					{
 						conversionToInr = Convert.ToInt32(Console.ReadLine());

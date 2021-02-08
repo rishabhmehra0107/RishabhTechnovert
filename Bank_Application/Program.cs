@@ -1,11 +1,11 @@
 ﻿using System;
-namespace BankApplication
+namespace Bank_Application
 {
     class Program
     {
         static void Main(string[] args)
         {
-            InitiateBank bank = new InitiateBank();
+            BankApplication bank = new BankApplication();
             bank.BankMenu();
         }
     }

@@ -1,18 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-namespace BankApplication
+namespace Bank_Application
 {
-	public class InitiateBank
+	public class BankApplication
 	{
+		
+		Bank Bank;
 
-		public List<Admin> getAdmin = new List<Admin>();
-		public List<Branch> getBranch = new List<Branch>();
+		public BankApplication()
+        {
+			this.Bank = new Bank();
+        }
+
+		Admin ad = new Admin();
 		
 		public void BankMenu()
 		{
-			Console.WriteLine("Welcome to Bank Application\n");
-			Console.WriteLine("1. Setup New Bank \n2. User login\n3. Exit");
+			Console.WriteLine("Welcome to Bank Application\n1. Setup New Bank \n2. User login\n3. Exit");
 			string enterchoice = Console.ReadLine();
 			int SubmitChoice = Convert.ToInt32(enterchoice);
 
@@ -38,54 +43,39 @@ namespace BankApplication
 
 		public void SetupBank()
 		{
-			string bankName = " ";
-			string userName = " ";
-			string password = " ";
-			string role = "Admin";
-			string location = " ";
+			Console.WriteLine("Enter bankname: ");
+			this.Bank.Name = GetStringInput(Console.ReadLine());
+			Console.WriteLine("Enter location: ");
+			this.Bank.Location = GetStringInput(Console.ReadLine());
+			Console.WriteLine("Bank setup is completed. Please provide admin details");
+			Admin admin = new Admin() { Type = "Admin" };
+			Console.WriteLine("Enter Admin username: ");
+			var name= admin.UserName = GetStringInput(Console.ReadLine());
+			Console.WriteLine("Enter Admin password: ");
+			var password=admin.Password = Console.ReadLine();
+
+			this.Bank.admin.Add(ad);
 			
 
-			Console.WriteLine("Enter bankname: ");
-			bankName = Console.ReadLine();
-			if (Regex.IsMatch(bankName, "^[a-zA-Z]+$"))
+			string GetStringInput(string str)
 			{
-				Console.WriteLine("Enter location: ");
-				location = Console.ReadLine();
-
-				if (Regex.IsMatch(location, "^[a-zA-Z]+$"))
+				if (Regex.IsMatch(str, "^[a-zA-Z]+$"))
 				{
-					Console.WriteLine("Enter Admin username: ");
-					userName = Console.ReadLine();
-
-					if (Regex.IsMatch(userName, "^[a-zA-Z]+$"))
-					{
-						Console.WriteLine("Enter Admin password: ");
-						password = Console.ReadLine();
-					}
-					else
-					{
-						Console.WriteLine("Invalid Username");
-					}
+					return str;
 				}
-				else
-				{
-					Console.WriteLine("Invalid Location");
-				}
-
-			}
-			else
-			{
-				Console.WriteLine("Inavlid Bank");
+                else
+                {
+					return "Invalid Input";
+                }
 			}
 
+			Branch branch = new Branch();
 
-			var adminDetails = new Admin(userName, password, role);
-			getAdmin.Add(adminDetails);
+			branch.BankId = this.Bank.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
+			branch.BankLocation = GetStringInput(Console.ReadLine());
+			branch.Id = GetStringInput(Console.ReadLine());
 
-			var branchDetails = new Branch(bankName, location);
-			getBranch.Add(branchDetails);
-
-			BankSetup newBank = new BankSetup(bankName, userName, password);
+			BankSetup newBank = new BankSetup(this.Bank.Name, name, password);
 			BankMenu();
 		}
 
@@ -121,9 +111,8 @@ namespace BankApplication
 				Console.WriteLine("Enter Admin password: ");
 				pass = Console.ReadLine();
 
-				foreach (Admin ad in getAdmin)
-				{
-					if (ad.userName == user && ad.password == pass)
+				
+					if (ad.UserName == user && ad.Password == pass)
 					{
 						Account newAccount = new Account();
 						newAccount.setupAccount();
@@ -133,7 +122,7 @@ namespace BankApplication
 						Console.WriteLine("Wrong Username or Password for Admin");
 					}
 
-				}
+				
 
 				BankMenu();
 			}
@@ -151,18 +140,12 @@ namespace BankApplication
 				Console.WriteLine("Enter Admin password: ");
 				pass = Console.ReadLine();
 
-				foreach (Admin ad in getAdmin)
-                {
-					if(ad.userName==user && ad.password == pass)
-                    {
+				
+					
 						StaffAccount newStaff = new StaffAccount(bankk, user, pass);
-					}
-                    else
-                    {
-						Console.WriteLine("Wrong Username or Password for Admin");
-                    }
+					
 						
-				}
+				
 			
 				BankMenu();
 			}

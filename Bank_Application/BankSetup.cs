@@ -1,5 +1,5 @@
 ﻿using System;
-namespace BankApplication
+namespace Bank_Application
 {
     public class BankSetup
     {

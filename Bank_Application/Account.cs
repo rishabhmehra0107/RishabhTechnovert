@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-namespace BankApplication
+namespace Bank_Application
 {
     public class Account
     {
-		
-		public List<User> getUsers = new List<User>();
+
+		Bank bank = new Bank();
 		public List<double> DepositList = new List<double>();
 		public List<double> WithdrawList = new List<double>();
 		public Account()
@@ -26,8 +26,8 @@ namespace BankApplication
 			password = Console.ReadLine();
 			initialBalance = 1000;
 			accountId = userName.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
-			var userDetails = new User(userName, password, role, accountId);
-			getUsers.Add(userDetails);
+			User users = new User() { UserName = userName, Password = password, Type = "Account Holder", Id = accountId };
+			this.bank.Users.Add(users);
 
 			Console.WriteLine("Username: {0} ,AccountID:{1}, Balance: {2}", userName, accountId, initialBalance);
 			NextMenu();

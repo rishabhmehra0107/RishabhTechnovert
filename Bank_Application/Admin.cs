@@ -1,20 +1,8 @@
 ﻿using System;
-namespace BankApplication
+namespace Bank_Application
 {
-    public class Admin
-    {
-
-        public string userName { get; set; }
-        public string password { get; set; }
-        public string userType { get; set; }
-        
-        public Admin(string username, string password, string type)
-        {
-            this.userName = username;
-            this.password = password;
-            this.userType = type;
-           
-        }
+    public class Admin : User
+    { 
 
     }
 }
