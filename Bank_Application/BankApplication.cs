@@ -75,7 +75,7 @@ namespace Bank_Application
 			branch.BankLocation = GetStringInput(Console.ReadLine());
 			branch.Id = GetStringInput(Console.ReadLine());
 
-			BankSetup newBank = new BankSetup(this.Bank.Name, name, password);
+			Console.WriteLine("Bankname: {0}, Username: {1}, Password {2}",this.Bank.Name,name,password);
 			MainMenu();
 		}
 
