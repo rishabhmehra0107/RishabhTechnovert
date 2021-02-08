@@ -6,109 +6,109 @@ namespace Bank_Application
     public class Account
     {
 
-		Bank bank = new Bank();
+		Bank Bank = new Bank();
 		public List<double> DepositList = new List<double>();
 		public List<double> WithdrawList = new List<double>();
 		public Account()
         {
         }
-		public string userName { get; set; }
-		public string password { get; set; }
-		public string role = "Account Holder";
-		public double initialBalance { get; set; }
-		public string accountId { get; set; }
+		public string UserName { get; set; }
+		public string Password { get; set; }
+		public string Role = "Account Holder";
+		public double InitialBalance { get; set; }
+		public string AccountId { get; set; }
 
 		public void setupAccount()
 		{
 			Console.WriteLine("Enter Account Holder username");
-			userName = Console.ReadLine();
+			UserName = Console.ReadLine();
 			Console.WriteLine("Enter Account Holder password");
-			password = Console.ReadLine();
-			initialBalance = 1000;
-			accountId = userName.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
-			User users = new User() { UserName = userName, Password = password, Type = "Account Holder", Id = accountId };
-			this.bank.Users.Add(users);
+			Password = Console.ReadLine();
+			InitialBalance = 1000;
+			AccountId = UserName.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
+			User users = new User() { UserName = UserName, Password = Password, Type = "Account Holder", Id = AccountId };
+			this.Bank.Users.Add(users);
 
-			Console.WriteLine("Username: {0} ,AccountID:{1}, Balance: {2}", userName, accountId, initialBalance);
-			NextMenu();
+			Console.WriteLine("Username: {0} ,AccountID:{1}, Balance: {2}", UserName, AccountId, InitialBalance);
+			nextMenu();
 		}
 
-		public void NextMenu()
+		public void nextMenu()
 		{
-			double balance = initialBalance;
+			double balance = InitialBalance;
 			Console.WriteLine("1.Withdrawl \n2.Deposit\n3.Deposit History\n4.Withdraw History\n5.Logout");
-			string MenuList = Console.ReadLine();
-			int NextChoice = Convert.ToInt32(MenuList);
+			string menuList = Console.ReadLine();
+			int nextChoice = Convert.ToInt32(menuList);
 
-			switch (NextChoice)
+			switch (nextChoice)
 			{
 				case 1:
-					Withdraw();
+					withdraw();
 					break;
 				case 2:
-					Deposit();
+					deposit();
 					break;
 
 				case 3:
-					DepositHistory();
+					depositHistory();
 					break;
 				case 4:
-					WithdrawHistory();
+					withdrawHistory();
 					break;
 				case 5:
-					Logout();
+					logout();
 					break;
 			}
 		}
 
-		public double Withdraw()
+		public double withdraw()
 		{
-			Console.WriteLine("Available Balance: {0}", initialBalance);
+			Console.WriteLine("Available Balance: {0}", InitialBalance);
 			Console.WriteLine("Withdraw Amount: ");
-			double WithdrawAmt = Convert.ToDouble(Console.ReadLine());
-			WithdrawList.Add(WithdrawAmt);
-			initialBalance = initialBalance -= WithdrawAmt;
-			Console.WriteLine(initialBalance);
-			NextMenu();
-			return WithdrawAmt;
+			double withdrawAmt = Convert.ToDouble(Console.ReadLine());
+			WithdrawList.Add(withdrawAmt);
+			InitialBalance = InitialBalance -= withdrawAmt;
+			Console.WriteLine("New Balance: {0}",InitialBalance);
+			nextMenu();
+			return withdrawAmt;
 		}
 
-		public double Deposit()
+		public double deposit()
 		{
-			Console.WriteLine("Available Balance: {0}", initialBalance);
+			Console.WriteLine("Available Balance: {0}", InitialBalance);
 			Console.WriteLine("Deposit Amount: ");
-			double DepositAmt = Convert.ToDouble(Console.ReadLine());
+			double depositAmt = Convert.ToDouble(Console.ReadLine());
 
 
-			DepositList.Add(DepositAmt);
+			DepositList.Add(depositAmt);
 
-			initialBalance = initialBalance + DepositAmt;
-			Console.WriteLine(initialBalance);
-			NextMenu();
-			return DepositAmt;
+			InitialBalance = InitialBalance + depositAmt;
+			Console.WriteLine("New Balance: {0}", InitialBalance);
+			nextMenu();
+			return depositAmt;
 		}
 
-		public void DepositHistory()
+		public void depositHistory()
 		{
 			foreach (double i in DepositList)
 			{
 				Console.WriteLine("Deposit History: " + i);
 			}
-			NextMenu();
+			nextMenu();
 		}
 
-		public void WithdrawHistory()
+		public void withdrawHistory()
 		{
 			foreach (double i in WithdrawList)
 			{
 				Console.WriteLine("Withdraw History: " + i);
 			}
-			NextMenu();
+			nextMenu();
 		}
 
-		public void Logout()
+		public void logout()
 		{
-			Console.WriteLine("Goodbye: " + userName);
+			Console.WriteLine("Goodbye: " + UserName);
 		}
 
 	}
