@@ -6,13 +6,10 @@ namespace Bank_Application
     public class StaffAccount
     {
 		
-		public List<Branch> GetBranches = new List<Branch>();
-		public List<User> getUser = new List<User>();
-	
-		public string bankk { get; set; }
-		public string user { get; set; }
-		public string pass { get; set; }
-		public string accountId { get; set; }
+		public string BankName { get; set; }
+		public string UserName { get; set; }
+		public string Password { get; set; }
+		public string AccountId { get; set; }
 
 		Bank Bank = new Bank();
 		Branch Branch = new Branch();
@@ -20,16 +17,16 @@ namespace Bank_Application
 		User User;
 		public StaffAccount(string bankk, string user, string pass)
 		{
-			this.bankk = bankk;
-			this.user = user;
-			this.pass = pass;
-			Branch.BankId= this.bankk.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
-			Branch.BankLocation= GetStringInput(Console.ReadLine());
-			Branch.Id= GetStringInput(Console.ReadLine());
+			this.BankName = bankk;
+			this.UserName = user;
+			this.Password = pass;
+			Branch.BankId= this.BankName.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
+			Branch.BankLocation= getStringInput(Console.ReadLine());
+			Branch.Id= getStringInput(Console.ReadLine());
 
 			this.Bank.Branches.Add(Branch);
 
-			string GetStringInput(string str)
+			string getStringInput(string str)
 			{
 				if (Regex.IsMatch(str, "^[a-zA-Z]+$"))
 				{
@@ -44,25 +41,25 @@ namespace Bank_Application
 			
 
 			Console.WriteLine("Admin{0} present in the system ", user);
-			NextMenu();
+			nextMenu();
 		}
 
-		public void NextMenu()
+		public void nextMenu()
 		{
 
 			Console.WriteLine("1. Add Staff\n2. Add Account Holder\n3.Display Bank User details\n4. Update Service Charges\n5. Add new Currency\n6. Logout");
-			int NextChoice = Convert.ToInt32(Console.ReadLine());
+			int nextChoice = Convert.ToInt32(Console.ReadLine());
 
-			switch (NextChoice)
+			switch (nextChoice)
 			{
 				case 1:
-					AddStaff();
+					addStaff();
 					break;
 				case 2:
-					AddAccountHolder();
+					addAccountHolder();
 					break;
 				case 3:
-					BankUsers();
+					bankUsers();
 					break;
 				case 4:
 					updateCharges();
@@ -75,38 +72,38 @@ namespace Bank_Application
 					break;
 				default:
 					Console.WriteLine("Please select option from the list");
-					NextMenu();
+					nextMenu();
 					break;
 
 			}
 		}
 
-		public void AddStaff()
+		public void addStaff()
 		{
 
 			Console.WriteLine("Enter username: ");
-			string Staffuser = Console.ReadLine();
-			string Staffpass = " ";
-			if (Regex.IsMatch(Staffuser, "^[a-zA-Z]*$"))
+			string staffUser = Console.ReadLine();
+			string staffPass = " ";
+			if (Regex.IsMatch(staffUser, "^[a-zA-Z]*$"))
 			{
 				Console.WriteLine("Enter password: ");
-				Staffpass = Convert.ToString(Console.ReadLine());
+				staffPass = Convert.ToString(Console.ReadLine());
 			}
 			else
 			{
 				Console.WriteLine("Username must contains alphabets only");
 			}
 	
-			this.accountId = user.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
+			this.AccountId = UserName.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
 
-			Staff = new Staff() { UserName = Staffuser, Password = Staffpass, Type = "Bank Staff", Id = accountId };
+			Staff = new Staff() { UserName = staffUser, Password = staffPass, Type = "Bank Staff", Id = AccountId };
 
 			this.Bank.Staffs.Add(Staff);
-			Console.WriteLine("Username {0} staff account created", Staffuser);
-			NextMenu();
+			Console.WriteLine("Username {0} staff account created", staffUser);
+			nextMenu();
 
 		}
-		public void AddAccountHolder()
+		public void addAccountHolder()
 		{
 			Console.WriteLine("Enter username: ");
 			string holderUser = Console.ReadLine();
@@ -121,14 +118,14 @@ namespace Bank_Application
 				Console.WriteLine("Username must contains alphabets only");
 			}
 
-			this.accountId = holderUser.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
-			User = new User() { Id = accountId, Password = holderPass, Type = "Account Holder", UserName = holderUser };
+			this.AccountId = holderUser.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
+			User = new User() { Id = AccountId, Password = holderPass, Type = "Account Holder", UserName = holderUser };
 			this.Bank.Users.Add(User);
 			Console.WriteLine("Username {0} Account Holder account created", holderUser);
-			NextMenu();
+			nextMenu();
 
 		}
-		public void BankUsers()
+		public void bankUsers()
 		{
 			Console.WriteLine("Bank Staff Users");
 			foreach (Staff staff in this.Bank.Staffs)
@@ -140,7 +137,7 @@ namespace Bank_Application
 			{
 				Console.WriteLine(user.UserName);
 			}
-			NextMenu();
+			nextMenu();
 		}
 		public void updateCharges()
 		{
@@ -202,7 +199,7 @@ namespace Bank_Application
 				
 			}
 
-			NextMenu();
+			nextMenu();
 		}
 
 		public void newCurrency()
@@ -243,12 +240,12 @@ namespace Bank_Application
 			{
 				Console.WriteLine("Invalid currency code");
 			}
-			NextMenu();
+			nextMenu();
 		}
 
 		public void Logout()
 		{
-			Console.WriteLine("Goodbye: " + user);
+			Console.WriteLine("Goodbye: " + UserName);
 		}
 	}
 }

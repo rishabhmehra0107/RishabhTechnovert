@@ -15,49 +15,49 @@ namespace Bank_Application
 
 		Admin ad;
 		
-		public void MainMenu()
+		public void mainMenu()
 		{
 			Console.WriteLine("Welcome to Bank Application\n1. Setup New Bank \n2. User login\n3. Exit");
-			string enterchoice = Console.ReadLine();
-			int SubmitChoice = Convert.ToInt32(enterchoice);
+			string enterChoice = Console.ReadLine();
+			int submitChoice = Convert.ToInt32(enterChoice);
 
-			switch (SubmitChoice)
+			switch (submitChoice)
 			{
 				case 1:
-					SetupBank();
+					setupBank();
 					break;
 				case 2:
-					UserLogin();
+					userLogin();
 					break;
 				case 3:
-					Exit();
+					exit();
 					break;
 				default:
 					Console.WriteLine("Please select option from the list");
-					MainMenu();
+					mainMenu();
 					break;
 
 
 			}
 		}
 
-		public void SetupBank()
+		public void setupBank()
 		{
 			Console.WriteLine("Enter bankname: ");
-			this.Bank.Name = GetStringInput(Console.ReadLine());
+			this.Bank.Name = getStringInput(Console.ReadLine());
 			Console.WriteLine("Enter location: ");
-			this.Bank.Location = GetStringInput(Console.ReadLine());
+			this.Bank.Location = getStringInput(Console.ReadLine());
 			Console.WriteLine("Bank setup is completed. Please provide admin details");
 			ad = new Admin() { Type = "Admin" };
 			Console.WriteLine("Enter Admin username: ");
-			var name= ad.UserName = GetStringInput(Console.ReadLine());
+			var name= ad.UserName = getStringInput(Console.ReadLine());
 			Console.WriteLine("Enter Admin password: ");
 			var password=ad.Password = Console.ReadLine();
 
 			this.Bank.Admins.Add(ad);
 			
 
-			string GetStringInput(string str)
+			string getStringInput(string str)
 			{
 				if (Regex.IsMatch(str, "^[a-zA-Z]+$"))
 				{
@@ -72,36 +72,36 @@ namespace Bank_Application
 			Branch branch = new Branch();
 
 			branch.BankId = this.Bank.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
-			branch.BankLocation = GetStringInput(Console.ReadLine());
-			branch.Id = GetStringInput(Console.ReadLine());
+			branch.BankLocation = getStringInput(Console.ReadLine());
+			branch.Id = getStringInput(Console.ReadLine());
 
 			Console.WriteLine("Bankname: {0}, Username: {1}, Password {2}",this.Bank.Name,name,password);
-			MainMenu();
+			mainMenu();
 		}
 
-		void UserLogin()
+		void userLogin()
 		{
 			Console.WriteLine("1. Bank Staff \n2. Account Holder");
-			string typechoice = Console.ReadLine();
-			int enterChoice = Convert.ToInt32(typechoice);
+			string typeChoice = Console.ReadLine();
+			int enterChoice = Convert.ToInt32(typeChoice);
 
 			switch (enterChoice)
 			{
 				case 1:
-					StaffUser();
+					staffUser();
 					break;
 				case 2:
-					AccountUser();
+					accountUser();
 					break;
 				default:
 					Console.WriteLine("Please select option from the list");
-					UserLogin();
+					userLogin();
 					break;
 
 
 			}
 
-			void AccountUser()
+			void accountUser()
 			{
 				string user = " ";
 				string pass = " ";
@@ -124,10 +124,10 @@ namespace Bank_Application
 
 				
 
-				MainMenu();
+				mainMenu();
 			}
 
-			void StaffUser()
+			void staffUser()
 			{
 				string bankk = " ";
 				string user = " ";
@@ -149,13 +149,13 @@ namespace Bank_Application
 					Console.WriteLine("Wrong Username or Password for Admin");
 				}
 
-				MainMenu();
+				mainMenu();
 			}
 
 
 		}
 
-		void Exit()
+		void exit()
 		{
 			Console.WriteLine("Date saved!!! You can exit!");
 		}
