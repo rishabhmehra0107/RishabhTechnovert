@@ -8,11 +8,10 @@ namespace Bank_Application
 		
 		public List<Branch> GetBranches = new List<Branch>();
 		public List<User> getUser = new List<User>();
-		
+	
 		public string bankk { get; set; }
 		public string user { get; set; }
 		public string pass { get; set; }
-		public string role = "Bank Staff";
 		public string accountId { get; set; }
 
 		Bank Bank = new Bank();

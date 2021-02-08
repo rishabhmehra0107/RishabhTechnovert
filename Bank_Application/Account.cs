@@ -7,6 +7,7 @@ namespace Bank_Application
     {
 
 		Bank bank = new Bank();
+		User user;
 		public List<double> DepositList = new List<double>();
 		public List<double> WithdrawList = new List<double>();
 		public Account()
