@@ -5,7 +5,7 @@ namespace Bank_Application
 {
     public class StaffAccount
     {
-		public List<Staff> getStaff = new List<Staff>();
+		
 		public List<Branch> GetBranches = new List<Branch>();
 		public List<User> getUser = new List<User>();
 		
@@ -15,19 +15,20 @@ namespace Bank_Application
 		public string role = "Bank Staff";
 		public string accountId { get; set; }
 
-		Bank bank = new Bank();
-		Branch branch = new Branch();
-		Staff staff;
+		Bank Bank = new Bank();
+		Branch Branch = new Branch();
+		Staff Staff;
+		User User;
 		public StaffAccount(string bankk, string user, string pass)
 		{
 			this.bankk = bankk;
 			this.user = user;
 			this.pass = pass;
-			branch.BankId= this.bankk.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
-			branch.BankLocation= GetStringInput(Console.ReadLine());
-			branch.Id= GetStringInput(Console.ReadLine());
+			Branch.BankId= this.bankk.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
+			Branch.BankLocation= GetStringInput(Console.ReadLine());
+			Branch.Id= GetStringInput(Console.ReadLine());
 
-			this.bank.Branches.Add(branch);
+			this.Bank.Branches.Add(Branch);
 
 			string GetStringInput(string str)
 			{
@@ -99,9 +100,9 @@ namespace Bank_Application
 	
 			this.accountId = user.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
 
-			staff = new Staff() { UserName = Staffuser, Password = Staffpass, Type = "Bank Staff", Id = accountId };
+			Staff = new Staff() { UserName = Staffuser, Password = Staffpass, Type = "Bank Staff", Id = accountId };
 
-			this.bank.Users.Add(staff);
+			this.Bank.Staffs.Add(Staff);
 			Console.WriteLine("Username {0} staff account created", Staffuser);
 			NextMenu();
 
@@ -122,8 +123,8 @@ namespace Bank_Application
 			}
 
 			this.accountId = holderUser.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
-			User user = new User() { Id = accountId, Password = holderPass, Type = "Account Holder", UserName = holderUser };
-			this.bank.Users.Add(user);
+			User = new User() { Id = accountId, Password = holderPass, Type = "Account Holder", UserName = holderUser };
+			this.Bank.Users.Add(User);
 			Console.WriteLine("Username {0} Account Holder account created", holderUser);
 			NextMenu();
 
@@ -131,12 +132,12 @@ namespace Bank_Application
 		public void BankUsers()
 		{
 			Console.WriteLine("Bank Staff Users");
-			foreach (Staff staff in getStaff)
+			foreach (Staff staff in this.Bank.Staffs)
 			{
 				Console.WriteLine(staff.UserName);
 			}
 			Console.WriteLine("Bank Account Holders");
-			foreach (User user in getUser)
+			foreach (User user in this.Bank.Users)
 			{
 				Console.WriteLine(user.UserName);
 			}
@@ -161,9 +162,9 @@ namespace Bank_Application
 					string bname = Console.ReadLine();
 					Console.WriteLine("Enter Bank Location: ");
 					string location = Console.ReadLine();
-					this.branch.BankId = bname.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
-					this.branch.BankLocation = GetStringInput(Console.ReadLine());
-					this.branch.Id = GetStringInput(Console.ReadLine());
+					this.Branch.BankId = bname.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
+					this.Branch.BankLocation = GetStringInput(Console.ReadLine());
+					this.Branch.Id = GetStringInput(Console.ReadLine());
 					string GetStringInput(string str)
 					{
 						if (Regex.IsMatch(str, "^[a-zA-Z]+$"))
@@ -175,7 +176,7 @@ namespace Bank_Application
 							return "Invalid Input";
 						}
 					}
-					this.bank.Branches.Add(branch);
+					this.Bank.Branches.Add(Branch);
 					int flag = 0;
 					foreach (Branch branch1 in GetBranches)
 					{
