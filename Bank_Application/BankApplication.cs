@@ -15,7 +15,7 @@ namespace Bank_Application
 
 		Admin ad = new Admin();
 		
-		public void BankMenu()
+		public void MainMenu()
 		{
 			Console.WriteLine("Welcome to Bank Application\n1. Setup New Bank \n2. User login\n3. Exit");
 			string enterchoice = Console.ReadLine();
@@ -34,7 +34,7 @@ namespace Bank_Application
 					break;
 				default:
 					Console.WriteLine("Please select option from the list");
-					BankMenu();
+					MainMenu();
 					break;
 
 
@@ -76,7 +76,7 @@ namespace Bank_Application
 			branch.Id = GetStringInput(Console.ReadLine());
 
 			BankSetup newBank = new BankSetup(this.Bank.Name, name, password);
-			BankMenu();
+			MainMenu();
 		}
 
 		void UserLogin()
@@ -124,7 +124,7 @@ namespace Bank_Application
 
 				
 
-				BankMenu();
+				MainMenu();
 			}
 
 			void StaffUser()
@@ -147,7 +147,7 @@ namespace Bank_Application
 						
 				
 			
-				BankMenu();
+				MainMenu();
 			}
 
 
