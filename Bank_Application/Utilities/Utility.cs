@@ -18,14 +18,12 @@ namespace Bank_Application.Utilities
         }
         public double getIntegerInput(string helpText)
         {
-            double input;
+            
             Console.WriteLine(helpText);
-            var amount = Console.ReadLine();
-            bool parseSuccess = double.TryParse(amount, out input);
-
-            if (parseSuccess==true)
+            double inputAmt = Convert.ToDouble(Console.ReadLine());
+            if (inputAmt>0 && inputAmt<=10000)
             {
-                return input;
+                return inputAmt;
             }
             return this.getIntegerInput(helpText);
         }

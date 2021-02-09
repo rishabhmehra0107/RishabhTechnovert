@@ -115,8 +115,9 @@ namespace Bank_Application
 
 			if (Admin.UserName.Equals(user) && Admin.Password.Equals(pass))
 			{
+				
 				Account account = new Account();
-				account.setupAccount();
+				account.setUpAccount();
 				
 			}
 			else
