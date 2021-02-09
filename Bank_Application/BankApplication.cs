@@ -57,7 +57,9 @@ namespace Bank_Application
 			Admin.UserName = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter admin username");
 			Admin.Password = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter admin password");
 			Bank.Admins.Add(Admin);
-			
+
+			Console.WriteLine("Admin details added successfully. Please provide Branch ID, Location and BankID");
+
 			Branch branch = new Branch();
 
 			branch.BankId = this.Bank.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
@@ -115,10 +117,9 @@ namespace Bank_Application
 
 			if (Admin.UserName.Equals(user) && Admin.Password.Equals(pass))
 			{
-				
-				Account account = new Account();
-				account.setUpAccount();
-				
+
+				this.AccountService.SetUpAccount();
+
 			}
 			else
 			{

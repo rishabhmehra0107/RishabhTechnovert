@@ -35,7 +35,6 @@ namespace Bank_Application.Services
 			this.Bank.Users.Add(users);
 
 			Console.WriteLine("Username: {0} ,AccountID:{1}, Balance: {2}", UserName, AccountId, InitialBalance);
-			Account account = new Account();
 			this.Transaction.nextMenu();
 		}
 

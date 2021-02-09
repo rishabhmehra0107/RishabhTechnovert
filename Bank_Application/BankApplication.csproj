@@ -35,7 +35,6 @@
     <Compile Include="BankApplication.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Admin.cs" />
-    <Compile Include="Account.cs" />
     <Compile Include="Branch.cs" />
     <Compile Include="Staff.cs" />
     <Compile Include="StaffAccount.cs" />
