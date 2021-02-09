@@ -1,17 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Bank_Application.Services;
+using Bank_Application.Utilities;
+
 namespace Bank_Application
 {
     public class Account
     {
-
-		Bank Bank = new Bank();
+		Bank Bank;
+		private AccountService AccountService { get; set; }
+		private Utility Utility { get; set; }
+		public Account()
+		{
+			this.Bank = new Bank();
+			this.Utility = new Utility();
+			this.AccountService = new AccountService();
+		}
+		
 		public List<double> DepositList = new List<double>();
 		public List<double> WithdrawList = new List<double>();
-		public Account()
-        {
-        }
+		
 		public string UserName { get; set; }
 		public string Password { get; set; }
 		public string Role = "Account Holder";
@@ -20,10 +29,9 @@ namespace Bank_Application
 
 		public void setupAccount()
 		{
-			Console.WriteLine("Enter Account Holder username");
-			UserName = Console.ReadLine();
-			Console.WriteLine("Enter Account Holder password");
-			Password = Console.ReadLine();
+			string UserName = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Account Holder username");
+			string Password = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter Account Holder password");
+			
 			InitialBalance = 1000;
 			AccountId = UserName.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
 			User users = new User() { UserName = UserName, Password = Password, Type = "Account Holder", Id = AccountId };
@@ -64,8 +72,8 @@ namespace Bank_Application
 		public double withdraw()
 		{
 			Console.WriteLine("Available Balance: {0}", InitialBalance);
-			Console.WriteLine("Withdraw Amount: ");
-			double withdrawAmt = Convert.ToDouble(Console.ReadLine());
+			double withdrawAmt = this.Utility.getIntegerInput("Enter Withdraw Amount");
+			Console.WriteLine("Available Balance: {0}", InitialBalance);
 			WithdrawList.Add(withdrawAmt);
 			InitialBalance = InitialBalance -= withdrawAmt;
 			Console.WriteLine("New Balance: {0}",InitialBalance);
@@ -76,8 +84,7 @@ namespace Bank_Application
 		public double deposit()
 		{
 			Console.WriteLine("Available Balance: {0}", InitialBalance);
-			Console.WriteLine("Deposit Amount: ");
-			double depositAmt = Convert.ToDouble(Console.ReadLine());
+			double depositAmt = this.Utility.getIntegerInput("Enter Deposit Amount");
 
 
 			DepositList.Add(depositAmt);

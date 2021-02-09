@@ -1,33 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Bank_Application.Utilities;
+using Bank_Application.Services;
+
 namespace Bank_Application
 {
 	public class BankApplication
 	{
-		
+
 		Bank Bank;
+		private Utility Utility { get; set; }
+		private AccountService AccountService { get; set; }
 
 		public BankApplication()
         {
 			this.Bank = new Bank();
+			this.Utility = new Utility();
+			this.AccountService = new AccountService();
+			this.mainMenu();
         }
+		Admin Admin = new Admin();
 
-		Admin ad;
-		
 		public void mainMenu()
 		{
 			Console.WriteLine("Welcome to Bank Application\n1. Setup New Bank \n2. User login\n3. Exit");
-			string enterChoice = Console.ReadLine();
-			int submitChoice = Convert.ToInt32(enterChoice);
+			int option = Convert.ToInt32(Console.ReadLine());
 
-			switch (submitChoice)
+			switch (option)
 			{
 				case 1:
 					setupBank();
 					break;
 				case 2:
-					userLogin();
+					login();
 					break;
 				case 3:
 					exit();
@@ -43,116 +49,84 @@ namespace Bank_Application
 
 		public void setupBank()
 		{
-			Console.WriteLine("Enter bankname: ");
-			this.Bank.Name = getStringInput(Console.ReadLine());
-			Console.WriteLine("Enter location: ");
-			this.Bank.Location = getStringInput(Console.ReadLine());
-			Console.WriteLine("Bank setup is completed. Please provide admin details");
-			ad = new Admin() { Type = "Admin" };
-			Console.WriteLine("Enter Admin username: ");
-			var name= ad.UserName = getStringInput(Console.ReadLine());
-			Console.WriteLine("Enter Admin password: ");
-			var password=ad.Password = Console.ReadLine();
+			Bank.Name = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Bank Name");
+			Bank.Location = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Bank Location");
+			Console.WriteLine("Bank setup is completed. Please provide admin username and password for admin");
 
-			this.Bank.Admins.Add(ad);
 			
-
-			string getStringInput(string str)
-			{
-				if (Regex.IsMatch(str, "^[a-zA-Z]+$"))
-				{
-					return str;
-				}
-                else
-                {
-					return "Invalid Input";
-                }
-			}
-
+			Admin.UserName = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter admin username");
+			Admin.Password = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter admin password");
+			Bank.Admins.Add(Admin);
+			
 			Branch branch = new Branch();
 
 			branch.BankId = this.Bank.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
-			branch.BankLocation = getStringInput(Console.ReadLine());
-			branch.Id = getStringInput(Console.ReadLine());
-
-			Console.WriteLine("Bankname: {0}, Username: {1}, Password {2}",this.Bank.Name,name,password);
+			branch.BankLocation = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Branch Location");
+			branch.Id = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter Branch Id");
+			Bank.Branches.Add(branch);
+			Console.WriteLine("Bankname: {0}, Username: {1}, Password {2}",Bank.Name,Admin.UserName,Admin.Password);
 			mainMenu();
 		}
 
-		void userLogin()
+		void login()
 		{
-			Console.WriteLine("1. Bank Staff \n2. Account Holder");
-			string typeChoice = Console.ReadLine();
-			int enterChoice = Convert.ToInt32(typeChoice);
+			User user = new User() { Type = "AccountHolder" };
+			Staff staff = new Staff() { Type = "BankStaff" };
+			
+			string userType = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter User Type");
+			if (user.Type.Equals(userType))
+            {
+				accountUser();
+            }
+			else if (staff.Type.Equals(userType))
+            {
+				staffUser();
+            }
+            else
+            {
+				login();
+            }
+			
+		}
 
-			switch (enterChoice)
+		void staffUser()
+		{
+			string bankk = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Bank Name");
+			string user = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Admin Username");
+			string pass = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter Admin Password");
+
+			
+			if (Admin.UserName.Equals(user) && Admin.Password.Equals(pass))
 			{
-				case 1:
-					staffUser();
-					break;
-				case 2:
-					accountUser();
-					break;
-				default:
-					Console.WriteLine("Please select option from the list");
-					userLogin();
-					break;
-
-
+				StaffAccount newStaff = new StaffAccount(bankk, user, pass);
+			}
+			else
+			{
+				Console.WriteLine("Wrong Username or Password for Admin");
 			}
 
-			void accountUser()
+			mainMenu();
+		}
+
+		void accountUser()
+		{
+			string user = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Admin Username");
+			string pass = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter Admin Password");
+
+			if (Admin.UserName.Equals(user) && Admin.Password.Equals(pass))
 			{
-				string user = " ";
-				string pass = " ";
-
-				Console.WriteLine("Enter Admin username: ");
-				user = Console.ReadLine();
-				Console.WriteLine("Enter Admin password: ");
-				pass = Console.ReadLine();
-
+				Account account = new Account();
+				account.setupAccount();
 				
-					if (ad.UserName == user && ad.Password == pass)
-					{
-						Account newAccount = new Account();
-						newAccount.setupAccount();
-					}
-					else
-					{
-						Console.WriteLine("Wrong Username or Password for Admin");
-					}
-
-				
-
-				mainMenu();
 			}
-
-			void staffUser()
+			else
 			{
-				string bankk = " ";
-				string user = " ";
-				string pass = " ";
-
-				Console.WriteLine("Enter bankname: ");
-				bankk = Console.ReadLine();
-				Console.WriteLine("Enter Admin username: ");
-				user = Console.ReadLine();
-				Console.WriteLine("Enter Admin password: ");
-				pass = Console.ReadLine();
-
-				if (ad.UserName == user && ad.Password == pass)
-				{
-					StaffAccount newStaff = new StaffAccount(bankk, user, pass);
-				}
-				else
-				{
-					Console.WriteLine("Wrong Username or Password for Admin");
-				}
-
-				mainMenu();
+				Console.WriteLine("Wrong Username or Password for Admin");
 			}
 
 
+
+			mainMenu();
 		}
 
 		void exit()

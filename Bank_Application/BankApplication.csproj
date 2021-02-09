@@ -40,6 +40,12 @@
     <Compile Include="Staff.cs" />
     <Compile Include="StaffAccount.cs" />
     <Compile Include="Bank.cs" />
+    <Compile Include="Utilities\Utility.cs" />
+    <Compile Include="Services\AccountService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Utilities\" />
+    <Folder Include="Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

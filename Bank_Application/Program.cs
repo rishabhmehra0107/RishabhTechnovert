@@ -5,8 +5,8 @@ namespace Bank_Application
     {
         static void Main(string[] args)
         {
-            BankApplication bank = new BankApplication();
-            bank.mainMenu();
+            new BankApplication();
+          
         }
     }
 }
