@@ -155,37 +155,20 @@ namespace Bank_Application.Services
 			string currencyName = " ";
 			int conversionToInr;
 
-			Console.WriteLine("Enter Currency Code:");
-			currencyCode = Console.ReadLine();
-			if (Regex.IsMatch(currencyCode, "^[a-zA-Z]*$"))
+			currencyCode = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter Currency Code:");
+			currencyName = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter Currency Name:");
+			Console.WriteLine("Enter Currency Value Cnoverted To INR:");
+			try
 			{
-				Console.WriteLine("Enter Currency Name:");
-				currencyName = Console.ReadLine();
-				if (Regex.IsMatch(currencyName, "^[a-zA-Z]*$"))
+				conversionToInr = Convert.ToInt32(Console.ReadLine());
+				if (conversionToInr >= 0 && conversionToInr <= 250)
 				{
-					Console.WriteLine("Enter Currency Value Cnoverted To INR:");
-
-					try
-					{
-						conversionToInr = Convert.ToInt32(Console.ReadLine());
-						if (conversionToInr >= 0 && conversionToInr <= 250)
-						{
-							Console.WriteLine("New Currency updated Successfully");
-						}
-					}
-					catch (Exception e)
-					{
-						Console.WriteLine("Invalid Conversion value" + e.Message);
-					}
-				}
-				else
-				{
-					Console.WriteLine("Invalid currency name");
+					Console.WriteLine("New Currency updated Successfully");
 				}
 			}
-			else
+			catch (Exception e)
 			{
-				Console.WriteLine("Invalid currency code");
+				Console.WriteLine("Invalid Conversion value" + e.Message);
 			}
 			nextMenu();
 		}
