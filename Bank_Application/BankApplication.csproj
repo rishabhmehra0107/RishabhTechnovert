@@ -37,11 +37,11 @@
     <Compile Include="Admin.cs" />
     <Compile Include="Branch.cs" />
     <Compile Include="Staff.cs" />
-    <Compile Include="StaffAccount.cs" />
     <Compile Include="Bank.cs" />
     <Compile Include="Utilities\Utility.cs" />
     <Compile Include="Services\AccountService.cs" />
-    <Compile Include="Services\Transaction.cs" />
+    <Compile Include="Services\TransactionService.cs" />
+    <Compile Include="Services\StaffService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utilities\" />

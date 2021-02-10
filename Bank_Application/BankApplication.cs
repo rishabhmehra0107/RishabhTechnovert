@@ -100,7 +100,7 @@ namespace Bank_Application
 			
 			if (Admin.UserName.Equals(user) && Admin.Password.Equals(pass))
 			{
-				StaffAccount newStaff = new StaffAccount(bankk, user, pass);
+				this.AccountService.setupStaffAccount(bankk,user,pass);
 			}
 			else
 			{
@@ -118,7 +118,7 @@ namespace Bank_Application
 			if (Admin.UserName.Equals(user) && Admin.Password.Equals(pass))
 			{
 
-				this.AccountService.SetUpAccount();
+				this.AccountService.setupUserAccount();
 
 			}
 			else

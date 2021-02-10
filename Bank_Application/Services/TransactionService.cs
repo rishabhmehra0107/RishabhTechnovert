@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using Bank_Application.Utilities;
 namespace Bank_Application.Services
 {
-    public class Transaction
+    public class TransactionService
     {
 		Bank Bank;
 		private Utility Utility { get; set; }
-		public Transaction()
+		public TransactionService()
 		{
 			this.Bank = new Bank();
 			this.Utility = new Utility();
@@ -17,7 +17,6 @@ namespace Bank_Application.Services
 
 		public string UserName { get; set; }
 		public string Password { get; set; }
-		public string Role = "Account Holder";
 		public double InitialBalance = 1000;
 		public string AccountId { get; set; }
 

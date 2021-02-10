@@ -1,29 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
 using Bank_Application.Utilities;
-using Bank_Application.Services;
+
 namespace Bank_Application.Services
 {
 	public class AccountService
 	{
 		Bank Bank;
+		Branch Branch;
+		
 		private Utility Utility { get; set; }
-		private Transaction Transaction { get; set; }
+		private TransactionService Transaction { get; set; }
+		private StaffService StaffService { get; set; }
 		public AccountService()
 		{
 			this.Bank = new Bank();
+			this.Branch = new Branch();
 			this.Utility = new Utility();
-			this.Transaction = new Transaction();
+			this.Transaction = new TransactionService();
+			this.StaffService = new StaffService();
 		}
-		public List<double> DepositList = new List<double>();
-		public List<double> WithdrawList = new List<double>();
 
+		public string BankName { get; set; }
 		public string UserName { get; set; }
 		public string Password { get; set; }
-		public string Role = "Account Holder";
 		public double InitialBalance { get; set; }
 		public string AccountId { get; set; }
-		public void SetUpAccount()
+
+		public void setupUserAccount()
 		{
 			Console.WriteLine("Enter Account Holder username");
 			UserName = Console.ReadLine();
@@ -38,5 +41,21 @@ namespace Bank_Application.Services
 			this.Transaction.nextMenu();
 		}
 
+		public void setupStaffAccount(string bankk, string user, string pass)
+		{
+			this.BankName = bankk;
+			this.UserName = user;
+			this.Password = pass;
+			Branch.BankId = this.BankName.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
+			Branch.BankLocation = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Branch Location");
+			Branch.Id = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Branch Id");
+
+			Bank.Branches.Add(Branch);
+
+
+			Console.WriteLine("Admin {0} present in the system ", user);
+			this.StaffService.nextMenu();
+		}
+		
 	}
 }
