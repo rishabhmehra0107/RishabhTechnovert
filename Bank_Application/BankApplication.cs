@@ -209,32 +209,21 @@ namespace Bank_Application
 				Console.WriteLine(accountHolder.UserName);
             }
 			string strname = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Account username: ");
-			foreach (AccountHolder user in this.Bank.AccountHolders)
-			{
-				if (user.UserName == strname)
-				{
-					Console.WriteLine("Username: {0}. This account can now be updated ", strname);
-
-					string bname = this.Utility.getStringInput("^[a-zA-Z]+$", "Update bankname of user: ");
-					Branch branch = new Branch();
-					branch.BankId = bname.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
-					branch.Location = this.Utility.getStringInput("^[a-zA-Z]+$", "Update Branch Location: ");
-					branch.Id = $"{branch.BankId} {branch.Location}{DateTime.UtcNow.ToString("MMddyy")}";
-
-					this.Bank.Branches.Add(branch);
-
-					user.UserName= this.Utility.getStringInput("^[a-zA-Z]+$", "Update username of user: ");
-					user.Password= this.Utility.getStringInput("^[a-zA-Z]+$", "Update password of user: ");
-					user.Name = this.Utility.getStringInput("^[a-zA-Z]+$", "Update Account Holder Name");
-					user.Type = "AccountHolder";
-					user.InitialBalance = 1000;
-					user.AccountNumber = user.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
-					user.AccountType = "Savings account";
-					user.Id = "31";
+			
+					
+					foreach (var account in this.Bank.AccountHolders.Where(w => w.UserName == strname))
+					{
+						Console.WriteLine("Username: {0}. This account can now be updated ", strname);
+						account.UserName = this.Utility.getStringInput("^[a-zA-Z]+$", "Update username of user: ");
+						account.Password = this.Utility.getStringInput("^[a-zA-Z]+$", "Update password of user: ");
+						account.Name = this.Utility.getStringInput("^[a-zA-Z]+$", "Update Account Holder Name");
+						account.Type = "AccountHolder";
+						account.InitialBalance = 1000;
+						account.AccountNumber = account.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
+						account.AccountType = "SavingsAccount";
+						account.Id = "31";
+					}
 					Console.WriteLine("User Account updated successfully");
-				}
-
-			}
 		}
 
 		public void updateCharges()
