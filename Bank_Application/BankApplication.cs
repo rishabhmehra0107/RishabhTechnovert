@@ -106,7 +106,7 @@ namespace Bank_Application
 
 		public void showAdminMenu()
         {
-			Console.WriteLine("1. Add Staff\n2. Add Account Holder\n3.Display Bank User details\n4. Update Service Charges\n5. Add new Currency\n6. Update Account\n7. Logout");
+			Console.WriteLine("1. Add Staff\n2. Add Account Holder\n3.Display Bank User details\n4. Update Service Charges\n5. Add new Currency\n6. Update Account\n7. Delete Account\n8.Logout");
 			int option = Convert.ToInt32(Console.ReadLine());
 
 			switch (option)
@@ -130,6 +130,9 @@ namespace Bank_Application
 					updateAccount();
 					break;
 				case 7:
+					deleteAccount();
+					break;
+				case 8:
 					logout();
 					break;
 				default:
@@ -224,6 +227,18 @@ namespace Bank_Application
 						account.Id = "31";
 					}
 					Console.WriteLine("User Account updated successfully");
+		}
+		public void deleteAccount()
+        {
+			Console.WriteLine("Select account to delete");
+			foreach (AccountHolder accountHolder in this.Bank.AccountHolders)
+			{
+				Console.WriteLine(accountHolder.UserName);
+			}
+			string strname = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Account username: ");
+
+			this.Bank.AccountHolders.RemoveAll(x => x.UserName == strname);
+			Console.WriteLine("User Account deleted successfully");
 		}
 
 		public void updateCharges()
