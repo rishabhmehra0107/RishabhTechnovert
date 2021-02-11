@@ -5,7 +5,7 @@ namespace Bank_Application
     {
         public string Id { get; set; }
         public string BankId { get; set; }
-        public string BankLocation { get; set; }
+        public string Location { get; set; }
        
     }
 }

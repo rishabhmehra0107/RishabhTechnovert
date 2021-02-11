@@ -14,6 +14,7 @@ namespace Bank_Application.Utilities
             {
                 return input;
             }
+            Console.WriteLine("Invalid input");
             return this.getStringInput(regex, helpText);
         }
         public double getIntegerInput(string helpText)
@@ -25,6 +26,7 @@ namespace Bank_Application.Utilities
             {
                 return inputAmt;
             }
+            Console.Write("Invalid input");
             return this.getIntegerInput(helpText);
         }
     }

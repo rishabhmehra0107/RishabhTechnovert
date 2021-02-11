@@ -42,6 +42,7 @@
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\TransactionService.cs" />
     <Compile Include="Services\StaffService.cs" />
+    <Compile Include="AccountHolder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utilities\" />

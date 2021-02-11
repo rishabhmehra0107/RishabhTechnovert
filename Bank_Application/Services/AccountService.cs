@@ -11,51 +11,53 @@ namespace Bank_Application.Services
 		private Utility Utility { get; set; }
 		private TransactionService Transaction { get; set; }
 		private StaffService StaffService { get; set; }
-		public AccountService()
+		public AccountService(Bank bank, TransactionService transactionService, StaffService staffService)
 		{
-			this.Bank = new Bank();
-			this.Branch = new Branch();
+			this.Bank = bank;
 			this.Utility = new Utility();
-			this.Transaction = new TransactionService();
-			this.StaffService = new StaffService();
+			this.Transaction = transactionService;
+			this.StaffService = staffService;
 		}
 
-		public string BankName { get; set; }
-		public string UserName { get; set; }
-		public string Password { get; set; }
-		public double InitialBalance { get; set; }
-		public string AccountId { get; set; }
-
-		public void setupUserAccount()
+		public void setupUserAccount(string user, string pass)
 		{
-			Console.WriteLine("Enter Account Holder username");
-			UserName = Console.ReadLine();
-			Console.WriteLine("Enter Account Holder password");
-			Password = Console.ReadLine();
-			InitialBalance = 1000;
-			AccountId = UserName.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
-			User users = new User() { UserName = UserName, Password = Password, Type = "Account Holder", Id = AccountId };
-			this.Bank.Users.Add(users);
+			AccountHolder accountHolder = new AccountHolder();
+			accountHolder.UserName = user;
+			accountHolder.Password = pass;
+			accountHolder.InitialBalance = 1000;
+			accountHolder.AccountNumber = accountHolder.UserName.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
+			//AccountHolder accountHolder1 = new AccountHolder() { UserName = accountHolder.UserName, Password = accountHolder.Password, Type = "AccountHolder", AccountId = accountHolder.AccountId };
+			this.Bank.AccountHolders.Add(accountHolder);
 
-			Console.WriteLine("Username: {0} ,AccountID:{1}, Balance: {2}", UserName, AccountId, InitialBalance);
+			Console.WriteLine("Username: {0} ,AccountID:{1}, Balance: {2}", accountHolder.UserName, accountHolder.AccountNumber, accountHolder.InitialBalance);
 			this.Transaction.nextMenu();
 		}
 
-		public void setupStaffAccount(string bankk, string user, string pass)
+		public void setupStaffAccount(string user, string pass)
 		{
-			this.BankName = bankk;
-			this.UserName = user;
-			this.Password = pass;
-			Branch.BankId = this.BankName.Substring(0, 3) + DateTime.UtcNow.ToString("MM-dd-yyyy");
-			Branch.BankLocation = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Branch Location");
-			Branch.Id = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Branch Id");
+			Admin admin = new Admin();
+			admin.UserName = user;
+			admin.Password = pass;
+			this.Bank.Admins.Add(admin);
 
-			Bank.Branches.Add(Branch);
-
-
-			Console.WriteLine("Admin {0} present in the system ", user);
-			this.StaffService.nextMenu();
+			Console.WriteLine("Employee {0} present in the system ", user);
 		}
-		
+		public void createStaffAccount(Staff staff)
+        {
+			staff.Name = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Staff Name");
+			staff.Type = "Employee";
+			staff.Id = "45";
+			this.Bank.Staffs.Add(staff);
+        }
+		public void createUserAccount(AccountHolder account)
+        {
+			account.Name= this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Account Holder Name");
+			account.Type = "AccountHolder";
+			account.InitialBalance = 1000;
+			account.AccountNumber = account.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
+			account.AccountType = "Savings account";
+			account.Id = "31";
+			this.Bank.AccountHolders.Add(account);
+		}
 	}
 }
