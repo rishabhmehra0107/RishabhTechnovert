@@ -106,7 +106,7 @@ namespace Bank_Application
 
 		public void showAdminMenu()
         {
-			Console.WriteLine("1. Add Staff\n2. Add Account Holder\n3.Display Bank User details\n4. Update Service Charges\n5. Add new Currency\n6. Logout");
+			Console.WriteLine("1. Add Staff\n2. Add Account Holder\n3.Display Bank User details\n4. Update Service Charges\n5. Add new Currency\n6. Update Account\n7. Logout");
 			int option = Convert.ToInt32(Console.ReadLine());
 
 			switch (option)
@@ -127,6 +127,9 @@ namespace Bank_Application
 					this.StaffService.newCurrency();
 					break;
 				case 6:
+					updateAccount();
+					break;
+				case 7:
 					logout();
 					break;
 				default:
@@ -195,6 +198,42 @@ namespace Bank_Application
 			foreach (AccountHolder accountHolder in this.Bank.AccountHolders)
 			{
 				Console.WriteLine(accountHolder.UserName);
+			}
+		}
+
+		public void updateAccount()
+        {
+			Console.WriteLine("Select account to update");
+			foreach(AccountHolder accountHolder in this.Bank.AccountHolders)
+            {
+				Console.WriteLine(accountHolder.UserName);
+            }
+			string strname = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Account username: ");
+			foreach (AccountHolder user in this.Bank.AccountHolders)
+			{
+				if (user.UserName == strname)
+				{
+					Console.WriteLine("Username: {0}. This account can now be updated ", strname);
+
+					string bname = this.Utility.getStringInput("^[a-zA-Z]+$", "Update bankname of user: ");
+					Branch branch = new Branch();
+					branch.BankId = bname.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
+					branch.Location = this.Utility.getStringInput("^[a-zA-Z]+$", "Update Branch Location: ");
+					branch.Id = $"{branch.BankId} {branch.Location}{DateTime.UtcNow.ToString("MMddyy")}";
+
+					this.Bank.Branches.Add(branch);
+
+					user.UserName= this.Utility.getStringInput("^[a-zA-Z]+$", "Update username of user: ");
+					user.Password= this.Utility.getStringInput("^[a-zA-Z]+$", "Update password of user: ");
+					user.Name = this.Utility.getStringInput("^[a-zA-Z]+$", "Update Account Holder Name");
+					user.Type = "AccountHolder";
+					user.InitialBalance = 1000;
+					user.AccountNumber = user.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
+					user.AccountType = "Savings account";
+					user.Id = "31";
+					Console.WriteLine("User Account updated successfully");
+				}
+
 			}
 		}
 
