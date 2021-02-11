@@ -1,42 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BankApplication>
-  <AccountHolders>
-    <Name>oooo</Name>
-    <Type>AccountHolder</Type>
-    <AccountNumber>ooo02112021</AccountNumber>
-    <Username>pppp</Username>
-    <Password>oooo</Password>
-    <ID>31</ID>
-  </AccountHolders>
-  <AccountHolders>
-    <Name>oooo</Name>
-    <Type>AccountHolder</Type>
-    <AccountNumber>ooo02112021</AccountNumber>
-    <Username>oooo</Username>
-    <Password>oooo</Password>
-    <ID>31</ID>
-  </AccountHolders>
-  <AccountHolders>
-    <Name>kkkk</Name>
-    <Type>AccountHolder</Type>
-    <AccountNumber>kkk02112021</AccountNumber>
-    <Username>oooo</Username>
-    <Password>kkkk</Password>
-    <ID>31</ID>
-  </AccountHolders>
-  <Employees>
-    <Name>oooo</Name>
-    <Type>Employee</Type>
-    <ID>45</ID>
-    <Username>oooo</Username>
-    <Password>oooo</Password>
-  </Employees>
-  <AccountHolders>
-    <Name>iiii</Name>
-    <Type>AccountHolder</Type>
-    <AccountNumber>iii02112021</AccountNumber>
-    <Username>iiii</Username>
-    <Password>iiii</Password>
-    <ID>31</ID>
-  </AccountHolders>
+
 </BankApplication>

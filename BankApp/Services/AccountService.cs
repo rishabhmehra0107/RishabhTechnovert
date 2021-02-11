@@ -8,7 +8,6 @@ namespace Bank_Application.Services
 	public class AccountService
 	{
 		Bank Bank;
-		Branch Branch;
 
 		private Utility Utility { get; set; }
 		private TransactionService Transaction { get; set; }
