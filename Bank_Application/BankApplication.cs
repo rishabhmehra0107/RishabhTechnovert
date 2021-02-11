@@ -253,45 +253,7 @@ namespace Bank_Application
 			Console.WriteLine("Goodbye");
 			mainMenu();
 		}
-		void staffUser()
-		{
-			//string bankk = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Bank Name");
-			string user = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Admin Username");
-			string pass = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter Admin Password");
-
-			if(this.Bank.Admins.Any(element => element.UserName == user && element.Password==pass))
-			{
-				this.AccountService.setupStaffAccount(user,pass);
-			}
-			else
-			{
-				Console.WriteLine("Wrong Username or Password for Admin");
-			}
-
-			mainMenu();
-		}
-
-		void accountUser()
-		{
-			string user = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Admin Username");
-			string pass = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter Admin Password");
-
-			if (Bank.Admins.Any(element => element.UserName == user && element.Password == pass))
-			{
-
-				this.AccountService.setupUserAccount(user,pass);
-
-			}
-			else
-			{
-				Console.WriteLine("Wrong Username or Password for Admin");
-			}
-
-
-
-			mainMenu();
-		}
-
+		
 		void exit()
 		{
 			Console.WriteLine("Date saved!!! You can exit!");
