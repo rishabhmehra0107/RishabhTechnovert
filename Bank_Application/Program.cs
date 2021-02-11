@@ -3,7 +3,7 @@ namespace Bank_Application
 {
     class Program
     {
-        static void Main()
+        public static void Main()
         {
             new BankApplication();
           
