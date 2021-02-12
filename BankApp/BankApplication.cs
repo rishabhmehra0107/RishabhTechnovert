@@ -64,7 +64,7 @@ namespace Bank_Application
 			branch.Id = $"{this.Bank.Id} {branch.Location}{DateTime.UtcNow.ToString("MMddyy")}";
 			this.Bank.Branches.Add(branch);
 
-			this.AccountService.storeBankData(Bank, branch);
+			//this.AccountService.storeBankData(Bank, branch);
 			Console.WriteLine("Branch details added. Please provide admin username and password for admin");
 
 			Admin admin = new Admin();
@@ -74,7 +74,7 @@ namespace Bank_Application
 			admin.Password = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter admin password");
 			admin.Id = "101";
 			this.Bank.Admins.Add(admin);
-			this.AccountService.storeAdminData(admin);
+			//this.AccountService.storeAdminData(admin);
 			Console.WriteLine("Admin created successfuly");
 
 			
@@ -141,6 +141,7 @@ namespace Bank_Application
 					break;
 				case 8:
 					this.StaffService.logout();
+					this.StaffService.xmlData();
 					mainMenu();
 					break;
 				default:

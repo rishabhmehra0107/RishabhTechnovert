@@ -12,5 +12,6 @@ namespace Bank_Application
         public List<Branch> Branches = new List<Branch>();
         public List<Admin> Admins = new List<Admin>();
         public List<Staff> Staffs = new List<Staff>();
+        public List<Currency> Currency = new List<Currency>();
     }
 }

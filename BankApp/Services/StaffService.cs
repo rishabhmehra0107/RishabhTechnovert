@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Xml;
+using System.Xml.Linq;
 using System.Linq;
 using Bank_Application.Utilities;
 namespace Bank_Application.Services
@@ -19,19 +21,18 @@ namespace Bank_Application.Services
 
 		public void newCurrency()
 		{
-			string currencyCode = " ";
-			string currencyName = " ";
-			int conversionToInr;
-
-			currencyCode = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter Currency Code:");
-			currencyName = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter Currency Name:");
+			Currency currency = new Currency();
+			currency.CurrencyCode = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter Currency Code:");
+			currency.CurrencyName = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter Currency Name:");
 			Console.WriteLine("Enter Currency Value Cnoverted To INR:");
 			try
 			{
-				conversionToInr = Convert.ToInt32(Console.ReadLine());
-				if (conversionToInr >= 0 && conversionToInr <= 250)
+				currency.ConvertToInr = Convert.ToInt32(Console.ReadLine());
+				if (currency.ConvertToInr >= 0 && currency.ConvertToInr <= 250)
 				{
 					Console.WriteLine("New Currency updated Successfully");
+					this.Bank.Currency.Add(currency);
+					this.AccountService.storeCurrencyData(currency);	
 				}
 			}
 			catch (Exception e)
@@ -53,6 +54,47 @@ namespace Bank_Application.Services
 			{
 				Console.WriteLine(accountHolder.UserName);
 			}
+		}
+
+		public void xmlData()
+        {
+			int i = 1;
+			foreach (Branch branch in this.Bank.Branches)
+			{
+				XDocument xDocument = XDocument.Load("/Users/apple/Projects/BankApp/BankApp/Data.xml");
+				xDocument.Root.Add(new XElement("BankBranch"+i, new XElement("BankName", this.Bank.Name), new XElement("Location", this.Bank.Location), new XElement("ID", this.Bank.Id), new XElement("BranchLocation", branch.Location), new XElement("BranchID", branch.Id)));
+				xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
+				i++;
+			}
+
+			i = 1;
+			foreach(Admin admin in this.Bank.Admins)
+            {
+				XDocument xDocument = XDocument.Load("/Users/apple/Projects/BankApp/BankApp/Data.xml");
+				xDocument.Root.Add(new XElement("Admin"+i, new XElement("Name", admin.Name), new XElement("Type", admin.Type), new XElement("ID", admin.Id), new XElement("Username", admin.UserName), new XElement("Password", admin.Password)));
+				xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
+				++i;
+			}
+
+			i = 1;
+			foreach (Staff staff in this.Bank.Staffs)
+            {
+				XDocument xDocument = XDocument.Load("/Users/apple/Projects/BankApp/BankApp/Data.xml");
+				xDocument.Root.Add(new XElement("Employee"+i, new XElement("Name", staff.Name), new XElement("Type", staff.Type), new XElement("ID", staff.Id), new XElement("Username", staff.UserName), new XElement("Password", staff.Password)));
+				xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
+				i++;
+			}
+
+			i = 1;
+			foreach (AccountHolder account in this.Bank.AccountHolders)
+			{
+				XDocument xDocument = XDocument.Load("/Users/apple/Projects/BankApp/BankApp/Data.xml");
+				xDocument.Root.Add(new XElement("AccountHolders"+i, new XElement("Name", account.Name), new XElement("Type", account.Type), new XElement("AccountNumber", account.AccountNumber), new XElement("Username", account.UserName), new XElement("Password", account.Password), new XElement("ID", account.Id)));
+				xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
+				i++;
+			}
+
+			
 		}
 
 		public void updateCharges()

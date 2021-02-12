@@ -1,4 +1,47 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<BankApplication>
-  
-</BankApplication>
+<Bank>
+  <BankBranch1>
+    <BankName>hdfc</BankName>
+    <Location>hyd</Location>
+    <ID>hdf02122021</ID>
+    <BranchLocation>kauvrihills</BranchLocation>
+    <BranchID>hdf02122021 kauvrihills021221</BranchID>
+  </BankBranch1>
+  <Admin1>
+    <Name>Rishabh</Name>
+    <Type>Admin</Type>
+    <ID>101</ID>
+    <Username>rishabh</Username>
+    <Password>rish1234</Password>
+  </Admin1>
+  <Employee1>
+    <Name>Sanjay</Name>
+    <Type>Employee</Type>
+    <ID>45</ID>
+    <Username>sanjaym</Username>
+    <Password>sanjay</Password>
+  </Employee1>
+  <Employee2>
+    <Name>pppp</Name>
+    <Type>Employee</Type>
+    <ID>45</ID>
+    <Username>pppp</Username>
+    <Password>pppp</Password>
+  </Employee2>
+  <AccountHolders1>
+    <Name>VivekReddy</Name>
+    <Type>AccountHolder</Type>
+    <AccountNumber>Viv02122021</AccountNumber>
+    <Username>vivekreddy</Username>
+    <Password>vivekr</Password>
+    <ID>31</ID>
+  </AccountHolders1>
+  <AccountHolders2>
+    <Name>sss</Name>
+    <Type>AccountHolder</Type>
+    <AccountNumber>sss02122021</AccountNumber>
+    <Username>ssss</Username>
+    <Password>ssss</Password>
+    <ID>31</ID>
+  </AccountHolders2>
+</Bank>
