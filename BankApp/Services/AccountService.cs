@@ -62,6 +62,21 @@ namespace Bank_Application.Services
 			this.Bank.AccountHolders.Add(account);
 			storeUserData(account);
 		}
+
+		public void storeBankData(Bank bank, Branch branch)
+		{
+			XDocument xDocument = XDocument.Load("/Users/apple/Projects/BankApp/BankApp/Data.xml");
+			xDocument.Root.Add(new XElement("Bank", new XElement("BankName", bank.Name), new XElement("Location", bank.Location), new XElement("ID", bank.Id), new XElement("BranchLocation", branch.Location), new XElement("BranchID", branch.Id)));
+			xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
+		}
+
+		public void storeAdminData(Admin admin)
+		{
+			XDocument xDocument = XDocument.Load("/Users/apple/Projects/BankApp/BankApp/Data.xml");
+			xDocument.Root.Add(new XElement("Admin", new XElement("Name", admin.Name), new XElement("Type", admin.Type), new XElement("ID", admin.Id), new XElement("Username", admin.UserName), new XElement("Password", admin.Password)));
+			xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
+		}
+
 		public void storeStaffData(Staff staff)
 		{
 			XDocument xDocument = XDocument.Load("/Users/apple/Projects/BankApp/BankApp/Data.xml");

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Bank_Application.Utilities;
 namespace Bank_Application.Services
 {
@@ -102,6 +103,14 @@ namespace Bank_Application.Services
 
 			}
 
+		}
+
+		
+
+		public void logout()
+		{
+			Console.WriteLine("Goodbye");
+			
 		}
 	}
 }

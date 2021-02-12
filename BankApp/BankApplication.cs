@@ -55,15 +55,7 @@ namespace Bank_Application
 			this.Bank.Name = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Bank Name");
 			this.Bank.Location = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Bank Location");
 			this.Bank.Id = this.Bank.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
-			Console.WriteLine("Bank setup is completed. Please provide admin username and password for admin");
-
-			Admin admin = new Admin();
-			admin.Type = "Admin";
-			admin.UserName = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter admin username");
-			admin.Password = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter admin password");
-			this.Bank.Admins.Add(admin);
-
-			Console.WriteLine("Admin created successfully. Please provide branch details");
+			Console.WriteLine("Bank setup is completed. Please provide branch details");
 
 			Branch branch = new Branch();
 
@@ -71,6 +63,22 @@ namespace Bank_Application
 			branch.Location = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Branch Location");
 			branch.Id = $"{this.Bank.Id} {branch.Location}{DateTime.UtcNow.ToString("MMddyy")}";
 			this.Bank.Branches.Add(branch);
+
+			this.AccountService.storeBankData(Bank, branch);
+			Console.WriteLine("Branch details added. Please provide admin username and password for admin");
+
+			Admin admin = new Admin();
+			admin.Type = "Admin";
+			admin.Name = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter admin name");
+			admin.UserName = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter admin username");
+			admin.Password = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter admin password");
+			admin.Id = "101";
+			this.Bank.Admins.Add(admin);
+			this.AccountService.storeAdminData(admin);
+			Console.WriteLine("Admin created successfully.");
+
+			
+
 			Console.WriteLine("Bank Name: {0}, User Name: {1}, Password {2}", Bank.Name, admin.UserName, admin.Password);
 			mainMenu();
 		}
@@ -131,7 +139,8 @@ namespace Bank_Application
 					deleteAccount();
 					break;
 				case 8:
-					logout();
+					this.StaffService.logout();
+					mainMenu();
 					break;
 				default:
 					Console.WriteLine("Please select option from the list");
@@ -160,7 +169,8 @@ namespace Bank_Application
 					this.StaffService.newCurrency();
 					break;
 				case 5:
-					logout();
+					this.StaffService.logout();
+					mainMenu();
 					break;
 
 				default:
@@ -187,21 +197,7 @@ namespace Bank_Application
 			accountHolder.Password = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Account Holder password");
 			this.AccountService.createUserAccount(accountHolder);
 		}
-		/*
-		public void bankUsers()
-		{
-			Console.WriteLine("Bank Staff Users");
-			foreach (Staff staff in this.Bank.Staffs)
-			{
-				Console.WriteLine(staff.UserName);
-			}
-			Console.WriteLine("Bank Account Holders");
-			foreach (AccountHolder accountHolder in this.Bank.AccountHolders)
-			{
-				Console.WriteLine(accountHolder.UserName);
-			}
-		}
-		*/
+		
 		public void updateAccount()
 		{
 			Console.WriteLine("Select account to update");
@@ -246,7 +242,6 @@ namespace Bank_Application
 			Console.WriteLine("Goodbye");
 			mainMenu();
 		}
-
 		void exit()
 		{
 			Console.WriteLine("Date saved!!! You can exit!");
