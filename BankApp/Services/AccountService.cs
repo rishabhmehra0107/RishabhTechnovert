@@ -31,7 +31,6 @@ namespace Bank_Application.Services
 			this.Bank.AccountHolders.Add(accountHolder);
 
 			Console.WriteLine("Username: {0} ,AccountID:{1}, Balance: {2}", accountHolder.UserName, accountHolder.AccountNumber, accountHolder.InitialBalance);
-			this.Transaction.nextMenu();
 		}
 
 		public void setupStaffAccount(string user, string pass)

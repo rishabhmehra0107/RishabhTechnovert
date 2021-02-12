@@ -75,7 +75,7 @@ namespace Bank_Application
 			admin.Id = "101";
 			this.Bank.Admins.Add(admin);
 			this.AccountService.storeAdminData(admin);
-			Console.WriteLine("Admin created successfully.");
+			Console.WriteLine("Admin created successfuly");
 
 			
 
@@ -99,6 +99,7 @@ namespace Bank_Application
 			else if (this.Bank.AccountHolders.Any(element => element.UserName == user && element.Password == pass))
 			{
 				this.AccountService.setupUserAccount(user, pass);
+				showUserMenu(1000);
 			}
 			else
 			{
@@ -153,8 +154,8 @@ namespace Bank_Application
 		public void showStaffMenu()
 		{
 			Console.WriteLine("1. Add Account Holder\n2.Display Bank User details\n3. Update Service Charges\n4. Add new Currency\n5. Logout");
-			int nextChoice = Convert.ToInt32(Console.ReadLine());
-			switch (nextChoice)
+			int option = Convert.ToInt32(Console.ReadLine());
+			switch (option)
 			{
 				case 1:
 					addAccountHolder();
@@ -178,6 +179,35 @@ namespace Bank_Application
 					showStaffMenu();
 					break;
 
+			}
+		}
+
+		public void showUserMenu(double InitialBalance)
+		{
+			double balance = InitialBalance;
+			Console.WriteLine("1.Withdrawl \n2.Deposit\n3.Deposit History\n4.Withdraw History\n5.Logout");
+			int option = Convert.ToInt32(Console.ReadLine());
+
+			switch (option)
+			{
+				case 1:
+					double w= this.TransactionService.withdraw();
+					showUserMenu(w);
+					break;
+				case 2:
+					double d = this.TransactionService.deposit();
+					showUserMenu(d);
+					break;
+
+				case 3:
+					this.TransactionService.depositHistory();
+					break;
+				case 4:
+					this.TransactionService.withdrawHistory();
+					break;
+				case 5:
+					this.TransactionService.logout();
+					break;
 			}
 		}
 
