@@ -2,39 +2,54 @@
 <Bank>
   <Branches>
     <BankBranch1>
-      <BankName>pppp</BankName>
-      <Location>pppp</Location>
-      <ID>ppp02132021</ID>
-      <BranchLocation>pppp</BranchLocation>
-      <BranchID>ppp02132021 pppp021321</BranchID>
+      <BankName>HDFC</BankName>
+      <Location>HYDERABAD</Location>
+      <ID>HDF02122021</ID>
+      <BranchLocation>KAUVRIHILLS</BranchLocation>
+      <BranchID>HDF02122021 KAUVRIHILLS021221</BranchID>
     </BankBranch1>
   </Branches>
   <Admins>
     <Admin1>
-      <Name>pppp</Name>
+      <Name>RISHABH</Name>
       <Type>Admin</Type>
       <ID>101</ID>
-      <Username>pppp</Username>
-      <Password>pppp</Password>
+      <Username>rishabh</Username>
+      <Password>rish123</Password>
     </Admin1>
   </Admins>
-  <Staffs />
+  <Staffs>
+    <Employee1>
+      <Name>VijayReddy</Name>
+      <Type>Employee</Type>
+      <ID>45</ID>
+      <Username>reddyvj</Username>
+      <Password>red123</Password>
+    </Employee1>
+    <Employee2>
+      <Name>pppp</Name>
+      <Type>Employee</Type>
+      <ID>45</ID>
+      <Username>pppp</Username>
+      <Password>pppp</Password>
+    </Employee2>
+  </Staffs>
   <AccountHolders>
     <AccountHolders1>
-      <Name>ooooo</Name>
+      <Name>SanjayPavan</Name>
       <Type>AccountHolder</Type>
-      <AccountNumber>ooo02132021</AccountNumber>
-      <Username>oooo</Username>
-      <Password>oooo</Password>
-      <ID>AccountHolder_01</ID>
+      <AccountNumber>San02122021</AccountNumber>
+      <Username>Sanjayp</Username>
+      <Password>sanp</Password>
+      <ID>31</ID>
     </AccountHolders1>
     <AccountHolders2>
-      <Name />
-      <Type />
-      <AccountNumber>ooo02-13-2021</AccountNumber>
+      <Name>oooo</Name>
+      <Type>AccountHolder</Type>
+      <AccountNumber>ooo02122021</AccountNumber>
       <Username>oooo</Username>
       <Password>oooo</Password>
-      <ID />
+      <ID>31</ID>
     </AccountHolders2>
   </AccountHolders>
 </Bank>
