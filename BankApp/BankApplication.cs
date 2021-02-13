@@ -11,7 +11,6 @@ namespace BankApp
 		private AccountService AccountService { get; set; }
 		private TransactionService TransactionService { get; set; }
 		private StaffService StaffService { get; set; }
-
 		public Bank Bank { get; set; }
 		public string PresentUser;
 
@@ -19,9 +18,9 @@ namespace BankApp
 		{
 			this.Bank = new Bank();
 			this.Utility = new Utility();
-			this.TransactionService = new TransactionService(this.Bank);
-			this.StaffService = new StaffService(this.Bank,this.TransactionService,this.AccountService);
-			this.AccountService = new AccountService(this.Bank, this.TransactionService, this.StaffService);
+			this.TransactionService = new TransactionService(this.Bank,this.Utility);
+			this.StaffService = new StaffService(this.Bank,this.TransactionService,this.Utility);
+			this.AccountService = new AccountService(this.Bank, this.TransactionService, this.Utility);
 			this.mainMenu();
 		}
 
@@ -94,13 +93,13 @@ namespace BankApp
 			}
 			else if (this.Bank.Staffs.Find(element => element.UserName == user && element.Password == pass) != null)
 			{
-				this.AccountService.setupStaffAccount(user, pass);
+				this.AccountService.SetupStaffAccount(user, pass);
 				PresentUser = "Staff";
 				showStaffMenu(PresentUser);
 			}
 			else if (this.Bank.AccountHolders.Any(element => element.UserName == user && element.Password == pass))
 			{
-				this.AccountService.setupUserAccount(user, pass);
+				this.AccountService.SetupUserAccount(user, pass);
 				PresentUser = "AccountHolder";
 				showUserMenu(1000,PresentUser);
 			}
@@ -128,13 +127,13 @@ namespace BankApp
 					addAccountHolder();
 					break;
 				case 3:
-					this.StaffService.bankUsers();
+					this.StaffService.BankUsers();
 					break;
 				case 4:
-					this.StaffService.updateCharges();
+					this.StaffService.UpdateCharges();
 					break;
 				case 5:
-					this.StaffService.newCurrency();
+					this.StaffService.NewCurrency();
 					break;
 				case 6:
 					updateAccount();
@@ -143,8 +142,8 @@ namespace BankApp
 					deleteAccount();
 					break;
 				case 8:
-					this.StaffService.logout();
-					this.StaffService.xmlData();
+					this.StaffService.Logout();
+					this.StaffService.XmlData();
 					mainMenu();
 					break;
 				default:
@@ -165,16 +164,16 @@ namespace BankApp
 					addAccountHolder();
 					break;
 				case 2:
-					this.StaffService.bankUsers();
+					this.StaffService.BankUsers();
 					break;
 				case 3:
-					this.StaffService.updateCharges();
+					this.StaffService.UpdateCharges();
 					break;
 				case 4:
-					this.StaffService.newCurrency();
+					this.StaffService.NewCurrency();
 					break;
 				case 5:
-					this.StaffService.logout();
+					this.StaffService.Logout();
 					mainMenu();
 					break;
 
@@ -228,7 +227,7 @@ namespace BankApp
 			Staff staff = new Staff();
 			staff.UserName = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Staff username");
 			staff.Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter Staff password");
-			this.AccountService.createStaffAccount(staff);
+			this.AccountService.CreateStaffAccount(staff);
 			showAdminMenu("Admin");
 		}
 
@@ -237,7 +236,7 @@ namespace BankApp
 			AccountHolder accountHolder = new AccountHolder();
 			accountHolder.UserName = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Account Holder username");
 			accountHolder.Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter Account Holder password");
-			this.AccountService.createUserAccount(accountHolder);
+			this.AccountService.CreateUserAccount(accountHolder);
 		}
 		
 		public void updateAccount()
@@ -261,7 +260,7 @@ namespace BankApp
 				account.AccountNumber = account.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
 				account.AccountType = "SavingsAccount";
 				account.Id = "31";
-				this.AccountService.storeUpdateAccount(account, strname);
+				this.AccountService.StoreUpdateAccount(account, strname);
 			}
 			Console.WriteLine("User Account updated successfully");
 		}
@@ -275,7 +274,7 @@ namespace BankApp
 			string strname = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Account username: ");
 			
 			this.Bank.AccountHolders.RemoveAll(x => x.UserName == strname);
-			this.AccountService.deleteStoredAccount(strname);
+			this.AccountService.DeleteStoredAccount(strname);
 			Console.WriteLine("User Account deleted successfully");
 		}
 		

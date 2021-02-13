@@ -11,19 +11,19 @@ namespace BankApp.Services
 		private TransactionService Transaction { get; set; }
 		private AccountService AccountService { get; set; }
 		private Utility Utility { get; set; }
-		public StaffService(Bank bank, TransactionService transactionService, AccountService accountService)
+
+		public StaffService(Bank bank, TransactionService transactionService, Utility utility)
 		{
 			this.Bank = bank;
-			this.AccountService = accountService;
 			this.Transaction = transactionService;
-			this.Utility = new Utility();
+			this.Utility = utility;
 		}
 
-		public void newCurrency()
+		public void NewCurrency()
 		{
 			Currency currency = new Currency();
-			currency.Code = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter Currency Code:");
-			currency.Name = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter Currency Name:");
+			currency.Code = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter Currency Code:");
+			currency.Name = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Currency Name:");
 			Console.WriteLine("Enter Currency Value Cnoverted To INR:");
 			try
 			{
@@ -32,17 +32,15 @@ namespace BankApp.Services
 				{
 					Console.WriteLine("New Currency updated Successfully");
 					this.Bank.Currency.Add(currency);
-					//this.AccountService.storeCurrencyData(currency);	
 				}
 			}
 			catch (Exception e)
 			{
 				Console.WriteLine("Invalid Conversion value" + e.Message);
 			}
-			//nextMenu();
 		}
 
-		public void bankUsers()
+		public void BankUsers()
 		{
 			Console.WriteLine("Bank Staff Users");
 			foreach (Staff staff in this.Bank.Staffs)
@@ -56,7 +54,7 @@ namespace BankApp.Services
 			}
 		}
 
-		public void xmlData()
+		public void XmlData()
         {
 			XDocument xDocument = XDocument.Load("/Users/apple/Projects/BankApp/BankApp/Data.xml");
 			XElement xElement = new XElement("Branches");
@@ -107,7 +105,7 @@ namespace BankApp.Services
 
 		}
 
-		public void updateCharges()
+		public void UpdateCharges()
 		{
 			Console.WriteLine("Select account from the list");
 			foreach (AccountHolder user in this.Bank.AccountHolders)
@@ -115,17 +113,17 @@ namespace BankApp.Services
 				Console.WriteLine(user.UserName + " " + user.Id);
 			}
 
-			string strname = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter username: ");
+			string strname = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter username: ");
 			foreach (AccountHolder user in this.Bank.AccountHolders)
 			{
 				if (user.UserName == strname)
 				{
 					Console.WriteLine("Username: {0} \nDefault RTGS for same bank: 0%, Default RTGS for different bank: 2%, Default IMPS for same bank: 5%, Default IMPS for different bank: 6%, ", strname);
 
-					string bname = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter bankname of user: ");
+					string bname = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter bankname of user: ");
 					Branch branch = new Branch();
 					branch.BankId = bname.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
-					branch.Location = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Branch Location: ");
+					branch.Location = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Branch Location: ");
 					branch.Id = $"{branch.BankId} {branch.Location}{DateTime.UtcNow.ToString("MMddyy")}";
 
 					this.Bank.Branches.Add(branch);
@@ -159,7 +157,7 @@ namespace BankApp.Services
 
 		
 
-		public void logout()
+		public void Logout()
 		{
 			Console.WriteLine("Goodbye");
 			

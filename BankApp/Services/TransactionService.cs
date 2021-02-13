@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using BankApp.Utilities;
 namespace BankApp.Services
 {
@@ -7,10 +6,11 @@ namespace BankApp.Services
 	{
 		Bank Bank;
 		private Utility Utility { get; set; }
-		public TransactionService(Bank bank)
+
+		public TransactionService(Bank bank, Utility utility)
 		{
 			this.Bank = bank;
-			this.Utility = new Utility();
+			this.Utility = utility;
 		}
 
 		public double InitialBalance = 1000;
