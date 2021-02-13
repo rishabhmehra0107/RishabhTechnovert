@@ -198,12 +198,14 @@ namespace BankApp
 					Console.WriteLine("Available Balance: {0}", InitialBalance);
 					double withdrawAmt = this.Utility.getIntegerInput("Enter Withdraw Amount");
 					double w= this.TransactionService.Withdraw(withdrawAmt,PresentUser);
+					Console.WriteLine("New Balance: {0}", w);
 					showUserMenu(w, PresentUser);
 					break;
 				case 2:
 					Console.WriteLine("Available Balance: {0}", InitialBalance);
 					double depositAmt = this.Utility.getIntegerInput("Enter Deposit Amount");
 					double d = this.TransactionService.Deposit(depositAmt,PresentUser);
+					Console.WriteLine("New Balance: {0}", d);
 					showUserMenu(d, PresentUser);
 					break;
 

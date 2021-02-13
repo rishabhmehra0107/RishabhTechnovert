@@ -22,16 +22,16 @@ namespace BankApp.Services
 		public void newCurrency()
 		{
 			Currency currency = new Currency();
-			currency.CurrencyCode = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter Currency Code:");
-			currency.CurrencyName = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter Currency Name:");
+			currency.Code = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter Currency Code:");
+			currency.Name = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter Currency Name:");
 			Console.WriteLine("Enter Currency Value Cnoverted To INR:");
 			try
 			{
-				currency.ConvertToInr = Convert.ToInt32(Console.ReadLine());
-				if (currency.ConvertToInr >= 0 && currency.ConvertToInr <= 250)
+				currency.InrValue = Convert.ToInt32(Console.ReadLine());
+				if (currency.InrValue >= 0 && currency.InrValue <= 250)
 				{
 					Console.WriteLine("New Currency updated Successfully");
-					//this.Bank.Currency.Add(currency);
+					this.Bank.Currency.Add(currency);
 					//this.AccountService.storeCurrencyData(currency);	
 				}
 			}
@@ -63,7 +63,8 @@ namespace BankApp.Services
 			XElement xElement1 = new XElement("Admins");
 			XElement xElement2 = new XElement("Staffs");
 			XElement xElement3 = new XElement("AccountHolders");
-			xDocument = new XDocument(new XElement("Bank",xElement,xElement1,xElement2,xElement3));
+			XElement xElement4 = new XElement("Currencies");
+			xDocument = new XDocument(new XElement("Bank",xElement,xElement1,xElement2,xElement3,xElement4));
 			int i = 1;
 			foreach (Branch branch in this.Bank.Branches)
 			{
@@ -95,8 +96,15 @@ namespace BankApp.Services
 				xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
 				i++;
 			}
-			
-			
+
+			i = 1;
+			foreach (Currency currency in this.Bank.Currency)
+			{
+				xElement4.Add(new XElement("Currencies" + i, new XElement("Name", currency.Name), new XElement("Code", currency.Code), new XElement("INRValue", currency.InrValue)));
+				xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
+				i++;
+			}
+
 		}
 
 		public void updateCharges()

@@ -12,8 +12,6 @@ namespace BankApp.Services
 			this.Bank = bank;
 			this.Utility = new Utility();
 		}
-		public List<double> DepositList = new List<double>();
-		public List<double> WithdrawList = new List<double>();
 
 		public double InitialBalance = 1000;
 	
@@ -31,8 +29,7 @@ namespace BankApp.Services
 			transaction.Amount = withdrawAmt;
 			InitialBalance = InitialBalance -= withdrawAmt;
 			this.Bank.Transactions.Add(transaction);
-			Console.WriteLine("New Balance: {0}", InitialBalance);
-
+			
 			return InitialBalance;
 		}
 
@@ -47,7 +44,6 @@ namespace BankApp.Services
 			transaction.Amount = depositAmt;
 			InitialBalance = InitialBalance + depositAmt;
 			this.Bank.Transactions.Add(transaction);
-			Console.WriteLine("New Balance: {0}", InitialBalance);
 
 			return InitialBalance;
 		}
