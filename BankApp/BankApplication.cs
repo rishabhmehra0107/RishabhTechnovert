@@ -9,6 +9,7 @@ namespace BankApp
 	{
 		private Utility Utility { get; set; }
 		private AccountService AccountService { get; set; }
+		private BankServices BankServices { get; set; }
 		private TransactionService TransactionService { get; set; }
 		private StaffService StaffService { get; set; }
 		public Bank Bank { get; set; }
@@ -21,6 +22,7 @@ namespace BankApp
 			this.TransactionService = new TransactionService(this.Bank,this.Utility);
 			this.StaffService = new StaffService(this.Bank,this.TransactionService,this.Utility);
 			this.AccountService = new AccountService(this.Bank, this.TransactionService, this.Utility);
+			this.BankServices = new BankServices(this.Bank, this.Utility);
 			this.mainMenu();
 		}
 
@@ -61,7 +63,7 @@ namespace BankApp
 			branch.BankId = this.Bank.Id;
 			branch.Location = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Branch Location");
 			branch.Id = $"{this.Bank.Id} {branch.Location}{DateTime.UtcNow.ToString("MMddyy")}";
-			this.Bank.Branches.Add(branch);
+			this.BankServices.AddBranch(branch);
 
 			//this.AccountService.storeBankData(Bank, branch);
 			Console.WriteLine("Branch details added. Please provide admin username and password for admin");
@@ -72,8 +74,7 @@ namespace BankApp
 			admin.UserName = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter admin username");
 			admin.Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter admin password");
 			admin.Id = "101";
-			this.Bank.Admins.Add(admin);
-			//this.AccountService.storeAdminData(admin);
+			this.BankServices.AddAdmin(admin);
 			Console.WriteLine("Admin created successfuly");
 
 			
