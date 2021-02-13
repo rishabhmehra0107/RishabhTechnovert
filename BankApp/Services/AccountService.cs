@@ -48,7 +48,6 @@ namespace Bank_Application.Services
 			staff.Type = "Employee";
 			staff.Id = "45";
 			this.Bank.Staffs.Add(staff);
-			//storeStaffData(staff);
 		}
 		public void createUserAccount(AccountHolder account)
 		{
@@ -59,36 +58,8 @@ namespace Bank_Application.Services
 			account.AccountType = "Savings account";
 			account.Id = "31";
 			this.Bank.AccountHolders.Add(account);
-			//storeUserData(account);
 		}
-		/*
-		public void storeBankData(Bank bank, Branch branch)
-		{
-			XDocument xDocument = XDocument.Load("/Users/apple/Projects/BankApp/BankApp/Data.xml");
-			xDocument.Root.Add(new XElement("BankBranch", new XElement("BankName", bank.Name), new XElement("Location", bank.Location), new XElement("ID", bank.Id), new XElement("BranchLocation", branch.Location), new XElement("BranchID", branch.Id)));
-			xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
-		}
-
-		public void storeAdminData(Admin admin)
-		{
-			XDocument xDocument = XDocument.Load("/Users/apple/Projects/BankApp/BankApp/Data.xml");
-			xDocument.Root.Add(new XElement("Admin", new XElement("Name", admin.Name), new XElement("Type", admin.Type), new XElement("ID", admin.Id), new XElement("Username", admin.UserName), new XElement("Password", admin.Password)));
-			xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
-		}
-
-		public void storeStaffData(Staff staff)
-		{
-			XDocument xDocument = XDocument.Load("/Users/apple/Projects/BankApp/BankApp/Data.xml");
-			xDocument.Root.Add(new XElement("Employees", new XElement("Name", staff.Name), new XElement("Type", staff.Type), new XElement("ID", staff.Id), new XElement("Username", staff.UserName), new XElement("Password", staff.Password)));
-			xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
-		}
-		public void storeUserData(AccountHolder account)
-        {
-			XDocument xDocument = XDocument.Load("/Users/apple/Projects/BankApp/BankApp/Data.xml");
-			xDocument.Root.Add(new XElement("AccountHolders", new XElement("Name", account.Name), new XElement("Type", account.Type), new XElement("AccountNumber", account.AccountNumber), new XElement("Username", account.UserName), new XElement("Password", account.Password), new XElement("ID", account.Id)));
-			xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
-		}
-		*/
+		
 		public void storeUpdateAccount(AccountHolder accountHolder,string username)
         {
 			XDocument xDocument = XDocument.Load("/Users/apple/Projects/BankApp/BankApp/Data.xml");
@@ -105,11 +76,12 @@ namespace Bank_Application.Services
 			xElement.Remove();
 			xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
 		}
+		/*
 		public void storeCurrencyData(Currency currency)
         {
 			XDocument xDocument = XDocument.Load("/Users/apple/Projects/BankApp/BankApp/Data.xml");
 			xDocument.Root.Add(new XElement("Currency", new XElement("Currency Code", currency.CurrencyCode), new XElement("Currency Name", currency.CurrencyName), new XElement("ConversionValueToINR", currency.ConvertToInr)));
 			xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
-		}
+		}*/
 	}
 }

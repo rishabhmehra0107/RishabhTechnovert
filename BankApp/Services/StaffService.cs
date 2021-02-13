@@ -31,8 +31,8 @@ namespace Bank_Application.Services
 				if (currency.ConvertToInr >= 0 && currency.ConvertToInr <= 250)
 				{
 					Console.WriteLine("New Currency updated Successfully");
-					this.Bank.Currency.Add(currency);
-					this.AccountService.storeCurrencyData(currency);	
+					//this.Bank.Currency.Add(currency);
+					//this.AccountService.storeCurrencyData(currency);	
 				}
 			}
 			catch (Exception e)
@@ -58,11 +58,16 @@ namespace Bank_Application.Services
 
 		public void xmlData()
         {
+			XDocument xDocument = XDocument.Load("/Users/apple/Projects/BankApp/BankApp/Data.xml");
+			XElement xElement = new XElement("Branches");
+			XElement xElement1 = new XElement("Admins");
+			XElement xElement2 = new XElement("Staffs");
+			XElement xElement3 = new XElement("AccountHolders");
+			xDocument = new XDocument(new XElement("Bank",xElement,xElement1,xElement2,xElement3));
 			int i = 1;
 			foreach (Branch branch in this.Bank.Branches)
 			{
-				XDocument xDocument = XDocument.Load("/Users/apple/Projects/BankApp/BankApp/Data.xml");
-				xDocument.Root.Add(new XElement("BankBranch"+i, new XElement("BankName", this.Bank.Name), new XElement("Location", this.Bank.Location), new XElement("ID", this.Bank.Id), new XElement("BranchLocation", branch.Location), new XElement("BranchID", branch.Id)));
+				xElement.Add(new XElement("BankBranch"+i, new XElement("BankName", this.Bank.Name), new XElement("Location", this.Bank.Location), new XElement("ID", this.Bank.Id), new XElement("BranchLocation", branch.Location), new XElement("BranchID", branch.Id)));
 				xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
 				i++;
 			}
@@ -70,8 +75,7 @@ namespace Bank_Application.Services
 			i = 1;
 			foreach(Admin admin in this.Bank.Admins)
             {
-				XDocument xDocument = XDocument.Load("/Users/apple/Projects/BankApp/BankApp/Data.xml");
-				xDocument.Root.Add(new XElement("Admin"+i, new XElement("Name", admin.Name), new XElement("Type", admin.Type), new XElement("ID", admin.Id), new XElement("Username", admin.UserName), new XElement("Password", admin.Password)));
+				xElement1.Add(new XElement("Admin"+i, new XElement("Name", admin.Name), new XElement("Type", admin.Type), new XElement("ID", admin.Id), new XElement("Username", admin.UserName), new XElement("Password", admin.Password)));
 				xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
 				++i;
 			}
@@ -79,8 +83,7 @@ namespace Bank_Application.Services
 			i = 1;
 			foreach (Staff staff in this.Bank.Staffs)
             {
-				XDocument xDocument = XDocument.Load("/Users/apple/Projects/BankApp/BankApp/Data.xml");
-				xDocument.Root.Add(new XElement("Employee"+i, new XElement("Name", staff.Name), new XElement("Type", staff.Type), new XElement("ID", staff.Id), new XElement("Username", staff.UserName), new XElement("Password", staff.Password)));
+				xElement2.Add(new XElement("Employee"+i, new XElement("Name", staff.Name), new XElement("Type", staff.Type), new XElement("ID", staff.Id), new XElement("Username", staff.UserName), new XElement("Password", staff.Password)));
 				xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
 				i++;
 			}
@@ -88,12 +91,11 @@ namespace Bank_Application.Services
 			i = 1;
 			foreach (AccountHolder account in this.Bank.AccountHolders)
 			{
-				XDocument xDocument = XDocument.Load("/Users/apple/Projects/BankApp/BankApp/Data.xml");
-				xDocument.Root.Add(new XElement("AccountHolders"+i, new XElement("Name", account.Name), new XElement("Type", account.Type), new XElement("AccountNumber", account.AccountNumber), new XElement("Username", account.UserName), new XElement("Password", account.Password), new XElement("ID", account.Id)));
+				xElement3.Add(new XElement("AccountHolders"+i, new XElement("Name", account.Name), new XElement("Type", account.Type), new XElement("AccountNumber", account.AccountNumber), new XElement("Username", account.UserName), new XElement("Password", account.Password), new XElement("ID", account.Id)));
 				xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
 				i++;
 			}
-
+			
 			
 		}
 
