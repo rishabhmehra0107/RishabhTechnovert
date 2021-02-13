@@ -1,4 +1,47 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Bank>
-
+  <Branches>
+    <BankBranch1>
+      <BankName>HDFC</BankName>
+      <Location>Hyderabad</Location>
+      <ID>HDF02132021</ID>
+      <BranchLocation>KauvriHills</BranchLocation>
+      <BranchID>HDF02132021 KauvriHills021321</BranchID>
+    </BankBranch1>
+  </Branches>
+  <Admins>
+    <Admin1>
+      <Name>Rishabh</Name>
+      <Type>Admin</Type>
+      <ID>101</ID>
+      <Username>rishabhmehra</Username>
+      <Password>rish1234</Password>
+    </Admin1>
+  </Admins>
+  <Staffs>
+    <Employee1>
+      <Name>Sanjay</Name>
+      <Type>Employee</Type>
+      <ID>Staff_01</ID>
+      <Username>sanjaym</Username>
+      <Password>san123</Password>
+    </Employee1>
+  </Staffs>
+  <AccountHolders>
+    <AccountHolders1>
+      <Name>Vishnu</Name>
+      <Type>AccountHolder</Type>
+      <AccountNumber>Vis02132021</AccountNumber>
+      <Username>vishnureddy</Username>
+      <Password>vish1234</Password>
+      <ID>AccountHolder_01</ID>
+    </AccountHolders1>
+  </AccountHolders>
+  <Currencies>
+    <Currencies1>
+      <Name>USDollar</Name>
+      <Code>USD</Code>
+      <INRValue>73</INRValue>
+    </Currencies1>
+  </Currencies>
 </Bank>
