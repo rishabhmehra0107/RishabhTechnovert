@@ -52,15 +52,15 @@ namespace BankApp
 
 		public void setupBank()
 		{
-			this.Bank.Name = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Bank Name");
-			this.Bank.Location = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Bank Location");
+			this.Bank.Name = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Bank Name");
+			this.Bank.Location = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Bank Location");
 			this.Bank.Id = this.Bank.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
 			Console.WriteLine("Bank setup is completed. Please provide branch details");
 
 			Branch branch = new Branch();
 
 			branch.BankId = this.Bank.Id;
-			branch.Location = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Branch Location");
+			branch.Location = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Branch Location");
 			branch.Id = $"{this.Bank.Id} {branch.Location}{DateTime.UtcNow.ToString("MMddyy")}";
 			this.Bank.Branches.Add(branch);
 
@@ -69,9 +69,9 @@ namespace BankApp
 
 			Admin admin = new Admin();
 			admin.Type = "Admin";
-			admin.Name = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter admin name");
-			admin.UserName = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter admin username");
-			admin.Password = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter admin password");
+			admin.Name = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter admin name");
+			admin.UserName = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter admin username");
+			admin.Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter admin password");
 			admin.Id = "101";
 			this.Bank.Admins.Add(admin);
 			//this.AccountService.storeAdminData(admin);
@@ -85,8 +85,8 @@ namespace BankApp
 
 		public void login()
 		{
-			string user = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter your Username");
-			string pass = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter your Password");
+			string user = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter your Username");
+			string pass = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter your Password");
 			if (this.Bank.Admins.Find(element => element.UserName.Equals(user) && element.Password.Equals(pass)) != null)
 			{
 				PresentUser = "Admin";
@@ -196,14 +196,14 @@ namespace BankApp
 			{
 				case 1:
 					Console.WriteLine("Available Balance: {0}", InitialBalance);
-					double withdrawAmt = this.Utility.getIntegerInput("Enter Withdraw Amount");
+					double withdrawAmt = this.Utility.GetDoubleInput("Enter Withdraw Amount");
 					double w= this.TransactionService.Withdraw(withdrawAmt,PresentUser);
 					Console.WriteLine("New Balance: {0}", w);
 					showUserMenu(w, PresentUser);
 					break;
 				case 2:
 					Console.WriteLine("Available Balance: {0}", InitialBalance);
-					double depositAmt = this.Utility.getIntegerInput("Enter Deposit Amount");
+					double depositAmt = this.Utility.GetDoubleInput("Enter Deposit Amount");
 					double d = this.TransactionService.Deposit(depositAmt,PresentUser);
 					Console.WriteLine("New Balance: {0}", d);
 					showUserMenu(d, PresentUser);
@@ -226,8 +226,8 @@ namespace BankApp
 		public void addStaff()
 		{
 			Staff staff = new Staff();
-			staff.UserName = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Staff username");
-			staff.Password = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter Staff password");
+			staff.UserName = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Staff username");
+			staff.Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter Staff password");
 			this.AccountService.createStaffAccount(staff);
 			showAdminMenu("Admin");
 		}
@@ -235,8 +235,8 @@ namespace BankApp
 		public void addAccountHolder()
 		{
 			AccountHolder accountHolder = new AccountHolder();
-			accountHolder.UserName = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Account Holder username");
-			accountHolder.Password = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Account Holder password");
+			accountHolder.UserName = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Account Holder username");
+			accountHolder.Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter Account Holder password");
 			this.AccountService.createUserAccount(accountHolder);
 		}
 		
@@ -247,15 +247,15 @@ namespace BankApp
 			{
 				Console.WriteLine(accountHolder.UserName);
 			}
-			string strname = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Account username: ");
+			string strname = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Account username: ");
 
 
 			foreach (var account in this.Bank.AccountHolders.Where(w => w.UserName == strname))
 			{
 				Console.WriteLine("Username: {0}. This account can now be updated ", strname);
-				account.UserName = this.Utility.getStringInput("^[a-zA-Z]+$", "Update username of user: ");
-				account.Password = this.Utility.getStringInput("^[a-zA-Z]+$", "Update password of user: ");
-				account.Name = this.Utility.getStringInput("^[a-zA-Z]+$", "Update Account Holder Name");
+				account.UserName = this.Utility.GetStringInput("^[a-zA-Z]+$", "Update username of user: ");
+				account.Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Update password of user: ");
+				account.Name = this.Utility.GetStringInput("^[a-zA-Z]+$", "Update Account Holder Name");
 				account.Type = "AccountHolder";
 				account.InitialBalance = 1000;
 				account.AccountNumber = account.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
@@ -272,7 +272,7 @@ namespace BankApp
 			{
 				Console.WriteLine(accountHolder.UserName);
 			}
-			string strname = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Account username: ");
+			string strname = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Account username: ");
 			
 			this.Bank.AccountHolders.RemoveAll(x => x.UserName == strname);
 			this.AccountService.deleteStoredAccount(strname);

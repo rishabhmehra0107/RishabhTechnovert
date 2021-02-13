@@ -44,14 +44,14 @@ namespace BankApp.Services
 		}
 		public void createStaffAccount(Staff staff)
 		{
-			staff.Name = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Staff Name");
+			staff.Name = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Staff Name");
 			staff.Type = "Employee";
 			staff.Id = "Staff_"+this.Bank.Staffs.Count + 1;
 			this.Bank.Staffs.Add(staff);
 		}
 		public void createUserAccount(AccountHolder account)
 		{
-			account.Name = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Account Holder Name");
+			account.Name = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Account Holder Name");
 			account.Type = "AccountHolder";
 			account.InitialBalance = 1000;
 			account.AccountNumber = account.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");

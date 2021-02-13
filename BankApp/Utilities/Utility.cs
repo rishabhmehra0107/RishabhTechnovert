@@ -6,7 +6,7 @@ namespace BankApp.Utilities
 {
     public class Utility
     {
-        public string getStringInput(string regex, string helpText)
+        public string GetStringInput(string regex, string helpText)
         {
             Console.WriteLine(helpText);
             var input = Console.ReadLine();
@@ -15,9 +15,10 @@ namespace BankApp.Utilities
                 return input;
             }
             Console.WriteLine("Invalid input");
-            return this.getStringInput(regex, helpText);
+
+            return this.GetStringInput(regex, helpText);
         }
-        public double getIntegerInput(string helpText)
+        public double GetDoubleInput(string helpText)
         {
 
             Console.WriteLine(helpText);
@@ -27,7 +28,8 @@ namespace BankApp.Utilities
                 return inputAmt;
             }
             Console.Write("Invalid input");
-            return this.getIntegerInput(helpText);
+
+            return this.GetDoubleInput(helpText);
         }
     }
 }
