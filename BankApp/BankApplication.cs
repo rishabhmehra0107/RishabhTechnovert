@@ -1,25 +1,25 @@
 ﻿using System;
-using Bank_Application.Utilities;
-using Bank_Application.Services;
+using BankApp.Utilities;
+using BankApp.Services;
 using System.Linq;
-namespace Bank_Application
+
+namespace BankApp
 {
 	public class BankApplication
 	{
-
-
 		private Utility Utility { get; set; }
 		private AccountService AccountService { get; set; }
 		private TransactionService TransactionService { get; set; }
 		private StaffService StaffService { get; set; }
 
 		public Bank Bank { get; set; }
+		public string PresentUser;
 
 		public BankApplication()
 		{
 			this.Bank = new Bank();
 			this.Utility = new Utility();
-			this.TransactionService = new TransactionService();
+			this.TransactionService = new TransactionService(this.Bank);
 			this.StaffService = new StaffService(this.Bank,this.TransactionService,this.AccountService);
 			this.AccountService = new AccountService(this.Bank, this.TransactionService, this.StaffService);
 			this.mainMenu();
@@ -89,17 +89,20 @@ namespace Bank_Application
 			string pass = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter your Password");
 			if (this.Bank.Admins.Find(element => element.UserName.Equals(user) && element.Password.Equals(pass)) != null)
 			{
-				showAdminMenu();
+				PresentUser = "Admin";
+				showAdminMenu(PresentUser);
 			}
 			else if (this.Bank.Staffs.Find(element => element.UserName == user && element.Password == pass) != null)
 			{
 				this.AccountService.setupStaffAccount(user, pass);
-				showStaffMenu();
+				PresentUser = "Staff";
+				showStaffMenu(PresentUser);
 			}
 			else if (this.Bank.AccountHolders.Any(element => element.UserName == user && element.Password == pass))
 			{
 				this.AccountService.setupUserAccount(user, pass);
-				showUserMenu(1000);
+				PresentUser = "AccountHolder";
+				showUserMenu(1000,PresentUser);
 			}
 			else
 			{
@@ -111,7 +114,7 @@ namespace Bank_Application
 
 
 
-		public void showAdminMenu()
+		public void showAdminMenu(string PresentUser)
 		{
 			Console.WriteLine("1. Add Staff\n2. Add Account Holder\n3.Display Bank User details\n4. Update Service Charges\n5. Add new Currency\n6. Update Account\n7. Delete Account\n8.Logout");
 			int option = Convert.ToInt32(Console.ReadLine());
@@ -146,13 +149,13 @@ namespace Bank_Application
 					break;
 				default:
 					Console.WriteLine("Please select option from the list");
-					showAdminMenu();
+					showAdminMenu(PresentUser);
 					break;
 
 			}
 		}
 
-		public void showStaffMenu()
+		public void showStaffMenu(string PresentUser)
 		{
 			Console.WriteLine("1. Add Account Holder\n2.Display Bank User details\n3. Update Service Charges\n4. Add new Currency\n5. Logout");
 			int option = Convert.ToInt32(Console.ReadLine());
@@ -177,13 +180,13 @@ namespace Bank_Application
 
 				default:
 					Console.WriteLine("Please select option from the list");
-					showStaffMenu();
+					showStaffMenu(PresentUser);
 					break;
 
 			}
 		}
 
-		public void showUserMenu(double InitialBalance)
+		public void showUserMenu(double InitialBalance, string PresentUser)
 		{
 			double balance = InitialBalance;
 			Console.WriteLine("1.Withdrawl \n2.Deposit\n3.Deposit History\n4.Withdraw History\n5.Logout");
@@ -192,22 +195,26 @@ namespace Bank_Application
 			switch (option)
 			{
 				case 1:
-					double w= this.TransactionService.withdraw();
-					showUserMenu(w);
+					Console.WriteLine("Available Balance: {0}", InitialBalance);
+					double withdrawAmt = this.Utility.getIntegerInput("Enter Withdraw Amount");
+					double w= this.TransactionService.Withdraw(withdrawAmt,PresentUser);
+					showUserMenu(w, PresentUser);
 					break;
 				case 2:
-					double d = this.TransactionService.deposit();
-					showUserMenu(d);
+					Console.WriteLine("Available Balance: {0}", InitialBalance);
+					double depositAmt = this.Utility.getIntegerInput("Enter Deposit Amount");
+					double d = this.TransactionService.Deposit(depositAmt,PresentUser);
+					showUserMenu(d, PresentUser);
 					break;
 
 				case 3:
-					this.TransactionService.depositHistory();
+					this.TransactionService.DepositHistory();
 					break;
 				case 4:
-					this.TransactionService.withdrawHistory();
+					this.TransactionService.WithdrawHistory();
 					break;
 				case 5:
-					this.TransactionService.logout();
+					this.TransactionService.Logout();
 					break;
 			}
 		}
@@ -218,7 +225,7 @@ namespace Bank_Application
 			staff.UserName = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Staff username");
 			staff.Password = this.Utility.getStringInput("^[a-zA-Z0-9]+$", "Enter Staff password");
 			this.AccountService.createStaffAccount(staff);
-			showAdminMenu();
+			showAdminMenu("Admin");
 		}
 
 		public void addAccountHolder()

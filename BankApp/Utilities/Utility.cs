@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace Bank_Application.Utilities
+namespace BankApp.Utilities
 {
     public class Utility
     {

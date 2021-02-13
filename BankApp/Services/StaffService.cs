@@ -2,8 +2,8 @@
 using System.Xml;
 using System.Xml.Linq;
 using System.Linq;
-using Bank_Application.Utilities;
-namespace Bank_Application.Services
+using BankApp.Utilities;
+namespace BankApp.Services
 {
 	public class StaffService
 	{

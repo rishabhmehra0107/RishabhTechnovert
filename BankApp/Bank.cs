@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-namespace Bank_Application
+namespace BankApp
 {
     public class Bank
     {
@@ -13,5 +13,6 @@ namespace Bank_Application
         public List<Admin> Admins = new List<Admin>();
         public List<Staff> Staffs = new List<Staff>();
         public List<Currency> Currency = new List<Currency>();
+        public List<Transaction> Transactions = new List<Transaction>();
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Xml.Linq;
-using Bank_Application.Utilities;
+using BankApp.Utilities;
 
-namespace Bank_Application.Services
+namespace BankApp.Services
 {
 	public class AccountService
 	{
@@ -46,7 +46,7 @@ namespace Bank_Application.Services
 		{
 			staff.Name = this.Utility.getStringInput("^[a-zA-Z]+$", "Enter Staff Name");
 			staff.Type = "Employee";
-			staff.Id = "45";
+			staff.Id = "Staff_"+this.Bank.Staffs.Count + 1;
 			this.Bank.Staffs.Add(staff);
 		}
 		public void createUserAccount(AccountHolder account)
@@ -56,7 +56,7 @@ namespace Bank_Application.Services
 			account.InitialBalance = 1000;
 			account.AccountNumber = account.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
 			account.AccountType = "Savings account";
-			account.Id = "31";
+			account.Id = "AccountHolder_"+this.Bank.AccountHolders.Count + 1;
 			this.Bank.AccountHolders.Add(account);
 		}
 		

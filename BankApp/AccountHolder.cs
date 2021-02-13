@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-namespace Bank_Application
+namespace BankApp
 {
     public class AccountHolder : User
     {

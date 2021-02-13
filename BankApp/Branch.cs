@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Bank_Application
+namespace BankApp
 {
     public class Branch
     {
