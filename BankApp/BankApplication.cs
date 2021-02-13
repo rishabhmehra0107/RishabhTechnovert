@@ -208,9 +208,11 @@ namespace BankApp
 					break;
 
 				case 3:
+					Console.WriteLine("Deposit History");
 					this.TransactionService.DepositHistory();
 					break;
 				case 4:
+					Console.WriteLine("Withdraw History");
 					this.TransactionService.WithdrawHistory();
 					break;
 				case 5:

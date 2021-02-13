@@ -54,7 +54,6 @@ namespace BankApp.Services
 
 		public void DepositHistory()
 		{
-			Console.WriteLine("Deposit History");
 			foreach (Transaction transaction in this.Bank.Transactions)
 			{
 				if (transaction.Type.Equals("Deposit"))
@@ -67,7 +66,6 @@ namespace BankApp.Services
 
 		public void WithdrawHistory()
 		{
-			Console.WriteLine("Withdraw History");
 			foreach(Transaction transaction in this.Bank.Transactions)
             {
 				if (transaction.Type.Equals("Withdraw"))
