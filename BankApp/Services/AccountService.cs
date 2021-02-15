@@ -43,21 +43,5 @@ namespace BankApp.Services
 			this.Bank.AccountHolders.Add(account);
 		}
 		
-		public void StoreUpdateAccount(AccountHolder accountHolder,string username)
-        {
-			XDocument xDocument = XDocument.Load("/Users/apple/Projects/BankApp/BankApp/Data.xml");
-			XElement xElement = xDocument.Root.Descendants("AccountHolders").Where(x => x.Element("Username").Value == username).FirstOrDefault();
-			xElement.Element("Username").Value = accountHolder.UserName;
-			xElement.Element("Name").Value = accountHolder.Name;
-			xElement.Element("Password").Value = accountHolder.Password;
-			xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
-		}
-		public void DeleteStoredAccount(string username)
-		{
-			XDocument xDocument = XDocument.Load("/Users/apple/Projects/BankApp/BankApp/Data.xml");
-			XElement xElement = xDocument.Root.Descendants("AccountHolders").Where(x => x.Element("Username").Value == username).FirstOrDefault();
-			xElement.Remove();
-			xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
-		}
 	}
 }

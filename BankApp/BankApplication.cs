@@ -319,9 +319,8 @@ namespace BankApp
 				Console.WriteLine(accountHolder.UserName);
 			}
 			string strname = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Account username: ");
-			
+			//this.AccountService.DeleteStoredAccount(strname);
 			this.Bank.AccountHolders.RemoveAll(x => x.UserName == strname);
-			this.AccountService.DeleteStoredAccount(strname);
 			Console.WriteLine("User Account deleted successfully");
 		}
 
