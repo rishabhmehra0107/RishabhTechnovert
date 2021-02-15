@@ -14,7 +14,7 @@ namespace BankApp
 		private TransactionService TransactionService { get; set; }
 		private StaffService StaffService { get; set; }
 		public Bank Bank { get; set; }
-		public string LoggedInUser;
+		public User LoggedInUser;
 
 		public BankApplication()
 		{
@@ -84,35 +84,30 @@ namespace BankApp
 		{
 			string user = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter your Username");
 			string pass = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter your Password");
-			if (this.Bank.Admins.Find(element => element.UserName.Equals(user) && element.Password.Equals(pass)) != null)
-			{
-				Console.WriteLine("Admin {0} present in the system ", user);
-				LoggedInUser = "Admin";
-				ShowAdminMenu(LoggedInUser);
-			}
-			else if (this.Bank.Staffs.Find(element => element.UserName == user && element.Password == pass) != null)
-			{
-				Console.WriteLine("Employee {0} present in the system ", user);
-				LoggedInUser = "Staff";
-				ShowStaffMenu(LoggedInUser);
-			}
-			else if (this.Bank.AccountHolders.Any(element => element.UserName == user && element.Password == pass))
-			{
-				Console.WriteLine("Account Holder {0} present in the system ", user);
-				LoggedInUser = "AccountHolder";
-				ShowUserMenu(1000, LoggedInUser);
-			}
-			else
-			{
-				Console.WriteLine("Invalid credentials");
-			}
-			Login();
 
+			this.LoggedInUser = this.BankServices.LogIn(user, pass);
+            if (this.LoggedInUser.Type.Equals("Admin"))
+            {
+				DisplayAdminMenu(this.LoggedInUser);
+            }
+			else if (this.LoggedInUser.Type.Equals("Employee"))
+            {
+				DisplayStaffMenu(this.LoggedInUser);
+            }
+			else if (this.LoggedInUser.Type.Equals("AccountHolder"))
+            {
+				DisplayUserMenu(1000,this.LoggedInUser);
+            }
+            else
+            {
+				Console.WriteLine("Invalid Credentials");
+            }
+			Login();
 		}
 
 
 
-		public void ShowAdminMenu(string LoggedInUser)
+		public void DisplayAdminMenu(User LoggedInUser)
 		{
 			Console.WriteLine("1. Add Staff\n2. Add Account Holder\n3.Display Bank User details\n4. Update Service Charges\n5. Add new Currency\n6. Update Account\n7. Delete Account\n8.Edit Transactions\n9.Logout");
 			int option = Convert.ToInt32(Console.ReadLine());
@@ -124,46 +119,46 @@ namespace BankApp
 					break;
 				case 2:
 					AddAccountHolder();
-					ShowAdminMenu(LoggedInUser);
+					DisplayAdminMenu(LoggedInUser);
 					break;
 				case 3:
 					BankUsers();
-					ShowAdminMenu(LoggedInUser);
+					DisplayAdminMenu(LoggedInUser);
 					break;
 				case 4:
 					UpdateCharges();
-					ShowAdminMenu(LoggedInUser);
+					DisplayAdminMenu(LoggedInUser);
 					break;
 				case 5:
 					NewCurrency();
-					ShowAdminMenu(LoggedInUser);
+					DisplayAdminMenu(LoggedInUser);
 					break;
 				case 6:
 					UpdateAccount();
-					ShowAdminMenu(LoggedInUser);
+					DisplayAdminMenu(LoggedInUser);
 					break;
 				case 7:
 					DeleteAccount();
-					ShowAdminMenu(LoggedInUser);
+					DisplayAdminMenu(LoggedInUser);
 					break;
 				case 8:
 					RevertTransaction();
-					ShowAdminMenu(LoggedInUser);
+					DisplayAdminMenu(LoggedInUser);
 					break;
 				case 9:
-					Logout(LoggedInUser);
 					this.StaffService.XmlData();
+					Logout(this.LoggedInUser.Name);
 					MainMenu();
 					break;
 				default:
 					Console.WriteLine("Please select option from the list");
-					ShowAdminMenu(LoggedInUser);
+					DisplayAdminMenu(LoggedInUser);
 					break;
 
 			}
 		}
 
-		public void ShowStaffMenu(string LoggedInUser)
+		public void DisplayStaffMenu(User LoggedInUser)
 		{
 			Console.WriteLine("1. Add Account Holder\n2.Display Bank User details\n3. Update Service Charges\n4. Add new Currency\n5. Edit Transactions\n6. Logout");
 			int option = Convert.ToInt32(Console.ReadLine());
@@ -171,38 +166,39 @@ namespace BankApp
 			{
 				case 1:
 					AddAccountHolder();
-					ShowStaffMenu(LoggedInUser);
+					DisplayStaffMenu(LoggedInUser);
 					break;
 				case 2:
 					BankUsers();
-					ShowStaffMenu(LoggedInUser);
+					DisplayStaffMenu(LoggedInUser);
 					break;
 				case 3:
 					UpdateCharges();
-					ShowStaffMenu(LoggedInUser);
+					DisplayStaffMenu(LoggedInUser);
 					break;
 				case 4:
 					NewCurrency();
-					ShowStaffMenu(LoggedInUser);
+					DisplayStaffMenu(LoggedInUser);
 					break;
 				case 5:
 					RevertTransaction();
-					ShowStaffMenu(LoggedInUser);
+					DisplayStaffMenu(LoggedInUser);
 					break;
 				case 6:
-					Logout(LoggedInUser);
+					this.StaffService.XmlData();
+					Logout(this.LoggedInUser.Name);
 					MainMenu();
 					break;
 
 				default:
 					Console.WriteLine("Please select option from the list");
-					ShowStaffMenu(LoggedInUser);
+					DisplayStaffMenu(LoggedInUser);
 					break;
 
 			}
 		}
 
-		public void ShowUserMenu(double InitialBalance, string LoggedInUser)
+		public void DisplayUserMenu(double InitialBalance, User LoggedInUser)
 		{
 			double balance = InitialBalance;
 			Console.WriteLine("1.Withdrawl \n2.Deposit\n3.Deposit History\n4.Withdraw History\n5.View Balance\n6.Logout");
@@ -213,16 +209,16 @@ namespace BankApp
 				case 1:
 					Console.WriteLine("Available Balance: {0}", balance);
 					double withdrawAmt = this.Utility.GetDoubleInput("Enter Withdraw Amount");
-					balance= this.TransactionService.Withdraw(withdrawAmt, LoggedInUser);
+					balance= this.TransactionService.Withdraw(withdrawAmt, this.LoggedInUser.Type);
 					Console.WriteLine("New Balance: {0}", balance);
-					ShowUserMenu(balance, LoggedInUser);
+					DisplayUserMenu(balance, LoggedInUser);
 					break;
 				case 2:
 					Console.WriteLine("Available Balance: {0}", balance);
 					double depositAmt = this.Utility.GetDoubleInput("Enter Deposit Amount");
-					balance = this.TransactionService.Deposit(depositAmt, LoggedInUser);
+					balance = this.TransactionService.Deposit(depositAmt, this.LoggedInUser.Type);
 					Console.WriteLine("New Balance: {0}", balance);
-					ShowUserMenu(balance, LoggedInUser);
+					DisplayUserMenu(balance, LoggedInUser);
 					break;
 				case 3:
 					Console.WriteLine("Deposit History");
@@ -234,7 +230,7 @@ namespace BankApp
 							Console.WriteLine("Deposit Amount: {0}\nTransaction Date: {1}\nTransaction ID: {2}", transaction.Amount, transaction.CreateDate, transaction.ID);
 						}
 					}
-					ShowUserMenu(balance, LoggedInUser);
+					DisplayUserMenu(balance, LoggedInUser);
 					break;
 				case 4:
 					Console.WriteLine("Withdraw History");
@@ -246,19 +242,20 @@ namespace BankApp
 							Console.WriteLine("Withdraw Amount: {0}\nTransaction Date: {1}\nTransaction ID: {2}", transaction.Amount, transaction.CreateDate, transaction.ID);
 						}
 					}
-					ShowUserMenu(balance, LoggedInUser);
+					DisplayUserMenu(balance, LoggedInUser);
 					break;
 				case 5:
 					Console.WriteLine("Current Balance: {0}",balance);
-					ShowUserMenu(balance, LoggedInUser);
+					DisplayUserMenu(balance, LoggedInUser);
 					break;
 				case 6:
-					Logout(LoggedInUser);
+					this.StaffService.XmlData();
+					Logout(this.LoggedInUser.Name);
 					MainMenu();
 					break;
 				default:
 					Console.WriteLine("Please select option from the list");
-					ShowUserMenu(balance, LoggedInUser);
+					DisplayUserMenu(balance, this.LoggedInUser);
 					break;
 			}
 		}
@@ -269,7 +266,7 @@ namespace BankApp
 			string password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter Staff password");
 			string name = this.Utility.GetStringInput("^[a-zA-Z]{3,}$", "Enter Staff Name");
 			this.AccountService.CreateStaffAccount(userName,password,name);
-			ShowAdminMenu("Admin");
+			DisplayAdminMenu(this.LoggedInUser);
 		}
 
 		public void AddAccountHolder()
@@ -393,7 +390,6 @@ namespace BankApp
 		public void Logout(string user)
 		{
 			Console.WriteLine("Goodbye "+user);
-			MainMenu();
 		}
 
 		void Exit()
