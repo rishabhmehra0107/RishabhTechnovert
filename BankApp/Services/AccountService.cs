@@ -19,37 +19,22 @@ namespace BankApp.Services
 			this.Transaction = transactionService;
 		}
 
-		public void SetupUserAccount(string user, string pass)
+		public void CreateStaffAccount(string username, string password, string name)
 		{
-			AccountHolder accountHolder = new AccountHolder();
-			accountHolder.UserName = user;
-			accountHolder.Password = pass;
-			accountHolder.InitialBalance = 1000;
-			accountHolder.AccountNumber = accountHolder.UserName.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
-			this.Bank.AccountHolders.Add(accountHolder);
-
-			Console.WriteLine("Username: {0} ,AccountID:{1}, Balance: {2}", accountHolder.UserName, accountHolder.AccountNumber, accountHolder.InitialBalance);
-		}
-
-		public void SetupStaffAccount(string user, string pass)
-		{
-			Admin admin = new Admin();
-			admin.UserName = user;
-			admin.Password = pass;
-			this.Bank.Admins.Add(admin);
-
-			Console.WriteLine("Employee {0} present in the system ", user);
-		}
-		public void CreateStaffAccount(Staff staff)
-		{
-			staff.Name = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Staff Name");
+			Staff staff = new Staff();
+			staff.UserName = username;
+			staff.Password = password;
+			staff.Name = name;
 			staff.Type = "Employee";
 			staff.Id = "Staff_"+this.Bank.Staffs.Count + 1;
 			this.Bank.Staffs.Add(staff);
 		}
-		public void CreateUserAccount(AccountHolder account)
+		public void CreateUserAccount(string username, string password, string name)
 		{
-			account.Name = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Account Holder Name");
+			AccountHolder account = new AccountHolder();
+			account.UserName = username;
+			account.Password = password;
+			account.Name = name;
 			account.Type = "AccountHolder";
 			account.InitialBalance = 1000;
 			account.AccountNumber = account.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");

@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Xml;
 using System.Xml.Linq;
 using System.Linq;
 using BankApp.Utilities;
+using System.Collections.Generic;
+
 namespace BankApp.Services
 {
 	public class StaffService
@@ -19,40 +20,54 @@ namespace BankApp.Services
 			this.Utility = utility;
 		}
 
-		public void NewCurrency()
+		public void NewCurrency(string code,string name,int value)
 		{
 			Currency currency = new Currency();
-			currency.Code = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter Currency Code:");
-			currency.Name = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Currency Name:");
-			Console.WriteLine("Enter Currency Value Cnoverted To INR:");
-			try
+			currency.Code = code;
+			currency.Name = name;
+			currency.InrValue = value;
+			if (currency.InrValue >= 0 && currency.InrValue <= 250)
 			{
-				currency.InrValue = Convert.ToInt32(Console.ReadLine());
-				if (currency.InrValue >= 0 && currency.InrValue <= 250)
-				{
-					Console.WriteLine("New Currency updated Successfully");
-					this.Bank.Currency.Add(currency);
-				}
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine("Invalid Conversion value" + e.Message);
+				this.Bank.Currency.Add(currency);
 			}
 		}
 
-		public void BankUsers()
+		public List<string> BankEmployees()
 		{
-			Console.WriteLine("Bank Staff Users");
-			foreach (Staff staff in this.Bank.Staffs)
-			{
-				Console.WriteLine(staff.UserName);
-			}
-			Console.WriteLine("Bank Account Holders");
-			foreach (AccountHolder accountHolder in this.Bank.AccountHolders)
-			{
-				Console.WriteLine(accountHolder.UserName);
-			}
+			List<string> newList = new List<string>();
+			newList = this.Bank.Staffs.Select(s => s.UserName).ToList();
+			return newList;
 		}
+
+		public List<string> BankAccountHolders()
+		{
+			List<string> newList = new List<string>();
+			newList = this.Bank.AccountHolders.Select(s => s.UserName).ToList();
+			return newList;
+		}
+
+		public void RevertTransaction(string id, DateTime date)
+        {
+			Transaction transaction = new Transaction();
+			transaction = this.Bank.Transactions.Find(element => element.ID == id && element.CreateDate == date);
+            {
+				this.Bank.Transactions.Remove(transaction);
+            }
+
+		}
+
+		public void UpdateChargesSameBank(int srtgs, int simps)
+		{
+			this.Bank.SameBankIMPSCharge = simps;
+			this.Bank.SameBankRTGSCharge = srtgs;
+
+		}
+		public void UpdateChargesDifferentBank(int drtgs,int dimps)
+        {
+			this.Bank.DifferentBankIMPSCharge = dimps;
+			this.Bank.DifferentBankRTGSCharge = drtgs;
+        }
+
 
 		public void XmlData()
         {
@@ -103,64 +118,6 @@ namespace BankApp.Services
 				i++;
 			}
 
-		}
-
-		public void UpdateCharges()
-		{
-			Console.WriteLine("Select account from the list");
-			foreach (AccountHolder user in this.Bank.AccountHolders)
-			{
-				Console.WriteLine(user.UserName + " " + user.Id);
-			}
-
-			string strname = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter username: ");
-			foreach (AccountHolder user in this.Bank.AccountHolders)
-			{
-				if (user.UserName == strname)
-				{
-					Console.WriteLine("Username: {0} \nDefault RTGS for same bank: 0%, Default RTGS for different bank: 2%, Default IMPS for same bank: 5%, Default IMPS for different bank: 6%, ", strname);
-
-					string bname = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter bankname of user: ");
-					Branch branch = new Branch();
-					branch.BankId = bname.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
-					branch.Location = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Branch Location: ");
-					branch.Id = $"{branch.BankId} {branch.Location}{DateTime.UtcNow.ToString("MMddyy")}";
-
-					this.Bank.Branches.Add(branch);
-					int flag = 0;
-					foreach (Branch branch1 in this.Bank.Branches)
-					{
-						if (branch1.BankId == bname.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy"))
-						{
-							Console.WriteLine("Since same bank, the new charges are:-");
-							Console.WriteLine("RTGS: ");
-							int srtgs = Convert.ToInt32(Console.ReadLine());
-							Console.WriteLine("IMPS: ");
-							int simps = Convert.ToInt32(Console.ReadLine());
-							flag = 1;
-							break;
-						}
-					}
-					if (flag == 0)
-					{
-						Console.WriteLine("Since different bank, the new charges are:-");
-						Console.WriteLine("RTGS: ");
-						int drtgs = Convert.ToInt32(Console.ReadLine());
-						Console.WriteLine("IMPS: ");
-						int dimps = Convert.ToInt32(Console.ReadLine());
-					}
-				}
-
-			}
-
-		}
-
-		
-
-		public void Logout()
-		{
-			Console.WriteLine("Goodbye");
-			
 		}
 	}
 }

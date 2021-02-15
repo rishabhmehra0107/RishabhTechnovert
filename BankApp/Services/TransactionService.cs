@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using BankApp.Utilities;
 namespace BankApp.Services
 {
@@ -47,18 +48,20 @@ namespace BankApp.Services
 
 			return InitialBalance;
 		}
-
-		public void DepositHistory()
+		/*
+		public Tuple<double,DateTime,string> DepositHistory()
 		{
 			foreach (Transaction transaction in this.Bank.Transactions)
 			{
 				if (transaction.Type.Equals("Deposit"))
 
 				{
-					Console.WriteLine("Deposit Amount: {0}\nTransaction Date: {1}\nTransaction ID: {2}", transaction.Amount, transaction.CreateDate, transaction.ID);
+					return new Tuple<double, DateTime, string>(transaction.Amount, transaction.CreateDate, transaction.ID);
 				}
 			}
-		}
+			DateTime date = new DateTime();
+			return new Tuple<double, DateTime, string>(0, date, "Invalid");
+		}*/
 
 		public void WithdrawHistory()
 		{
