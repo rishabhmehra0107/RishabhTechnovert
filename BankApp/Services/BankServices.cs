@@ -20,11 +20,15 @@ namespace BankApp.Services
 
 		public void AddBranch(Branch branch)
         {
+			branch.BankId = this.Bank.Id;
+			branch.Id = $"{this.Bank.Id} {branch.Location}{DateTime.UtcNow.ToString("MMddyy")}";
 			this.Bank.Branches.Add(branch);
 		}
 
 		public void AddAdmin(Admin admin)
         {
+			admin.Type = "Admin";
+			admin.Id = "ID_" + this.Bank.Admins.Count + 1;
 			this.Bank.Admins.Add(admin);
 		}
 	}
