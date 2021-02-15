@@ -63,18 +63,6 @@ namespace BankApp.Services
 			return new Tuple<double, DateTime, string>(0, date, "Invalid");
 		}*/
 
-		public void WithdrawHistory()
-		{
-			foreach(Transaction transaction in this.Bank.Transactions)
-            {
-				if (transaction.Type.Equals("Withdraw"))
-
-				{
-					Console.WriteLine("Withdraw Amount: {0}\nTransaction Date: {1}\nTransaction ID: {2}",transaction.Amount,transaction.CreateDate,transaction.ID);
-				}
-			}
-		
-		}
 
 		public void Logout()
 		{
