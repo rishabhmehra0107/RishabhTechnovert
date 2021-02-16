@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 namespace BankApp
 {
     public class User

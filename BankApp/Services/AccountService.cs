@@ -43,6 +43,12 @@ namespace BankApp.Services
 			account.Id = "AccountHolder_"+this.Bank.AccountHolders.Count + 1;
 			this.Bank.AccountHolders.Add(account);
 		}
+
+		public void TransferAmount(double amount, AccountHolder accountHolder, AccountHolder accountHolder1)
+        {
+			accountHolder1.InitialBalance += amount;
+			accountHolder.InitialBalance -= amount;
+        }
 		
 	}
 }

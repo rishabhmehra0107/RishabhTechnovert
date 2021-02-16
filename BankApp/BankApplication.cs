@@ -96,7 +96,13 @@ namespace BankApp
             }
 			else if (this.LoggedInUser.Type.Equals("AccountHolder"))
             {
-				DisplayUserMenu(1000,this.LoggedInUser);
+				foreach(AccountHolder accountHolder in this.Bank.AccountHolders)
+                {
+                    if (this.LoggedInUser.UserName.Equals(accountHolder.UserName))
+                    {
+						DisplayUserMenu(accountHolder);
+					}
+                }
             }
             else
             {
@@ -160,7 +166,7 @@ namespace BankApp
 
 		public void DisplayStaffMenu(User LoggedInUser)
 		{
-			Console.WriteLine("1. Add Account Holder\n2.Display Bank User Details\n3. Update Service Charges\n4. Add New Currency\n5. Edit Transactions\n6. Logout");
+			Console.WriteLine("1. Add Account Holder\n2. Display Bank User Details\n3. Update Service Charges\n4. Add New Currency\n5. Edit Transactions\n6. Logout");
 			int option = Convert.ToInt32(Console.ReadLine());
 			switch (option)
 			{
@@ -198,27 +204,27 @@ namespace BankApp
 			}
 		}
 
-		public void DisplayUserMenu(double InitialBalance, User LoggedInUser)
+		public void DisplayUserMenu(AccountHolder LoggedInAccountHolder)
 		{
-			double balance = InitialBalance;
-			Console.WriteLine("1.Withdrawl \n2.Deposit\n3.Transaction History\n4.View Balance\n5.Logout");
+			double balance = LoggedInAccountHolder.InitialBalance;
+			Console.WriteLine("1.Withdrawl \n2.Deposit\n3.Transaction History\n4.View Balance\n5.Transfer Funds\n6.Logout");
 			int option = Convert.ToInt32(Console.ReadLine());
 
 			switch (option)
 			{
 				case 1:
-					Console.WriteLine("Available Balance: {0}", balance);
+					Console.WriteLine("Available Balance: {0}", LoggedInAccountHolder.InitialBalance);
 					double withdrawAmt = this.Utility.GetDoubleInput("Enter Withdraw Amount");
-					balance= this.TransactionService.Withdraw(withdrawAmt, this.LoggedInUser.Type);
-					Console.WriteLine("New Balance: {0}", balance);
-					DisplayUserMenu(balance, LoggedInUser);
+					LoggedInAccountHolder.InitialBalance = this.TransactionService.Withdraw(withdrawAmt, LoggedInAccountHolder.Type);
+					Console.WriteLine("New Balance: {0}", LoggedInAccountHolder.InitialBalance);
+					DisplayUserMenu(LoggedInAccountHolder);
 					break;
 				case 2:
-					Console.WriteLine("Available Balance: {0}", balance);
+					Console.WriteLine("Available Balance: {0}", LoggedInAccountHolder.InitialBalance);
 					double depositAmt = this.Utility.GetDoubleInput("Enter Deposit Amount");
-					balance = this.TransactionService.Deposit(depositAmt, this.LoggedInUser.Type);
-					Console.WriteLine("New Balance: {0}", balance);
-					DisplayUserMenu(balance, LoggedInUser);
+					LoggedInAccountHolder.InitialBalance = this.TransactionService.Deposit(depositAmt, LoggedInAccountHolder.Type);
+					Console.WriteLine("New Balance: {0}", LoggedInAccountHolder.InitialBalance);
+					DisplayUserMenu(LoggedInAccountHolder);
 					break;
 				case 3:
 					Console.WriteLine("Transaction History");
@@ -229,19 +235,45 @@ namespace BankApp
 					break;
 
 				case 4:
-					Console.WriteLine("Current Balance: {0}",balance);
-					DisplayUserMenu(balance, LoggedInUser);
+					Console.WriteLine("Current Balance: {0}", LoggedInAccountHolder.InitialBalance);
+					DisplayUserMenu(LoggedInAccountHolder);
 					break;
 				case 5:
+					TransferFunds(LoggedInAccountHolder);
+					DisplayUserMenu(LoggedInAccountHolder);
+					break;
+				case 6:
 					this.StaffService.XmlData();
-					Logout(this.LoggedInUser.Name);
+					Logout(LoggedInAccountHolder.Name);
 					MainMenu();
 					break;
 				default:
 					Console.WriteLine("Please select option from the list");
-					DisplayUserMenu(balance, this.LoggedInUser);
+					DisplayUserMenu(LoggedInAccountHolder);
 					break;
 			}
+		}
+
+		public void TransferFunds(AccountHolder accountHolder)
+        {
+			string accountNumber = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Please enter vendor's account number to transfer funds.");
+			foreach (AccountHolder accountHolder1 in this.Bank.AccountHolders)
+			{
+				if (accountHolder1.AccountNumber.Equals(accountNumber))
+				{
+					double amount = this.Utility.GetDoubleInput("Enter Amount To Transfer");
+					double balance = accountHolder.InitialBalance - amount;
+					if(balance >= 0)
+                    {
+						this.AccountService.TransferAmount(amount, accountHolder, accountHolder1);
+					}
+                    else
+                    {
+						Console.WriteLine("Insufficient Balance");
+                    }
+				}
+			}
+
 		}
 
 		public void AddStaff()
