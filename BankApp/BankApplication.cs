@@ -201,7 +201,7 @@ namespace BankApp
 		public void DisplayUserMenu(double InitialBalance, User LoggedInUser)
 		{
 			double balance = InitialBalance;
-			Console.WriteLine("1.Withdrawl \n2.Deposit\n3.Deposit History\n4.Withdraw History\n5.View Balance\n6.Logout");
+			Console.WriteLine("1.Withdrawl \n2.Deposit\n3.Transaction History\n4.View Balance\n5.Logout");
 			int option = Convert.ToInt32(Console.ReadLine());
 
 			switch (option)
@@ -221,34 +221,18 @@ namespace BankApp
 					DisplayUserMenu(balance, LoggedInUser);
 					break;
 				case 3:
-					Console.WriteLine("Deposit History");
-					foreach (Transaction transaction in this.Bank.Transactions)
-					{
-						if (transaction.Type.Equals("Deposit"))
-
-						{
-							Console.WriteLine("Deposit Amount: {0}\nTransaction Date: {1}\nTransaction ID: {2}", transaction.Amount, transaction.CreateDate, transaction.ID);
-						}
-					}
-					DisplayUserMenu(balance, LoggedInUser);
+					Console.WriteLine("Transaction History");
+					foreach(Transaction transaction in this.Bank.Transactions)
+                    {
+						Console.WriteLine("Transaction Date: {0} , Transaction Type: {1} , Transaction Amount: {2}", transaction.CreateDate, transaction.Type,transaction.Amount);
+                    }
 					break;
+
 				case 4:
-					Console.WriteLine("Withdraw History");
-					foreach (Transaction transaction in this.Bank.Transactions)
-					{
-						if (transaction.Type.Equals("Withdraw"))
-
-						{
-							Console.WriteLine("Withdraw Amount: {0}\nTransaction Date: {1}\nTransaction ID: {2}", transaction.Amount, transaction.CreateDate, transaction.ID);
-						}
-					}
-					DisplayUserMenu(balance, LoggedInUser);
-					break;
-				case 5:
 					Console.WriteLine("Current Balance: {0}",balance);
 					DisplayUserMenu(balance, LoggedInUser);
 					break;
-				case 6:
+				case 5:
 					this.StaffService.XmlData();
 					Logout(this.LoggedInUser.Name);
 					MainMenu();

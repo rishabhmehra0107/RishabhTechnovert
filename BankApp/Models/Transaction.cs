@@ -12,5 +12,6 @@ namespace BankApp
         public string AccountNumber { get; set; }
         public bool isReverted { get; set; }
         public DateTime CreateDate { get; set; }
+
     }
 }
