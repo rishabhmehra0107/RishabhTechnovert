@@ -52,7 +52,7 @@ namespace BankApp
 
 		public void SetupBank()
 		{
-			this.Bank.Name = this.Utility.GetStringInput("^[a-zA-Z]{3,}$", "Enter Bank Name");
+			this.Bank.Name = this.Utility.GetStringInput("^[a-zA-Z]{3,}$", "Enter Bank Name").ToUpper();
 			this.Bank.Location = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Bank Location");
 			this.Bank.Id = this.Bank.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
 			this.Bank.SameBankIMPSCharge =5;
@@ -68,8 +68,8 @@ namespace BankApp
 			Console.WriteLine("Branch details added. Please provide admin username and password to setup");
 
 			Admin admin = new Admin();
-			admin.Name = this.Utility.GetStringInput("^[a-zA-Z]{3,}$", "Enter admin name");
-			admin.UserName = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter admin username");
+			admin.Name = this.Utility.GetStringInput("^[a-zA-Z]{3,}$", "Enter admin name").ToUpper();
+			admin.UserName = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter admin username").ToLower();
 			admin.Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter admin password");
 			this.BankServices.AddAdmin(admin);
 			Console.WriteLine("Admin created successfuly");
@@ -82,7 +82,7 @@ namespace BankApp
 
 		public void Login()
 		{
-			string user = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter your Username");
+			string user = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter your Username").ToLower();
 			string pass = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter your Password");
 
 			this.LoggedInUser = this.BankServices.LogIn(user, pass);
@@ -109,7 +109,7 @@ namespace BankApp
 
 		public void DisplayAdminMenu(User LoggedInUser)
 		{
-			Console.WriteLine("1. Add Staff\n2. Add Account Holder\n3.Display Bank User details\n4. Update Service Charges\n5. Add new Currency\n6. Update Account\n7. Delete Account\n8.Edit Transactions\n9.Logout");
+			Console.WriteLine("1. Add Staff\n2. Add Account Holder\n3.Display Bank User Details\n4. Update Service Charges\n5. Add New Currency\n6. Update Account\n7. Delete Account\n8.Edit Transactions\n9.Logout");
 			int option = Convert.ToInt32(Console.ReadLine());
 
 			switch (option)
@@ -160,7 +160,7 @@ namespace BankApp
 
 		public void DisplayStaffMenu(User LoggedInUser)
 		{
-			Console.WriteLine("1. Add Account Holder\n2.Display Bank User details\n3. Update Service Charges\n4. Add new Currency\n5. Edit Transactions\n6. Logout");
+			Console.WriteLine("1. Add Account Holder\n2.Display Bank User Details\n3. Update Service Charges\n4. Add New Currency\n5. Edit Transactions\n6. Logout");
 			int option = Convert.ToInt32(Console.ReadLine());
 			switch (option)
 			{
@@ -246,18 +246,18 @@ namespace BankApp
 
 		public void AddStaff()
 		{
-			string userName = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Staff username");
+			string userName = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Staff username").ToLower();
 			string password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter Staff password");
-			string name = this.Utility.GetStringInput("^[a-zA-Z]{3,}$", "Enter Staff Name");
+			string name = this.Utility.GetStringInput("^[a-zA-Z]{3,}$", "Enter Staff Name").ToUpper();
 			this.AccountService.CreateStaffAccount(userName,password,name);
 			DisplayAdminMenu(this.LoggedInUser);
 		}
 
 		public void AddAccountHolder()
 		{
-			string userName = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Account Holder username");
+			string userName = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Account Holder username").ToLower();
 			string password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter Account Holder password");
-			string name = this.Utility.GetStringInput("^[a-zA-Z]{3,}$", "Enter Account Holder Name");
+			string name = this.Utility.GetStringInput("^[a-zA-Z]{3,}$", "Enter Account Holder Name").ToUpper();
 			this.AccountService.CreateUserAccount(userName,password,name);
 		}
 		
@@ -269,13 +269,13 @@ namespace BankApp
 				Console.WriteLine(accountHolder.UserName);
 			}
 
-			string strname = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Account username: ");
+			string strname = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Account username: ").ToLower();
 			foreach (var account in this.Bank.AccountHolders.Where(w => w.UserName == strname))
 			{
 				Console.WriteLine("Username: {0}. This account can now be updated ", strname);
-				account.UserName = this.Utility.GetStringInput("^[a-zA-Z]+$", "Update username of user: ");
+				account.UserName = this.Utility.GetStringInput("^[a-zA-Z]+$", "Update username of user: ").ToLower();
 				account.Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Update password of user: ");
-				account.Name = this.Utility.GetStringInput("^[a-zA-Z]{3,}$", "Update Account Holder Name");
+				account.Name = this.Utility.GetStringInput("^[a-zA-Z]{3,}$", "Update Account Holder Name").ToUpper();
 			}
 			Console.WriteLine("User Account updated successfully");
 		}
@@ -288,7 +288,7 @@ namespace BankApp
 				Console.WriteLine(accountHolder.UserName);
 			}
 
-			string strname = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Account username: ");
+			string strname = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Account username: ").ToLower();
 			this.Bank.AccountHolders.RemoveAll(x => x.UserName == strname);
 			Console.WriteLine("User Account deleted successfully");
 		}
@@ -342,7 +342,7 @@ namespace BankApp
 				Console.WriteLine(user.UserName + " " + user.Id);
 			}
 
-			string strname = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter username: ");
+			string strname = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter username: ").ToLower();
 			if(this.Bank.AccountHolders.Any(user=>user.UserName==strname))
 			{
 				Console.WriteLine("Username: {0} \nDefault RTGS for same bank: 0%, Default RTGS for different bank: 2%, Default IMPS for same bank: 5%, Default IMPS for different bank: 6%, ", strname);

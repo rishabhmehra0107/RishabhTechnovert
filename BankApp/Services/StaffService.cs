@@ -36,6 +36,7 @@ namespace BankApp.Services
 		{
 			List<string> newList = new List<string>();
 			newList = this.Bank.Staffs.Select(s => s.UserName).ToList();
+
 			return newList;
 		}
 
@@ -43,6 +44,7 @@ namespace BankApp.Services
 		{
 			List<string> newList = new List<string>();
 			newList = this.Bank.AccountHolders.Select(s => s.UserName).ToList();
+
 			return newList;
 		}
 
