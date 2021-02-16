@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Xml.Linq;
 using BankApp.Utilities;
 
 namespace BankApp.Services
@@ -8,6 +6,7 @@ namespace BankApp.Services
 	public class AccountService
 	{
 		Bank Bank;
+		SystemValues Account;
 		private Utility Utility { get; set; }
 		private TransactionService Transaction { get; set; }
 		private StaffService StaffService { get; set; }
@@ -17,6 +16,7 @@ namespace BankApp.Services
 			this.Bank = bank;
 			this.Utility = utility;
 			this.Transaction = transactionService;
+			this.Account = new SystemValues();
 		}
 
 		public void CreateStaffAccount(string username, string password, string name)
@@ -25,20 +25,21 @@ namespace BankApp.Services
 			staff.UserName = username;
 			staff.Password = password;
 			staff.Name = name;
-			staff.Type = "Employee";
-			staff.Id = "Staff_"+this.Bank.Staffs.Count + 1;
+			staff.Type = Account.UserType[1];
+			staff.Id = "Staff_" + this.Bank.Staffs.Count + 1;
 			this.Bank.Staffs.Add(staff);
 		}
+
 		public void CreateUserAccount(string username, string password, string name)
 		{
 			AccountHolder account = new AccountHolder();
 			account.UserName = username;
 			account.Password = password;
 			account.Name = name;
-			account.Type = "AccountHolder";
+			account.Type = Account.UserType[2];
 			account.InitialBalance = 1000;
 			account.AccountNumber = account.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
-			account.AccountType = "Savings account";
+			account.AccountType = Account.AccountType;
 			account.Id = "AccountHolder_"+this.Bank.AccountHolders.Count + 1;
 			this.Bank.AccountHolders.Add(account);
 		}

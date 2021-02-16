@@ -8,6 +8,7 @@ namespace BankApp.Services
 	public class BankServices
 	{
 		Bank Bank;
+		SystemValues Account;
 		private Utility Utility { get; set; }
 		private TransactionService Transaction { get; set; }
 		private StaffService StaffService { get; set; }
@@ -16,6 +17,7 @@ namespace BankApp.Services
 		{
 			this.Bank = bank;
 			this.Utility = utility;
+			this.Account = new SystemValues();
 		}
 
 		public void AddBranch(Branch branch)
@@ -27,7 +29,7 @@ namespace BankApp.Services
 
 		public void AddAdmin(Admin admin)
         {
-			admin.Type = "Admin";
+			admin.Type = Account.UserType[0];
 			admin.Id = "ID_" + this.Bank.Admins.Count + 1;
 			this.Bank.Admins.Add(admin);
 		}

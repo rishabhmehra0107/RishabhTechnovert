@@ -268,23 +268,18 @@ namespace BankApp
 			{
 				Console.WriteLine(accountHolder.UserName);
 			}
+
 			string strname = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Account username: ");
-
-
 			foreach (var account in this.Bank.AccountHolders.Where(w => w.UserName == strname))
 			{
 				Console.WriteLine("Username: {0}. This account can now be updated ", strname);
 				account.UserName = this.Utility.GetStringInput("^[a-zA-Z]+$", "Update username of user: ");
 				account.Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Update password of user: ");
 				account.Name = this.Utility.GetStringInput("^[a-zA-Z]{3,}$", "Update Account Holder Name");
-				account.Type = "AccountHolder";
-				account.InitialBalance = 1000;
-				account.AccountNumber = account.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
-				account.AccountType = "SavingsAccount";
-				account.Id = "31";
 			}
 			Console.WriteLine("User Account updated successfully");
 		}
+
 		public void DeleteAccount()
 		{
 			Console.WriteLine("Select account to delete");
@@ -292,6 +287,7 @@ namespace BankApp
 			{
 				Console.WriteLine(accountHolder.UserName);
 			}
+
 			string strname = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Account username: ");
 			this.Bank.AccountHolders.RemoveAll(x => x.UserName == strname);
 			Console.WriteLine("User Account deleted successfully");
@@ -351,7 +347,6 @@ namespace BankApp
 			{
 				Console.WriteLine("Username: {0} \nDefault RTGS for same bank: 0%, Default RTGS for different bank: 2%, Default IMPS for same bank: 5%, Default IMPS for different bank: 6%, ", strname);
 				string bname = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter bankname of user: ");
-
 				if(this.Bank.Branches.Any(s=>s.BankId.Equals(bname.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy"))))
 				{
 					Console.WriteLine("Since same bank, the new charges of RTGS and IMPS are:-");
@@ -380,5 +375,6 @@ namespace BankApp
 		{
 			Console.WriteLine("Date saved!!! You can exit!");
 		}
+
 	}
 }
