@@ -5,7 +5,7 @@ namespace BankApp
     public class AccountHolder : User
     {
         public string AccountNumber { get; set; }
-        public double InitialBalance = 0;
+        public double InitialBalance { get; set; }
         public string AccountType { get; set; }
     }
 }

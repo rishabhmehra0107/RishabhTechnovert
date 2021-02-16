@@ -37,8 +37,8 @@ namespace BankApp.Services
 			account.Password = password;
 			account.Name = name;
 			account.Type = Account.UserType[2];
-			account.InitialBalance = 1000;
-			account.AccountNumber = account.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
+			account.InitialBalance = Account.InitialBalance;
+			account.AccountNumber = account.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyyhhmmss");
 			account.AccountType = Account.AccountType;
 			account.Id = "AccountHolder_"+this.Bank.AccountHolders.Count + 1;
 			this.Bank.AccountHolders.Add(account);
