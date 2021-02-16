@@ -14,7 +14,7 @@ namespace BankApp
 		private TransactionService TransactionService { get; set; }
 		private StaffService StaffService { get; set; }
 		public Bank Bank { get; set; }
-		public User LoggedInUser;
+		public User LoggedInUser { get; set; }
 
 		public BankApplication()
 		{
@@ -24,6 +24,7 @@ namespace BankApp
 			this.StaffService = new StaffService(this.Bank,this.TransactionService,this.Utility);
 			this.AccountService = new AccountService(this.Bank, this.TransactionService, this.Utility);
 			this.BankServices = new BankServices(this.Bank, this.Utility);
+			this.LoggedInUser = new User();
 			this.MainMenu();
 		}
 
@@ -42,6 +43,7 @@ namespace BankApp
 					break;
 				case 3:
 					Exit();
+					Environment.Exit(0);
 					break;
 				default:
 					Console.WriteLine("Please select option from the list");
@@ -86,25 +88,29 @@ namespace BankApp
 			string pass = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter your Password");
 
 			this.LoggedInUser = this.BankServices.LogIn(user, pass);
-            if (this.LoggedInUser.Type.Equals("Admin"))
+            try
             {
-				DisplayAdminMenu(this.LoggedInUser);
-            }
-			else if (this.LoggedInUser.Type.Equals("Employee"))
-            {
-				DisplayStaffMenu(this.LoggedInUser);
-            }
-			else if (this.LoggedInUser.Type.Equals("AccountHolder"))
-            {
-				foreach(AccountHolder accountHolder in this.Bank.AccountHolders)
-                {
-                    if (this.LoggedInUser.UserName.Equals(accountHolder.UserName))
-                    {
-						DisplayUserMenu(accountHolder);
+				if (this.LoggedInUser.Type.Equals("Admin"))
+				{
+					DisplayAdminMenu(this.LoggedInUser);
+				}
+				else if (this.LoggedInUser.Type.Equals("Employee"))
+				{
+					DisplayStaffMenu(this.LoggedInUser);
+				}
+				else if (this.LoggedInUser.Type.Equals("AccountHolder"))
+				{
+					foreach (AccountHolder accountHolder in this.Bank.AccountHolders)
+					{
+						if (this.LoggedInUser.UserName.Equals(accountHolder.UserName))
+						{
+							DisplayUserMenu(accountHolder);
+						}
 					}
-                }
-            }
-            else
+				}
+			}
+            
+            catch (Exception)
             {
 				Console.WriteLine("Invalid Credentials");
             }

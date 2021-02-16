@@ -49,8 +49,7 @@ namespace BankApp.Services
             {
 				user = this.Bank.AccountHolders.Find(element => element.UserName.Equals(username) && element.Password.Equals(password));
 			}
-
 			return user;
-        }
+		}
 	}
 }
