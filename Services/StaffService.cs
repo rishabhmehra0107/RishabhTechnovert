@@ -10,14 +10,15 @@ namespace BankApp.Services
 	public class StaffService
 	{
 		Bank Bank;
+		User User;
 		private TransactionService Transaction { get; set; }
 		private AccountService AccountService { get; set; }
 		private Utility Utility { get; set; }
 
-		public StaffService(Bank bank, TransactionService transactionService, Utility utility)
+		public StaffService(Bank bank, Utility utility, User user)
 		{
 			this.Bank = bank;
-			this.Transaction = transactionService;
+			this.User = user;
 			this.Utility = utility;
 		}
 
@@ -52,9 +53,9 @@ namespace BankApp.Services
 		public void RevertTransaction(string id, DateTime date)
         {
 			Transaction transaction = new Transaction();
-			transaction = this.Bank.Transactions.Find(element => element.ID == id && element.CreateDate == date);
+			transaction = this.User.Transactions.Find(element => element.ID == id && element.CreateDate == date);
             {
-				this.Bank.Transactions.Remove(transaction);
+				this.User.Transactions.Remove(transaction);
             }
 
 		}

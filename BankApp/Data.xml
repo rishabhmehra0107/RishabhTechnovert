@@ -17,14 +17,16 @@
       <Username>pppp</Username>
       <Password>pppp</Password>
     </Employee1>
-    <Employee2>
+  </Staffs>
+  <AccountHolders>
+    <AccountHolders1>
       <Name>LLLL</Name>
-      <Type>Staff</Type>
-      <ID>Staff_11</ID>
+      <Type>AccountHolder</Type>
+      <AccountNumber>LLL02172021031028</AccountNumber>
       <Username>llll</Username>
       <Password>llll</Password>
-    </Employee2>
-  </Staffs>
-  <AccountHolders />
+      <ID>AccountHolder_01</ID>
+    </AccountHolders1>
+  </AccountHolders>
   <Currencies />
 </Bank>

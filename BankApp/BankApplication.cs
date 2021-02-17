@@ -14,16 +14,18 @@ namespace BankApp
 		private TransactionService TransactionService { get; set; }
 		private StaffService StaffService { get; set; }
 		public Bank Bank { get; set; }
+		public User User { get; set; }
 		public User LoggedInUser;
 
 		public BankApplication()
 		{
 			this.Bank = new Bank();
+			this.User = new User();
 			this.Utility = new BankApp.Services.Utilities.Utility();
 			this.TransactionService = new TransactionService(this.Bank,this.Utility);
-			this.StaffService = new StaffService(this.Bank,this.TransactionService,this.Utility);
+			this.StaffService = new StaffService(this.Bank, this.Utility, this.User);
 			this.AccountService = new AccountService(this.Bank, this.TransactionService, this.Utility);
-			this.BankService = new BankService(this.Bank, this.Utility);
+			this.BankService = new BankService(this.Bank, this.Utility, this.User);
 			this.MainMenu();
 		}
 
@@ -233,7 +235,7 @@ namespace BankApp
 					break;
 				case 3:
 					Console.WriteLine("Transaction History");
-					foreach(Transaction transaction in this.Bank.Transactions)
+					foreach(Transaction transaction in this.User.Transactions)
                     {
 						Console.WriteLine("Transaction Date: {0} , Transaction Type: {1} , Transaction Amount: {2}", transaction.CreateDate, transaction.Type,transaction.Amount);
                     }
@@ -360,7 +362,7 @@ namespace BankApp
 		{
 			Console.WriteLine("Transactions of users by their ID and date are as follows:-");
 
-			foreach (Transaction transaction in this.Bank.Transactions)
+			foreach (Transaction transaction in this.User.Transactions)
 			{
 				Console.WriteLine("Transaction ID: {0} , Transaction Date: {1}", transaction.ID, transaction.CreateDate);
 			}

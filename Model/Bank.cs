@@ -16,6 +16,5 @@ namespace BankApp.Model
         public List<Branch> Branches = new List<Branch>();
         public List<Staff> Staffs = new List<Staff>();
         public List<Currency> Currency = new List<Currency>();
-        public List<Transaction> Transactions = new List<Transaction>();
     }
 }

@@ -10,13 +10,14 @@ namespace BankApp.Services
 	public class BankService
 	{
 		Bank Bank;
+		User User;
 		private Utility Utility { get; set; }
-		private TransactionService Transaction { get; set; }
 		private StaffService StaffService { get; set; }
 
-		public BankService(Bank bank, Utility utility)
+		public BankService(Bank bank, Utility utility, User user)
 		{
 			this.Bank = bank;
+			this.User = user;
 			this.Utility = utility;
 		}
 
@@ -39,11 +40,11 @@ namespace BankApp.Services
 			transaction.Type = TransactionTypes.Withdraw.ToString();
 			transaction.CreateDate = DateTime.UtcNow;
 			transaction.DoneBy = accountHolder.Type;
-			transaction.ID = "TXN" + this.Bank.Id + this.Bank.Transactions.Count;
+			transaction.ID = "TXN" + this.Bank.Id + this.User.Transactions.Count;
 			transaction.isReverted = false;
 			transaction.Amount = amount;
 			accountHolder.InitialBalance = accountHolder.InitialBalance - amount;
-			this.Bank.Transactions.Add(transaction);
+			this.User.Transactions.Add(transaction);
 
 			return accountHolder.InitialBalance;
 		}
@@ -54,11 +55,11 @@ namespace BankApp.Services
 			transaction.Type = TransactionTypes.Deposit.ToString();
 			transaction.CreateDate = DateTime.UtcNow;
 			transaction.DoneBy = accountHolder.Type;
-			transaction.ID = "TXN" + this.Bank.Id + this.Bank.Transactions.Count;
+			transaction.ID = "TXN" + this.Bank.Id + this.User.Transactions.Count;
 			transaction.isReverted = false;
 			transaction.Amount = amount;
 			accountHolder.InitialBalance = accountHolder.InitialBalance + amount;
-			this.Bank.Transactions.Add(transaction);
+			this.User.Transactions.Add(transaction);
 
 			return accountHolder.InitialBalance;
 		}
