@@ -17,7 +17,7 @@ namespace BankApp.Services
 		public BankService(Bank bank, Utility utility, User user)
 		{
 			this.Bank = bank;
-			this.User = user;
+			this.User = user; 
 			this.Utility = utility;
 		}
 

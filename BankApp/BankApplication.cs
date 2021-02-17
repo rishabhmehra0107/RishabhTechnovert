@@ -101,13 +101,9 @@ namespace BankApp
 				}
 				else if (this.LoggedInUser.Type.Equals("AccountHolder"))
 				{
-					foreach (AccountHolder accountHolder in this.Bank.AccountHolders)
-					{
-						if (this.LoggedInUser.UserName.Equals(accountHolder.UserName))
-						{
-							DisplayUserMenu(accountHolder);
-						}
-					}
+					var user = new AccountHolder();
+					user = this.Bank.AccountHolders.Find(element => element.UserName.Equals(this.LoggedInUser.UserName));
+					DisplayUserMenu(user);
 				}
 			}
             
