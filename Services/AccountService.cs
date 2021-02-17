@@ -25,7 +25,7 @@ namespace BankApp.Services
 			staff.UserName = username;
 			staff.Password = password;
 			staff.Name = name;
-			staff.Type = UserTypes.Employee.ToString();
+			staff.Type = EmployeeTypes.Staff.ToString();
 			staff.Id = "Staff_" + this.Bank.Staffs.Count + 1;
 			this.Bank.Staffs.Add(staff);
 		}

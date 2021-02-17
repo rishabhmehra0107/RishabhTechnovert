@@ -76,25 +76,16 @@ namespace BankApp.Services
         {
 			XDocument xDocument = XDocument.Load("/Users/apple/Projects/BankApp/BankApp/Data.xml");
 			XElement xElement = new XElement("Branches");
-			XElement xElement1 = new XElement("Admins");
 			XElement xElement2 = new XElement("Staffs");
 			XElement xElement3 = new XElement("AccountHolders");
 			XElement xElement4 = new XElement("Currencies");
-			xDocument = new XDocument(new XElement("Bank",xElement,xElement1,xElement2,xElement3,xElement4));
+			xDocument = new XDocument(new XElement("Bank",xElement,xElement2,xElement3,xElement4));
 			int i = 1;
 			foreach (Branch branch in this.Bank.Branches)
 			{
-				xElement.Add(new XElement("BankBranch"+i, new XElement("BankName", this.Bank.Name), new XElement("Location", this.Bank.Location), new XElement("ID", this.Bank.Id), new XElement("BranchLocation", branch.Location), new XElement("BranchID", branch.Id)));
+				xElement.Add(new XElement("BankBranch"+i, new XElement("BankName", this.Bank.Name), new XElement("Location", this.Bank.Location), new XElement("BankID", this.Bank.Id), new XElement("BranchLocation", branch.Location), new XElement("BranchID", branch.Id)));
 				xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
 				i++;
-			}
-
-			i = 1;
-			foreach(Admin admin in this.Bank.Admins)
-            {
-				xElement1.Add(new XElement("Admin"+i, new XElement("Name", admin.Name), new XElement("Type", admin.Type), new XElement("ID", admin.Id), new XElement("Username", admin.UserName), new XElement("Password", admin.Password)));
-				xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
-				++i;
 			}
 
 			i = 1;

@@ -68,7 +68,7 @@ namespace BankApp
 
 			Console.WriteLine("Branch details added. Please provide admin username and password to setup");
 
-			Admin admin = new Admin();
+			Staff admin = new Staff();
 			admin.Name = this.Utility.GetStringInput("^[a-zA-Z ]{3,}$", "Enter admin name").ToUpper();
 			admin.UserName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter admin username").ToLower();
 			admin.Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter admin password");
@@ -93,7 +93,7 @@ namespace BankApp
 				{
 					DisplayAdminMenu(this.LoggedInUser);
 				}
-				else if (this.LoggedInUser.Type.Equals("Employee"))
+				else if (this.LoggedInUser.Type.Equals("Staff"))
 				{
 					DisplayStaffMenu(this.LoggedInUser);
 				}

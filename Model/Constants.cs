@@ -13,13 +13,23 @@ namespace BankApp.Model
         {
             public static string AccountHolder = "AccountHolder";
             public static string Employee = "Employee";
-            public static string Admin = "Admin";
         }
 
         public enum UserTypes
         {
             AccountHolder,
-            Employee,
+            Employee
+        }
+
+        public static class EmployeeType
+        {
+            public static string Staff = "Staff";
+            public static string Admin = "Admin";
+        }
+
+        public enum EmployeeTypes
+        {
+            Staff,
             Admin
         }
 

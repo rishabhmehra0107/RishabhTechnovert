@@ -22,16 +22,15 @@ namespace BankApp.Services
 
 		public void AddBranch(Branch branch)
         {
-			branch.BankId = this.Bank.Id;
 			branch.Id = $"{this.Bank.Id} {branch.Location}{DateTime.UtcNow.ToString("MMddyy")}";
 			this.Bank.Branches.Add(branch);
 		}
 
-		public void AddAdmin(Admin admin)
+		public void AddAdmin(Staff admin)
         {
-			admin.Type = UserTypes.Admin.ToString();
-			admin.Id = "ID_" + this.Bank.Admins.Count + 1;
-			this.Bank.Admins.Add(admin);
+			admin.Type = EmployeeTypes.Admin.ToString();
+			admin.Id = "ID_" + this.Bank.Staffs.Count + 1;
+			this.Bank.Staffs.Add(admin);
 		}
 
 		public double Withdraw(double amount, AccountHolder accountHolder)
@@ -67,13 +66,13 @@ namespace BankApp.Services
 		public User LogIn(string username, string password)
         {
 			var user = new User();
-			if(this.Bank.Admins.Any(element => element.UserName == username && element.Password == password))
+			if(this.Bank.Staffs.Any(element => element.UserName == username && element.Password == password && element.Type.Equals("Admin")))
             {
-				user = this.Bank.Admins.Find(element => element.UserName.Equals(username) && element.Password.Equals(password));
+				user = this.Bank.Staffs.Find(element => element.UserName.Equals(username) && element.Password.Equals(password) && element.Type.Equals("Admin"));
 			}
-			else if(this.Bank.Staffs.Any(element => element.UserName == username && element.Password == password))
+			else if(this.Bank.Staffs.Any(element => element.UserName == username && element.Password == password && element.Type.Equals("Staff")))
             {
-				user = this.Bank.Staffs.Find(element => element.UserName.Equals(username) && element.Password.Equals(password));
+				user = this.Bank.Staffs.Find(element => element.UserName.Equals(username) && element.Password.Equals(password) && element.Type.Equals("Staff"));
 			}
 			else if(this.Bank.AccountHolders.Any(element => element.UserName == username && element.Password == password))
             {
