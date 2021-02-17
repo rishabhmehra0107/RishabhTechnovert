@@ -4,10 +4,10 @@ namespace BankApp.Model
     public static class Constants
     {
         public static double InitialBalance = 1000;
-        public static int SameBankRtgs = 0;
-        public static int SameBankImps = 5;
-        public static int DifferentBankRtgs = 2;
-        public static int DifferentBankImps = 6;
+        public static int SameBankRTGS = 0;
+        public static int SameBankIMPS = 5;
+        public static int DifferentBankRTGS = 2;
+        public static int DifferentBankIMPS = 6;
 
         public static class UserType
         {

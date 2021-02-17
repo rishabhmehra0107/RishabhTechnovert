@@ -56,10 +56,10 @@ namespace BankApp
 			this.Bank.Name = this.Utility.GetStringInput("^[a-zA-Z ]{3,}$", "Enter Bank Name").ToUpper();
 			this.Bank.Location = this.Utility.GetStringInput("^[a-zA-Z ]+$", "Enter Bank Location");
 			this.Bank.Id = this.Bank.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
-			this.Bank.SameBankIMPSCharge = Constants.SameBankImps;
-			this.Bank.SameBankRTGSCharge = Constants.SameBankRtgs;
-			this.Bank.DifferentBankIMPSCharge = Constants.DifferentBankImps;
-			this.Bank.DifferentBankRTGSCharge = Constants.DifferentBankRtgs;
+			this.Bank.SameBankIMPSCharge = Constants.SameBankIMPS;
+			this.Bank.SameBankRTGSCharge = Constants.SameBankRTGS;
+			this.Bank.DifferentBankIMPSCharge = Constants.DifferentBankIMPS;
+			this.Bank.DifferentBankRTGSCharge = Constants.DifferentBankRTGS;
 			Console.WriteLine("Bank setup is completed. Please provide branch details");
 
 			Branch branch = new Branch();
@@ -83,10 +83,10 @@ namespace BankApp
 
 		public void Login()
 		{
-			string user = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter your Username").ToLower();
-			string pass = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter your Password");
+			string username = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter your Username").ToLower();
+			string password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter your Password");
 
-			this.LoggedInUser = this.BankService.LogIn(user, pass);
+			this.LoggedInUser = this.BankService.LogIn(username, password);
             try
             {
 				if (this.LoggedInUser.Type.Equals("Admin"))
@@ -379,24 +379,24 @@ namespace BankApp
 				Console.WriteLine(user.UserName + " " + user.Id);
 			}
 
-			string strname = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter username: ").ToLower();
-			if(this.Bank.AccountHolders.Any(user=>user.UserName==strname))
+			string userName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter username: ").ToLower();
+			if(this.Bank.AccountHolders.Any(user=>user.UserName==userName))
 			{
-				Console.WriteLine("Username: {0} \nDefault RTGS for same bank: 0%, Default RTGS for different bank: 2%, Default IMPS for same bank: 5%, Default IMPS for different bank: 6%, ", strname);
-				string bname = this.Utility.GetStringInput("^[a-zA-Z ]+$", "Enter bankname of user: ");
-				if(this.Bank.Branches.Any(s=>s.BankId.Equals(bname.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy"))))
+				Console.WriteLine("Username: {0} \nDefault RTGS for same bank: 0%, Default RTGS for different bank: 2%, Default IMPS for same bank: 5%, Default IMPS for different bank: 6%, ", userName);
+				string bankName = this.Utility.GetStringInput("^[a-zA-Z ]+$", "Enter bankname of user: ");
+				if(this.Bank.Branches.Any(s=>s.BankId.Equals(bankName.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy"))))
 				{
 					Console.WriteLine("Since same bank, the new charges of RTGS and IMPS are:-");
-					int srtgs =Convert.ToInt32(Console.ReadLine());
-					int simps = Convert.ToInt32(Console.ReadLine());
-					this.StaffService.UpdateChargesSameBank(srtgs, simps);
+					int sameBankRTGS =Convert.ToInt32(Console.ReadLine());
+					int sameBankIMPS = Convert.ToInt32(Console.ReadLine());
+					this.StaffService.UpdateChargesSameBank(sameBankRTGS, sameBankIMPS);
 				}
 				else
 				{
 					Console.WriteLine("Since different bank, the new charges of RTGS and IMPS are:-");
-					int drtgs = Convert.ToInt32(Console.ReadLine());
-					int dimps = Convert.ToInt32(Console.ReadLine());
-					this.StaffService.UpdateChargesDifferentBank(drtgs, dimps);
+					int differentBankRTGS = Convert.ToInt32(Console.ReadLine());
+					int differentBankIMPS = Convert.ToInt32(Console.ReadLine());
+					this.StaffService.UpdateChargesDifferentBank(differentBankRTGS, differentBankIMPS);
 				}
 
 			}
