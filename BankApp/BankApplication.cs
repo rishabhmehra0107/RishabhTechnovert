@@ -14,7 +14,8 @@ namespace BankApp
 		private TransactionService TransactionService { get; set; }
 		private StaffService StaffService { get; set; }
 		public Bank Bank { get; set; }
-		public User LoggedInUser { get; set; }
+		public User LoggedInUser;
+		SystemValues Charges;
 
 		public BankApplication()
 		{
@@ -24,7 +25,7 @@ namespace BankApp
 			this.StaffService = new StaffService(this.Bank,this.TransactionService,this.Utility);
 			this.AccountService = new AccountService(this.Bank, this.TransactionService, this.Utility);
 			this.BankServices = new BankServices(this.Bank, this.Utility);
-			this.LoggedInUser = new User();
+			this.Charges = new SystemValues();
 			this.MainMenu();
 		}
 
@@ -57,10 +58,10 @@ namespace BankApp
 			this.Bank.Name = this.Utility.GetStringInput("^[a-zA-Z]{3,}$", "Enter Bank Name").ToUpper();
 			this.Bank.Location = this.Utility.GetStringInput("^[a-zA-Z]+$", "Enter Bank Location");
 			this.Bank.Id = this.Bank.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
-			this.Bank.SameBankIMPSCharge =5;
-			this.Bank.SameBankRTGSCharge =0;
-			this.Bank.DifferentBankIMPSCharge =6;
-			this.Bank.DifferentBankRTGSCharge =2;
+			this.Bank.SameBankIMPSCharge = Charges.SbImps;
+			this.Bank.SameBankRTGSCharge = Charges.SbRtgs;
+			this.Bank.DifferentBankIMPSCharge = Charges.DbImps;
+			this.Bank.DifferentBankRTGSCharge = Charges.DbRtgs;
 			Console.WriteLine("Bank setup is completed. Please provide branch details");
 
 			Branch branch = new Branch();
