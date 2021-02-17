@@ -260,21 +260,18 @@ namespace BankApp
 		public void TransferFunds(AccountHolder accountHolder)
         {
 			string accountNumber = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Please enter vendor's account number to transfer funds.");
-			foreach (AccountHolder accountHolder1 in this.Bank.AccountHolders)
+
+			var user = new AccountHolder();
+			user = this.Bank.AccountHolders.Find(element => element.AccountNumber.Equals(accountNumber));
+			double amount = this.Utility.GetDoubleInput("Enter Amount To Transfer");
+			double balance = accountHolder.InitialBalance - amount;
+			if (balance >= 0)
 			{
-				if (accountHolder1.AccountNumber.Equals(accountNumber))
-				{
-					double amount = this.Utility.GetDoubleInput("Enter Amount To Transfer");
-					double balance = accountHolder.InitialBalance - amount;
-					if(balance >= 0)
-                    {
-						this.AccountService.TransferAmount(amount, accountHolder, accountHolder1);
-					}
-                    else
-                    {
-						Console.WriteLine("Insufficient Balance");
-                    }
-				}
+				this.AccountService.TransferAmount(amount, accountHolder, user);
+			}
+			else
+			{
+				Console.WriteLine("Insufficient Balance");
 			}
 
 		}
