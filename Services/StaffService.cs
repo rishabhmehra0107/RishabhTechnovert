@@ -26,8 +26,8 @@ namespace BankApp.Services
 			Currency currency = new Currency();
 			currency.Code = code;
 			currency.Name = name;
-			currency.InrValue = value;
-			if (currency.InrValue >= 0 && currency.InrValue <= 250)
+			currency.Rate = value;
+			if (currency.Rate >= 0 && currency.Rate <= 250)
 			{
 				this.Bank.Currency.Add(currency);
 			}
@@ -107,7 +107,7 @@ namespace BankApp.Services
 			i = 1;
 			foreach (Currency currency in this.Bank.Currency)
 			{
-				xElement4.Add(new XElement("Currencies" + i, new XElement("Name", currency.Name), new XElement("Code", currency.Code), new XElement("INRValue", currency.InrValue)));
+				xElement4.Add(new XElement("Currencies" + i, new XElement("Name", currency.Name), new XElement("Code", currency.Code), new XElement("INRValue", currency.Rate)));
 				xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
 				i++;
 			}
