@@ -2,29 +2,36 @@
 <Bank>
   <Branches>
     <BankBranch1>
-      <BankName>PPPP</BankName>
-      <Location>pppp</Location>
-      <BankID>PPP02172021</BankID>
-      <BranchLocation>pppp</BranchLocation>
-      <BranchID>PPP02172021 pppp021721</BranchID>
+      <BankName>HDFC</BankName>
+      <Location>Hyderabad</Location>
+      <BankID>HDF02172021</BankID>
+      <BranchLocation>Kauvri Hills</BranchLocation>
+      <BranchID>HDF02172021 Kauvri Hills021721</BranchID>
     </BankBranch1>
   </Branches>
   <Staffs>
     <Employee1>
-      <Name>PPPP</Name>
+      <Name>RISHABH MEHRA</Name>
       <Type>Admin</Type>
       <ID>ID_01</ID>
-      <Username>pppp</Username>
-      <Password>pppp</Password>
+      <Username>rishabh@gmail.com</Username>
+      <Password>rish123</Password>
     </Employee1>
+    <Employee2>
+      <Name>VISHNU REDDY</Name>
+      <Type>Staff</Type>
+      <ID>Staff_11</ID>
+      <Username>reddyvishnu</Username>
+      <Password>red123</Password>
+    </Employee2>
   </Staffs>
   <AccountHolders>
     <AccountHolders1>
-      <Name>LLLL</Name>
+      <Name>VAIBHAV KUMAR</Name>
       <Type>AccountHolder</Type>
-      <AccountNumber>LLL02172021062301</AccountNumber>
-      <Username>llll</Username>
-      <Password>llll</Password>
+      <AccountNumber>VAI02172021015745</AccountNumber>
+      <Username>vaibhav@gmail.com</Username>
+      <Password>vaibhav123</Password>
       <ID>AccountHolder_01</ID>
     </AccountHolders1>
   </AccountHolders>
