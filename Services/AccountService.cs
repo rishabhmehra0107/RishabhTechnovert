@@ -1,13 +1,13 @@
 ﻿using System;
 using BankApp.Model;
 using BankApp.Services.Utilities;
+using static BankApp.Model.Constants;
 
 namespace BankApp.Services
 {
 	public class AccountService
 	{
 		Bank Bank;
-		SystemValues Account;
 		private Utility Utility { get; set; }
 		private TransactionService Transaction { get; set; }
 		private StaffService StaffService { get; set; }
@@ -17,7 +17,6 @@ namespace BankApp.Services
 			this.Bank = bank;
 			this.Utility = utility;
 			this.Transaction = transactionService;
-			this.Account = new SystemValues();
 		}
 
 		public void CreateStaffAccount(string username, string password, string name)
@@ -26,7 +25,7 @@ namespace BankApp.Services
 			staff.UserName = username;
 			staff.Password = password;
 			staff.Name = name;
-			staff.Type = Account.UserType[1];
+			staff.Type = UserTypes.Employee.ToString();
 			staff.Id = "Staff_" + this.Bank.Staffs.Count + 1;
 			this.Bank.Staffs.Add(staff);
 		}
@@ -37,10 +36,10 @@ namespace BankApp.Services
 			account.UserName = username;
 			account.Password = password;
 			account.Name = name;
-			account.Type = Account.UserType[2];
-			account.InitialBalance = Account.InitialBalance;
+			account.Type = UserTypes.AccountHolder.ToString();
+			account.InitialBalance = Constants.InitialBalance;
 			account.AccountNumber = account.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyyhhmmss");
-			account.AccountType = Account.AccountType;
+			account.AccountType = AccountTypes.Savings.ToString();
 			account.Id = "AccountHolder_"+this.Bank.AccountHolders.Count + 1;
 			this.Bank.AccountHolders.Add(account);
 		}

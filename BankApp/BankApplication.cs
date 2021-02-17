@@ -10,12 +10,11 @@ namespace BankApp
 	{
 		private BankApp.Services.Utilities.Utility Utility { get; set; }
 		private AccountService AccountService { get; set; }
-		private BankServices BankServices { get; set; }
+		private BankService BankService { get; set; }
 		private TransactionService TransactionService { get; set; }
 		private StaffService StaffService { get; set; }
 		public Bank Bank { get; set; }
 		public User LoggedInUser;
-		SystemValues Charges;
 
 		public BankApplication()
 		{
@@ -24,8 +23,7 @@ namespace BankApp
 			this.TransactionService = new TransactionService(this.Bank,this.Utility);
 			this.StaffService = new StaffService(this.Bank,this.TransactionService,this.Utility);
 			this.AccountService = new AccountService(this.Bank, this.TransactionService, this.Utility);
-			this.BankServices = new BankServices(this.Bank, this.Utility);
-			this.Charges = new SystemValues();
+			this.BankService = new BankService(this.Bank, this.Utility);
 			this.MainMenu();
 		}
 
@@ -58,15 +56,15 @@ namespace BankApp
 			this.Bank.Name = this.Utility.GetStringInput("^[a-zA-Z ]{3,}$", "Enter Bank Name").ToUpper();
 			this.Bank.Location = this.Utility.GetStringInput("^[a-zA-Z ]+$", "Enter Bank Location");
 			this.Bank.Id = this.Bank.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
-			this.Bank.SameBankIMPSCharge = Charges.SbImps;
-			this.Bank.SameBankRTGSCharge = Charges.SbRtgs;
-			this.Bank.DifferentBankIMPSCharge = Charges.DbImps;
-			this.Bank.DifferentBankRTGSCharge = Charges.DbRtgs;
+			this.Bank.SameBankIMPSCharge = Constants.SameBankImps;
+			this.Bank.SameBankRTGSCharge = Constants.SameBankRtgs;
+			this.Bank.DifferentBankIMPSCharge = Constants.DifferentBankImps;
+			this.Bank.DifferentBankRTGSCharge = Constants.DifferentBankRtgs;
 			Console.WriteLine("Bank setup is completed. Please provide branch details");
 
 			Branch branch = new Branch();
 			branch.Location = this.Utility.GetStringInput("^[a-zA-Z ]+$", "Enter Branch Location");
-			this.BankServices.AddBranch(branch);
+			this.BankService.AddBranch(branch);
 
 			Console.WriteLine("Branch details added. Please provide admin username and password to setup");
 
@@ -74,7 +72,7 @@ namespace BankApp
 			admin.Name = this.Utility.GetStringInput("^[a-zA-Z ]{3,}$", "Enter admin name").ToUpper();
 			admin.UserName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter admin username").ToLower();
 			admin.Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter admin password");
-			this.BankServices.AddAdmin(admin);
+			this.BankService.AddAdmin(admin);
 			Console.WriteLine("Admin created successfuly");
 
 			
@@ -88,7 +86,7 @@ namespace BankApp
 			string user = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter your Username").ToLower();
 			string pass = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter your Password");
 
-			this.LoggedInUser = this.BankServices.LogIn(user, pass);
+			this.LoggedInUser = this.BankService.LogIn(user, pass);
             try
             {
 				if (this.LoggedInUser.Type.Equals("Admin"))
@@ -221,15 +219,15 @@ namespace BankApp
 			{
 				case 1:
 					Console.WriteLine("Available Balance: {0}", LoggedInAccountHolder.InitialBalance);
-					double withdrawAmt = this.Utility.GetDoubleInput("Enter Withdraw Amount");
-					LoggedInAccountHolder.InitialBalance = this.TransactionService.Withdraw(withdrawAmt, LoggedInAccountHolder.Type);
+					double withdrawAmount = this.Utility.GetDoubleInput("Enter Withdraw Amount");
+					LoggedInAccountHolder.InitialBalance = this.BankService.Withdraw(withdrawAmount, LoggedInAccountHolder);
 					Console.WriteLine("New Balance: {0}", LoggedInAccountHolder.InitialBalance);
 					DisplayUserMenu(LoggedInAccountHolder);
 					break;
 				case 2:
 					Console.WriteLine("Available Balance: {0}", LoggedInAccountHolder.InitialBalance);
-					double depositAmt = this.Utility.GetDoubleInput("Enter Deposit Amount");
-					LoggedInAccountHolder.InitialBalance = this.TransactionService.Deposit(depositAmt, LoggedInAccountHolder.Type);
+					double depositAmount = this.Utility.GetDoubleInput("Enter Deposit Amount");
+					LoggedInAccountHolder.InitialBalance = this.BankService.Deposit(depositAmount, LoggedInAccountHolder);
 					Console.WriteLine("New Balance: {0}", LoggedInAccountHolder.InitialBalance);
 					DisplayUserMenu(LoggedInAccountHolder);
 					break;

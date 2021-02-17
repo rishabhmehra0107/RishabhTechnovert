@@ -3,22 +3,21 @@ using System.Linq;
 using System.Xml.Linq;
 using BankApp.Model;
 using BankApp.Services.Utilities;
+using static BankApp.Model.Constants;
 
 namespace BankApp.Services
 {
-	public class BankServices
+	public class BankService
 	{
 		Bank Bank;
-		SystemValues Account;
 		private Utility Utility { get; set; }
 		private TransactionService Transaction { get; set; }
 		private StaffService StaffService { get; set; }
 
-		public BankServices(Bank bank, Utility utility)
+		public BankService(Bank bank, Utility utility)
 		{
 			this.Bank = bank;
 			this.Utility = utility;
-			this.Account = new SystemValues();
 		}
 
 		public void AddBranch(Branch branch)
@@ -30,9 +29,39 @@ namespace BankApp.Services
 
 		public void AddAdmin(Admin admin)
         {
-			admin.Type = Account.UserType[0];
+			admin.Type = UserTypes.Admin.ToString();
 			admin.Id = "ID_" + this.Bank.Admins.Count + 1;
 			this.Bank.Admins.Add(admin);
+		}
+
+		public double Withdraw(double amount, AccountHolder accountHolder)
+		{
+			Transaction transaction = new Transaction();
+			transaction.Type = TransactionTypes.Withdraw.ToString();
+			transaction.CreateDate = DateTime.UtcNow;
+			transaction.DoneBy = accountHolder.Type;
+			transaction.ID = "TXN" + this.Bank.Id + this.Bank.Transactions.Count;
+			transaction.isReverted = false;
+			transaction.Amount = amount;
+			accountHolder.InitialBalance = accountHolder.InitialBalance - amount;
+			this.Bank.Transactions.Add(transaction);
+
+			return accountHolder.InitialBalance;
+		}
+
+		public double Deposit(double amount, AccountHolder accountHolder)
+		{
+			Transaction transaction = new Transaction();
+			transaction.Type = TransactionTypes.Deposit.ToString();
+			transaction.CreateDate = DateTime.UtcNow;
+			transaction.DoneBy = accountHolder.Type;
+			transaction.ID = "TXN" + this.Bank.Id + this.Bank.Transactions.Count;
+			transaction.isReverted = false;
+			transaction.Amount = amount;
+			accountHolder.InitialBalance = accountHolder.InitialBalance + amount;
+			this.Bank.Transactions.Add(transaction);
+
+			return accountHolder.InitialBalance;
 		}
 
 		public User LogIn(string username, string password)
