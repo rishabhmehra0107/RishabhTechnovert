@@ -3,23 +3,18 @@ using System.Xml.Linq;
 using System.Linq;
 using System.Collections.Generic;
 using BankApp.Model;
-using BankApp.Services.Utilities;
 
 namespace BankApp.Services
 {
 	public class StaffService
 	{
 		Bank Bank;
-		User User;
-		private TransactionService Transaction { get; set; }
-		private AccountService AccountService { get; set; }
-		private Utility Utility { get; set; }
+		AccountHolder User;
 
-		public StaffService(Bank bank, Utility utility, User user)
+		public StaffService(Bank bank, AccountHolder user)
 		{
 			this.Bank = bank;
 			this.User = user;
-			this.Utility = utility;
 		}
 
 		public void NewCurrency(string code,string name,int value)

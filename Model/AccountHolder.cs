@@ -7,5 +7,6 @@ namespace BankApp.Model
         public string AccountNumber { get; set; }
         public double InitialBalance { get; set; }
         public string AccountType { get; set; }
+        public List<Transaction> Transactions = new List<Transaction>();
     }
 }

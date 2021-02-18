@@ -9,6 +9,5 @@ namespace BankApp.Model
         public string Password { get; set; }
         public string Type { get; set; }
         public string Id { get; set; }
-        public List<Transaction> Transactions = new List<Transaction>();
     }
 }
