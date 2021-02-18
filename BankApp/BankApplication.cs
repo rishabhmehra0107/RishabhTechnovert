@@ -3,6 +3,7 @@ using BankApp.Model;
 using BankApp.Services;
 using System.Linq;
 using System.Collections.Generic;
+using static BankApp.Model.Constants;
 
 namespace BankApp
 {
@@ -37,18 +38,18 @@ namespace BankApp
 			switch (option)
 			{
 				case 1:
-					SetupBank();
+					this.SetupBank();
 					break;
 				case 2:
-					Login();
+					this.Login();
 					break;
 				case 3:
-					Exit();
+					this.Exit();
 					Environment.Exit(0);
 					break;
 				default:
 					Console.WriteLine("Please select option from the list");
-					MainMenu();
+					this.MainMenu();
 					break;
 			}
 		}
@@ -58,16 +59,16 @@ namespace BankApp
 			this.Bank.Name = this.Utility.GetStringInput("^[a-zA-Z ]{3,}$", "Enter Bank Name").ToUpper();
 			this.Bank.Location = this.Utility.GetStringInput("^[a-zA-Z ]+$", "Enter Bank Location");
 			this.Bank.Id = this.Bank.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
-			this.Bank.SameBankIMPSCharge = Constants.SameBankIMPS;
-			this.Bank.SameBankRTGSCharge = Constants.SameBankRTGS;
-			this.Bank.DifferentBankIMPSCharge = Constants.DifferentBankIMPS;
-			this.Bank.DifferentBankRTGSCharge = Constants.DifferentBankRTGS;
+			this.Bank.SameBankIMPS = Constants.SameBankIMPS;
+			this.Bank.SameBankRTGS = Constants.SameBankRTGS;
+			this.Bank.DifferentBankIMPS = Constants.DifferentBankIMPS;
+			this.Bank.DifferentBankRTGS = Constants.DifferentBankRTGS;
 			Console.WriteLine("Bank setup is completed. Please provide branch details");
 
 			Branch branch = new Branch();
+			branch.BankId = this.Bank.Id;
 			branch.Location = this.Utility.GetStringInput("^[a-zA-Z ]+$", "Enter Branch Location");
 			this.BankService.AddBranch(branch);
-
 			Console.WriteLine("Branch details added. Please provide admin username and password to setup");
 
 			Staff admin = new Staff();
@@ -77,183 +78,172 @@ namespace BankApp
 			this.UserService.AddAdmin(admin);
 			Console.WriteLine("Admin created successfuly");
 
-			
-
 			Console.WriteLine("Bank Name: {0}, User Name: {1}", Bank.Name, admin.UserName);
 			MainMenu();
 		}
 
 		public void Login()
 		{
-			string username = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter your Username").ToLower();
+			string username = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter your Username");
 			string password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter your Password");
 
 			this.LoggedInUser = this.UserService.LogIn(username, password);
             try
             {
-				if (this.LoggedInUser.Type.Equals("Admin"))
+                if (this.LoggedInUser.Id == null)
+                {
+					Console.WriteLine("Invalid Credentials");
+					this.Login();
+				}
+				if (this.LoggedInUser.Type.Equals(UserType.Admin))
 				{
 					DisplayAdminMenu(this.LoggedInUser);
 				}
-				else if (this.LoggedInUser.Type.Equals("Staff"))
+				else if (this.LoggedInUser.Type.Equals(UserType.Staff))
 				{
 					DisplayStaffMenu(this.LoggedInUser);
 				}
-				else if (this.LoggedInUser.Type.Equals("AccountHolder"))
+				else if (this.LoggedInUser.Type.Equals(UserType.AccountHolder))
 				{
 					var user = new AccountHolder();
 					user = this.Bank.AccountHolders.Find(element => element.UserName.Equals(this.LoggedInUser.UserName));
 					DisplayUserMenu(user);
 				}
 			}
-            
             catch (Exception)
             {
-				Console.WriteLine("Invalid Credentials");
+				this.Login();
             }
-			Login();
 		}
-
-
 
 		public void DisplayAdminMenu(User LoggedInUser)
 		{
 			Console.WriteLine("1. Add Staff\n2. Add Account Holder\n3.Display Bank User Details\n4. Update Service Charges\n5. Add New Currency\n6. Update Account\n7. Delete Account\n8. Logout");
-			int option = Convert.ToInt32(Console.ReadLine());
 
+			int option = Convert.ToInt32(Console.ReadLine());
 			switch (option)
 			{
 				case 1:
-					AddStaff();
+					this.AddStaff();
 					break;
 				case 2:
-					AddAccountHolder();
-					DisplayAdminMenu(LoggedInUser);
+					this.AddAccountHolder();
 					break;
 				case 3:
-					BankUsers();
-					DisplayAdminMenu(LoggedInUser);
+					this.DisplayBankEmployees();
+					this.DisplayBankAccountHolders();
 					break;
 				case 4:
-					UpdateCharges();
-					DisplayAdminMenu(LoggedInUser);
+					this.UpdateCharges();
 					break;
 				case 5:
-					NewCurrency();
-					DisplayAdminMenu(LoggedInUser);
+					this.NewCurrency();
 					break;
 				case 6:
-					UpdateAccount();
-					DisplayAdminMenu(LoggedInUser);
+					this.UpdateAccount();
 					break;
 				case 7:
-					DeleteAccount();
-					DisplayAdminMenu(LoggedInUser);
+					this.DeleteAccount();
 					break;
 				case 8:
 					this.StaffService.XmlData();
-					Logout(this.LoggedInUser.Name);
-					MainMenu();
+					this.MainMenu();
 					break;
 				default:
 					Console.WriteLine("Please select option from the list");
-					DisplayAdminMenu(LoggedInUser);
 					break;
 
 			}
+			DisplayAdminMenu(LoggedInUser);
 		}
 
 		public void DisplayStaffMenu(User LoggedInUser)
 		{
 			Console.WriteLine("1. Add Account Holder\n2. Display Bank User Details\n3. Update Service Charges\n4. Add New Currency\n5. Logout");
+
 			int option = Convert.ToInt32(Console.ReadLine());
 			switch (option)
 			{
 				case 1:
-					AddAccountHolder();
-					DisplayStaffMenu(LoggedInUser);
+					this.AddAccountHolder();
 					break;
 				case 2:
-					BankAccountHolders();
-					DisplayStaffMenu(LoggedInUser);
+					this.DisplayBankAccountHolders();
 					break;
 				case 3:
-					UpdateCharges();
-					DisplayStaffMenu(LoggedInUser);
+					this.UpdateCharges();
 					break;
 				case 4:
-					NewCurrency();
-					DisplayStaffMenu(LoggedInUser);
+					this.NewCurrency();
 					break;
 				case 5:
 					this.StaffService.XmlData();
-					Logout(this.LoggedInUser.Name);
-					MainMenu();
+					this.MainMenu();
 					break;
-
 				default:
 					Console.WriteLine("Please select option from the list");
-					DisplayStaffMenu(LoggedInUser);
 					break;
-
 			}
+			DisplayStaffMenu(LoggedInUser);
 		}
 
-		public void DisplayUserMenu(AccountHolder LoggedInAccountHolder)
+		public void DisplayUserMenu(AccountHolder accountHolder)
 		{
-			double balance = LoggedInAccountHolder.InitialBalance;
+			double balance = accountHolder.InitialBalance;
 			Console.WriteLine("1.Withdrawl \n2.Deposit\n3.Transaction History\n4.View Balance\n5.Transfer Funds\n6.Revert Transaction\n7.Logout");
-			int option = Convert.ToInt32(Console.ReadLine());
 
+			int option = Convert.ToInt32(Console.ReadLine());
 			switch (option)
 			{
 				case 1:
-					Console.WriteLine("Available Balance: {0}", LoggedInAccountHolder.InitialBalance);
+					Console.WriteLine("Available Balance: {0}", accountHolder.InitialBalance);
 					double withdrawAmount = this.Utility.GetDoubleInput("Enter Withdraw Amount");
-					LoggedInAccountHolder.InitialBalance = this.BankService.Withdraw(withdrawAmount, LoggedInAccountHolder);
-					this.TransactionService.AddWithdrawTransaction(withdrawAmount,LoggedInAccountHolder);
-					Console.WriteLine("New Balance: {0}", LoggedInAccountHolder.InitialBalance);
-					DisplayUserMenu(LoggedInAccountHolder);
+					accountHolder.InitialBalance = this.BankService.Withdraw(withdrawAmount, accountHolder);
+					Transaction transaction = new Transaction();
+					transaction.Type = TransactionType.Withdraw;
+					transaction.CreatedBy = this.LoggedInUser.Id;
+					transaction.Amount = withdrawAmount;
+					this.TransactionService.AddTransaction(transaction,accountHolder.AccountNumber);
+					Console.WriteLine("New Balance: {0}", accountHolder.InitialBalance);
 					break;
 				case 2:
-					Console.WriteLine("Available Balance: {0}", LoggedInAccountHolder.InitialBalance);
+					Console.WriteLine("Available Balance: {0}", accountHolder.InitialBalance);
 					double depositAmount = this.Utility.GetDoubleInput("Enter Deposit Amount");
-					LoggedInAccountHolder.InitialBalance = this.BankService.Deposit(depositAmount, LoggedInAccountHolder);
-					this.TransactionService.AddDepositTransaction(depositAmount, LoggedInAccountHolder);
-					Console.WriteLine("New Balance: {0}", LoggedInAccountHolder.InitialBalance);
-					DisplayUserMenu(LoggedInAccountHolder);
+					accountHolder.InitialBalance = this.BankService.Deposit(depositAmount, accountHolder);
+					Transaction transaction1 = new Transaction();
+					transaction1.Type = TransactionType.Deposit;
+					transaction1.CreatedBy = this.LoggedInUser.Id;
+					transaction1.Amount = depositAmount;
+					this.TransactionService.AddTransaction(transaction1, accountHolder.AccountNumber);
+					Console.WriteLine("New Balance: {0}", accountHolder.InitialBalance);
 					break;
 				case 3:
 					Console.WriteLine("Transaction History");
-					foreach(Transaction transaction in this.TransactionService.GetCurrentUserTransactions(LoggedInAccountHolder))
+					Console.WriteLine("Transaction Date\t\tTransaction Type\t\tTransaction Amount");
+					foreach(Transaction transaction2 in this.TransactionService.GetCurrentUserTransactions(accountHolder.AccountNumber))
                     {
-						Console.WriteLine("Transaction Date: {0} , Transaction Type: {1} , Transaction Amount: {2}", transaction.CreateDate, transaction.Type,transaction.Amount);
+						Console.WriteLine("{0}\t\t{1}\t\t\t{2}", transaction2.CreatedOn, transaction2.Type,transaction2.Amount);
                     }
-					DisplayUserMenu(LoggedInAccountHolder);
 					break;
-
 				case 4:
-					Console.WriteLine("Current Balance: {0}", LoggedInAccountHolder.InitialBalance);
-					DisplayUserMenu(LoggedInAccountHolder);
+					Console.WriteLine("Current Balance: {0}", accountHolder.InitialBalance);
 					break;
 				case 5:
-					TransferFunds(LoggedInAccountHolder);
-					DisplayUserMenu(LoggedInAccountHolder);
+					this.TransferFunds(accountHolder);
 					break;
 				case 6:
-					RevertTransaction(LoggedInAccountHolder);
-					DisplayUserMenu(LoggedInAccountHolder);
+					this.RevertTransaction(accountHolder);
 					break;
 				case 7:
 					this.StaffService.XmlData();
-					Logout(LoggedInAccountHolder.Name);
-					MainMenu();
+					this.Logout(accountHolder.Name);
+					this.MainMenu();
 					break;
 				default:
 					Console.WriteLine("Please select option from the list");
-					DisplayUserMenu(LoggedInAccountHolder);
 					break;
 			}
+			DisplayUserMenu(accountHolder);
 		}
 
 		public void TransferFunds(AccountHolder accountHolder)
@@ -261,7 +251,7 @@ namespace BankApp
 			string accountNumber = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Please enter vendor's account number to transfer funds.");
 
 			var user = new AccountHolder();
-			user = this.Bank.AccountHolders.Find(element => element.AccountNumber.Equals(accountNumber));
+			user = this.Bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
 			double amount = this.Utility.GetDoubleInput("Enter Amount To Transfer");
 			double balance = accountHolder.InitialBalance - amount;
 			if (balance >= 0)
@@ -272,24 +262,24 @@ namespace BankApp
 			{
 				Console.WriteLine("Insufficient Balance");
 			}
-
 		}
 
 		public void AddStaff()
 		{
-			string userName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter Staff username").ToLower();
-			string password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter Staff password");
-			string name = this.Utility.GetStringInput("^[a-zA-Z ]{3,}$", "Enter Staff Name").ToUpper();
-			this.UserService.CreateStaffAccount(userName,password,name);
-			DisplayAdminMenu(this.LoggedInUser);
+			Staff staff = new Staff();
+			staff.UserName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter Staff username");
+			staff.Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter Staff password");
+			staff.Name = this.Utility.GetStringInput("^[a-zA-Z ]{3,}$", "Enter Staff Name");
+			this.UserService.CreateEmployee(staff);
 		}
 
 		public void AddAccountHolder()
 		{
-			string userName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter Account Holder username").ToLower();
-			string password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter Account Holder password");
-			string name = this.Utility.GetStringInput("^[a-zA-Z ]{3,}$", "Enter Account Holder Name").ToUpper();
-			this.UserService.CreateUserAccount(userName,password,name);
+			AccountHolder accountHolder = new AccountHolder();
+			accountHolder.UserName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter Account Holder username");
+			accountHolder.Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter Account Holder password");
+			accountHolder.Name = this.Utility.GetStringInput("^[a-zA-Z ]{3,}$", "Enter Account Holder Name");
+			this.UserService.CreateAccountHolder(accountHolder);
 		}
 		
 		public void UpdateAccount()
@@ -300,13 +290,13 @@ namespace BankApp
 				Console.WriteLine(accountHolder.UserName);
 			}
 
-			string strname = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter Account username: ").ToLower();
-			foreach (var account in this.Bank.AccountHolders.Where(w => w.UserName == strname))
+			string userName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter Account username: ");
+			foreach (var account in this.Bank.AccountHolders.Where(account => account.UserName.ToLower() == userName.ToLower()))
 			{
-				Console.WriteLine("Username: {0}. This account can now be updated ", strname);
-				account.UserName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Update username of user: ").ToLower();
+				Console.WriteLine("Username: {0}. This account can now be updated ", userName);
+				account.UserName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Update username of user: ");
 				account.Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Update password of user: ");
-				account.Name = this.Utility.GetStringInput("^[a-zA-Z ]{3,}$", "Update Account Holder Name").ToUpper();
+				account.Name = this.Utility.GetStringInput("^[a-zA-Z ]{3,}$", "Update Account Holder Name");
 			}
 			Console.WriteLine("User Account updated successfully");
 		}
@@ -319,8 +309,8 @@ namespace BankApp
 				Console.WriteLine(accountHolder.UserName);
 			}
 
-			string strname = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter Account username: ").ToLower();
-			this.Bank.AccountHolders.RemoveAll(x => x.UserName == strname);
+			string userName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter Account username: ");
+			this.Bank.AccountHolders.RemoveAll(account => account.UserName == userName);
 			Console.WriteLine("User Account deleted successfully");
 		}
 
@@ -334,44 +324,38 @@ namespace BankApp
 			Console.WriteLine("New Currency updated Successfully");
 		}
 
-		public void BankUsers()
+		public void DisplayBankEmployees()
 		{
 			Console.WriteLine("Bank Staff Users");
-			List<string> x = this.StaffService.BankEmployees();
-			foreach (string s in x)
+			List<string> employeeList = this.StaffService.BankEmployees();
+			foreach (string staff in employeeList)
 			{
-				Console.WriteLine(s);
-			}
-			Console.WriteLine("Bank Account Holders");
-			List<string> y = this.StaffService.BankAccountHolders();
-			foreach (string ah in y)
-			{
-				Console.WriteLine(ah);
+				Console.WriteLine(staff);
 			}
 		}
 
-		public void BankAccountHolders()
+		public void DisplayBankAccountHolders()
 		{
 			Console.WriteLine("Bank Account Holders");
-			List<string> y = this.StaffService.BankAccountHolders();
-			foreach (string ah in y)
+			List<string> accountHolderList = this.StaffService.BankAccountHolders();
+			foreach (string user in accountHolderList)
 			{
-				Console.WriteLine(ah);
+				Console.WriteLine(user);
 			}
 		}
 
 		public void RevertTransaction(AccountHolder accountHolder)
 		{
 			Console.WriteLine("Transactions of users by their ID and date are as follows:-");
-
-			foreach (Transaction transaction in this.TransactionService.GetCurrentUserTransactions(accountHolder))
+			foreach (Transaction transaction in this.TransactionService.GetCurrentUserTransactions(accountHolder.AccountNumber))
 			{
-				Console.WriteLine("Transaction ID: {0} , Transaction Date: {1}", transaction.ID, transaction.CreateDate);
+				Console.WriteLine("Transaction ID: {0} , Transaction Date: {1}", transaction.ID, transaction.CreatedOn);
 			}
+
 			Console.WriteLine("Enter Transaction ID and Transaction Date to revert that transaction");
 			string id = Console.ReadLine();
 			DateTime date = Convert.ToDateTime(Console.ReadLine());
-			this.TransactionService.RevertTransaction(id, date, accountHolder);
+			this.TransactionService.RevertTransaction(id, date, accountHolder.AccountNumber);
 
 		}
 
@@ -383,39 +367,39 @@ namespace BankApp
 				Console.WriteLine(user.UserName + " " + user.Id);
 			}
 
-			string userName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter username: ").ToLower();
-			if(this.Bank.AccountHolders.Any(user=>user.UserName==userName))
+			string userName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter username : ");
+			if(this.Bank.AccountHolders.Any(account=>account.UserName.ToLower() == userName.ToLower()))
 			{
 				Console.WriteLine("Username: {0} \nDefault RTGS for same bank: 0%, Default RTGS for different bank: 2%, Default IMPS for same bank: 5%, Default IMPS for different bank: 6%, ", userName);
-				string bankName = this.Utility.GetStringInput("^[a-zA-Z ]+$", "Enter bankname of user: ");
-				if(this.Bank.Branches.Any(s=>s.BankId.Equals(bankName.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy"))))
+				string bankName = this.Utility.GetStringInput("^[a-zA-Z ]+$", "Enter bankname : ");
+				if(this.Bank.Branches.Any(bank=>bank.BankId.Equals(bankName.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy"))))
 				{
-					Console.WriteLine("Since same bank, the new charges of RTGS and IMPS are:-");
+					Console.WriteLine("New charges of RTGS and IMPS are:-");
 					int sameBankRTGS =Convert.ToInt32(Console.ReadLine());
 					int sameBankIMPS = Convert.ToInt32(Console.ReadLine());
-					this.StaffService.UpdateChargesSameBank(sameBankRTGS, sameBankIMPS);
+					BankType type = BankType.Same;
+					this.StaffService.UpdateCharges(sameBankRTGS, sameBankIMPS, type);
 				}
 				else
 				{
-					Console.WriteLine("Since different bank, the new charges of RTGS and IMPS are:-");
+					Console.WriteLine("New charges of RTGS and IMPS are:-");
 					int differentBankRTGS = Convert.ToInt32(Console.ReadLine());
 					int differentBankIMPS = Convert.ToInt32(Console.ReadLine());
-					this.StaffService.UpdateChargesDifferentBank(differentBankRTGS, differentBankIMPS);
+					BankType type = BankType.Different;
+					this.StaffService.UpdateCharges(differentBankRTGS, differentBankIMPS, type);
 				}
-
 			}
-
 		}
 
 		public void Logout(string user)
 		{
+			this.LoggedInUser = new User();
 			Console.WriteLine("Goodbye "+user);
 		}
 
-		void Exit()
+		public void Exit()
 		{
 			Console.WriteLine("Date saved!!! You can exit!");
 		}
-
 	}
 }

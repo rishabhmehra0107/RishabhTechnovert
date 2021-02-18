@@ -16,53 +16,41 @@ namespace BankApp.Services
 
 		public void AddAdmin(Staff admin)
 		{
-			admin.Type = EmployeeType.Admin;
-			admin.Id = "ID_" + this.Bank.Staffs.Count + 1;
+			admin.Type = UserType.Admin;
+			admin.Id = $"{UserType.Admin} {this.Bank.Staffs.Count + 1}";
 			this.Bank.Staffs.Add(admin);
 		}
 
-		public void CreateStaffAccount(string username, string password, string name)
+		public void CreateEmployee(Staff staff)
 		{
-			Staff staff = new Staff();
-			staff.UserName = username;
-			staff.Password = password;
-			staff.Name = name;
-			staff.Type = EmployeeType.Staff;
-			staff.Id = "Staff_" + this.Bank.Staffs.Count + 1;
+			staff.Type = UserType.Staff;
+			staff.Id = $"{UserType.Staff} {this.Bank.Staffs.Count + 1}";
 			this.Bank.Staffs.Add(staff);
 		}
 
-		public void CreateUserAccount(string username, string password, string name)
+		public void CreateAccountHolder(AccountHolder accountHolder)
 		{
-			AccountHolder account = new AccountHolder();
-			account.UserName = username;
-			account.Password = password;
-			account.Name = name;
-			account.Type = UserType.AccountHolder;
-			account.InitialBalance = Constants.InitialBalance;
-			account.AccountNumber = account.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyyhhmmss");
-			account.AccountType = AccountType.Savings;
-			account.Id = "AccountHolder_"+this.Bank.AccountHolders.Count + 1;
-			this.Bank.AccountHolders.Add(account);
+			accountHolder.Type = UserType.AccountHolder;
+			accountHolder.InitialBalance = Constants.InitialBalance;
+			accountHolder.AccountNumber = accountHolder.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyyhhmmss");
+			accountHolder.AccountType = AccountType.Savings;
+			accountHolder.Id = $"{UserType.AccountHolder} {this.Bank.AccountHolders.Count + 1}";
+			this.Bank.AccountHolders.Add(accountHolder);
 		}
 
 		public User LogIn(string username, string password)
 		{
 			var user = new User();
-			if (this.Bank.Staffs.Any(element => element.UserName == username && element.Password == password && element.Type.Equals("Admin")))
+			if (this.Bank.Staffs.Any(staff => staff.UserName.ToLower() == username.ToLower() && staff.Password == password && (staff.Type.Equals(UserType.Admin)|| staff.Type.Equals(UserType.Staff))))
 			{
-				user = this.Bank.Staffs.Find(element => element.UserName.Equals(username) && element.Password.Equals(password) && element.Type.Equals("Admin"));
+				user = this.Bank.Staffs.Find(staff => staff.UserName.ToLower() == username.ToLower() && staff.Password == password);
 			}
-			else if (this.Bank.Staffs.Any(element => element.UserName == username && element.Password == password && element.Type.Equals("Staff")))
+			else if (this.Bank.AccountHolders.Any(account => account.UserName.ToLower() == username.ToLower() && account.Password == password && account.Type.Equals(UserType.AccountHolder)))
 			{
-				user = this.Bank.Staffs.Find(element => element.UserName.Equals(username) && element.Password.Equals(password) && element.Type.Equals("Staff"));
+				user = this.Bank.AccountHolders.Find(account => account.UserName.ToLower() == username.ToLower() && account.Password == password);
 			}
-			else if (this.Bank.AccountHolders.Any(element => element.UserName == username && element.Password == password))
-			{
-				user = this.Bank.AccountHolders.Find(element => element.UserName.Equals(username) && element.Password.Equals(password));
-			}
+
 			return user;
 		}
-
 	}
 }

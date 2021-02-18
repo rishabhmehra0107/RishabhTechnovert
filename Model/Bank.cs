@@ -15,10 +15,10 @@ namespace BankApp.Model
         public string Id { get; set; }
         public string Name { get; set; }
         public string Location { get; set; }
-        public int SameBankRTGSCharge { get; set; }
-        public int SameBankIMPSCharge { get; set; }
-        public int DifferentBankRTGSCharge { get; set; }
-        public int DifferentBankIMPSCharge { get; set; }
+        public int SameBankRTGS { get; set; }
+        public int SameBankIMPS { get; set; }
+        public int DifferentBankRTGS { get; set; }
+        public int DifferentBankIMPS { get; set; }
         public List<AccountHolder> AccountHolders { get; set; }
         public List<User> Users { get; set; }
         public List<Branch> Branches { get; set; }

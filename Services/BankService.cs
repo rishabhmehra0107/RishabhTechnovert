@@ -32,7 +32,6 @@ namespace BankApp.Services
 			return accountHolder.InitialBalance;
 		}
 
-
 		public void TransferAmount(double amount, AccountHolder accountHolder, AccountHolder accountHolder1)
 		{
 			accountHolder1.InitialBalance += amount;

@@ -14,41 +14,29 @@ namespace BankApp.Services
 			this.Bank = bank;
 		}
 
-		public void AddWithdrawTransaction(double amount, AccountHolder accountHolder)
+		public void AddTransaction(Transaction transaction, string accountNumber)
         {
-			Transaction transaction = new Transaction();
-			transaction.Type = TransactionType.Withdraw;
+			var accountHolder = this.Bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
 			transaction.CreatedOn = DateTime.UtcNow;
-			transaction.CreatedBy = accountHolder.Id;
-			transaction.ID = "TXN" + this.Bank.Id + accountHolder.Transactions.Count;
-			transaction.isReverted = false;
-			transaction.Amount = amount;
+			transaction.ID = "TXN" + this.Bank.Id + accountHolder.Transactions.Count + DateTime.UtcNow.ToString("MMDDYYY");
+			transaction.IsReverted = false;
 			accountHolder.Transactions.Add(transaction);
 		}
 
-		public void AddDepositTransaction(double amount, AccountHolder accountHolder)
-        {
-			Transaction transaction = new Transaction();
-			transaction.Type = TransactionType.Deposit;
-			transaction.CreatedOn = DateTime.UtcNow;
-			transaction.CreatedBy = accountHolder.Id;
-			transaction.ID = "TXN" + this.Bank.Id + accountHolder.Transactions.Count;
-			transaction.isReverted = false;
-			transaction.Amount = amount;
-			accountHolder.Transactions.Add(transaction);
-		}
-
-		public bool RevertTransaction(string id, DateTime date, AccountHolder accountHolder)
+		public bool RevertTransaction(string id, DateTime date, string accountNumber)
 		{
-			
+
+			var accountHolder = this.Bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
 			var transaction = accountHolder.Transactions.Find(element => element.ID == id && element.CreatedOn == date);
 
-			return transaction.isReverted = true;
+			return transaction.IsReverted = true;
 
 		}
 
-		public List<Transaction> GetCurrentUserTransactions(AccountHolder accountHolder)
+		public List<Transaction> GetCurrentUserTransactions(string accountNumber)
         {
+			var accountHolder = this.Bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
+
 			return accountHolder.Transactions;
         }
 	}

@@ -3,6 +3,7 @@ using System.Xml.Linq;
 using System.Linq;
 using System.Collections.Generic;
 using BankApp.Model;
+using static BankApp.Model.Constants;
 
 namespace BankApp.Services
 {
@@ -32,7 +33,7 @@ namespace BankApp.Services
 		public List<string> BankEmployees()
 		{
 			List<string> newList = new List<string>();
-			newList = this.Bank.Staffs.Select(s => s.UserName).ToList();
+			newList = this.Bank.Staffs.Select(staff => staff.UserName).ToList();
 
 			return newList;
 		}
@@ -40,23 +41,24 @@ namespace BankApp.Services
 		public List<string> BankAccountHolders()
 		{
 			List<string> newList = new List<string>();
-			newList = this.Bank.AccountHolders.Select(s => s.UserName).ToList();
+			newList = this.Bank.AccountHolders.Select(accountHolder => accountHolder.UserName).ToList();
 
 			return newList;
 		}
 
-		public void UpdateChargesSameBank(int srtgs, int simps)
+		public void UpdateCharges(int rtgs, int imps, BankType type)
 		{
-			this.Bank.SameBankIMPSCharge = simps;
-			this.Bank.SameBankRTGSCharge = srtgs;
-
+            if (type.Equals(BankType.Same))
+            {
+				this.Bank.SameBankIMPS = imps;
+				this.Bank.SameBankRTGS = rtgs;
+			}
+			else if (type.Equals(BankType.Different))
+            {
+				this.Bank.DifferentBankIMPS = imps;
+				this.Bank.DifferentBankRTGS = rtgs;
+			}
 		}
-		public void UpdateChargesDifferentBank(int drtgs,int dimps)
-        {
-			this.Bank.DifferentBankIMPSCharge = dimps;
-			this.Bank.DifferentBankRTGSCharge = drtgs;
-        }
-
 
 		public void XmlData()
         {
@@ -65,7 +67,9 @@ namespace BankApp.Services
 			XElement xElement2 = new XElement("Staffs");
 			XElement xElement3 = new XElement("AccountHolders");
 			XElement xElement4 = new XElement("Currencies");
+
 			xDocument = new XDocument(new XElement("Bank",xElement,xElement2,xElement3,xElement4));
+
 			int i = 1;
 			foreach (Branch branch in this.Bank.Branches)
 			{
@@ -97,7 +101,6 @@ namespace BankApp.Services
 				xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
 				i++;
 			}
-
 		}
 	}
 }

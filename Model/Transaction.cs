@@ -10,7 +10,7 @@ namespace BankApp.Model
         public double Amount { get; set; }
         public TransactionType Type { get; set; }
         public string AccountNumber { get; set; }
-        public bool isReverted { get; set; }
+        public bool IsReverted { get; set; }
         public DateTime CreatedOn { get; set; }
 
     }

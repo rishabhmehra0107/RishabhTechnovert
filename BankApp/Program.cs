@@ -6,7 +6,6 @@ namespace BankApp
         static void Main()
         {
             new BankApplication();
-
         }
     }
 }
