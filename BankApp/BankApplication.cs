@@ -8,7 +8,7 @@ namespace BankApp
 {
     public class BankApplication
 	{
-		private BankApp.Services.Utilities.Utility Utility { get; set; }
+		private Services.Utilities.Utility Utility { get; set; }
 		private AccountService AccountService { get; set; }
 		private BankService BankService { get; set; }
 		private TransactionService TransactionService { get; set; }

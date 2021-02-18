@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Model\Model.csproj" />
-    <ProjectReference Include="..\Services\Services.csproj" />
+    <ProjectReference Include="..\Model\BankApp.Model.csproj" />
+    <ProjectReference Include="..\Services\BankApp.Services.csproj" />
   </ItemGroup>
 </Project>

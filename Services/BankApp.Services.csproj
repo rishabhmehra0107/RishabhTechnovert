@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Model\Model.csproj" />
+    <Folder Include="Utilities\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Utilities\" />
+    <ProjectReference Include="..\Model\BankApp.Model.csproj" />
   </ItemGroup>
 </Project>
