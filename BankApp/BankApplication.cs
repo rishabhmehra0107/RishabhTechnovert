@@ -65,17 +65,22 @@ namespace BankApp
 			this.Bank.DifferentBankRTGS = Constants.DifferentBankRTGS;
 			Console.WriteLine("Bank setup is completed. Please provide branch details");
 
-			Branch branch = new Branch();
-			branch.BankId = this.Bank.Id;
-			branch.Location = this.Utility.GetStringInput("^[a-zA-Z ]+$", "Enter Branch Location");
+			Branch branch = new Branch()
+			{
+				BankId = this.Bank.Id,
+				Location = this.Utility.GetStringInput("^[a-zA-Z ]+$", "Enter Branch Location")
+			};
 			this.BankService.AddBranch(branch);
 			Console.WriteLine("Branch details added. Please provide admin username and password to setup");
 
-			Staff admin = new Staff();
-			admin.Name = this.Utility.GetStringInput("^[a-zA-Z ]{3,}$", "Enter admin name").ToUpper();
-			admin.UserName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter admin username").ToLower();
-			admin.Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter admin password");
-			this.UserService.AddAdmin(admin);
+			Staff admin = new Staff()
+			{
+				Name = this.Utility.GetStringInput("^[a-zA-Z ]{3,}$", "Enter admin name").ToUpper(),
+				UserName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter admin username").ToLower(),
+				Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter admin password"),
+				Type = UserType.Admin
+			};
+			this.UserService.AddEmployee(admin);
 			Console.WriteLine("Admin created successfuly");
 
 			Console.WriteLine("Bank Name: {0}, User Name: {1}", Bank.Name, admin.UserName);
@@ -196,49 +201,78 @@ namespace BankApp
 			switch (option)
 			{
 				case 1:
-					Console.WriteLine("Available Balance: {0}", accountHolder.InitialBalance);
 					double withdrawAmount = this.Utility.GetDoubleInput("Enter Withdraw Amount");
-					accountHolder.InitialBalance = this.BankService.Withdraw(withdrawAmount, accountHolder);
-					Transaction transaction = new Transaction();
-					transaction.Type = TransactionType.Withdraw;
-					transaction.CreatedBy = this.LoggedInUser.Id;
-					transaction.Amount = withdrawAmount;
-					this.TransactionService.AddTransaction(transaction,accountHolder.AccountNumber);
-					Console.WriteLine("New Balance: {0}", accountHolder.InitialBalance);
+					double newBalanceAfterWithdraw = this.BankService.Withdraw(withdrawAmount, accountHolder.AccountNumber);
+					if (newBalanceAfterWithdraw != -1)
+						accountHolder.InitialBalance = newBalanceAfterWithdraw;
+                    else
+                    {
+						Console.WriteLine("Unable to perform withdraw");
+						break;
+                    }
+
+					Transaction withdrawTransaction = new Transaction();
+					withdrawTransaction.Type = TransactionType.Withdraw;
+					withdrawTransaction.CreatedBy = this.LoggedInUser.Id;
+					withdrawTransaction.Amount = withdrawAmount;
+                    if (this.TransactionService.AddTransaction(withdrawTransaction, accountHolder.AccountNumber))
+						Console.WriteLine("New Balance: {0}", accountHolder.InitialBalance);
+					else
+						Console.WriteLine("Unable to add transaction");
+
 					break;
+
 				case 2:
-					Console.WriteLine("Available Balance: {0}", accountHolder.InitialBalance);
 					double depositAmount = this.Utility.GetDoubleInput("Enter Deposit Amount");
-					accountHolder.InitialBalance = this.BankService.Deposit(depositAmount, accountHolder);
-					Transaction transaction1 = new Transaction();
-					transaction1.Type = TransactionType.Deposit;
-					transaction1.CreatedBy = this.LoggedInUser.Id;
-					transaction1.Amount = depositAmount;
-					this.TransactionService.AddTransaction(transaction1, accountHolder.AccountNumber);
-					Console.WriteLine("New Balance: {0}", accountHolder.InitialBalance);
+					double newBalanceAfterDeposit = this.BankService.Deposit(depositAmount, accountHolder.AccountNumber);
+					if (newBalanceAfterDeposit != -1)
+						accountHolder.InitialBalance = newBalanceAfterDeposit;
+					else
+					{
+						Console.WriteLine("Unable to perform deposit");
+						break;
+					}
+
+					Transaction depositTransaction = new Transaction();
+					depositTransaction.Type = TransactionType.Deposit;
+					depositTransaction.CreatedBy = this.LoggedInUser.Id;
+					depositTransaction.Amount = depositAmount;
+					if(this.TransactionService.AddTransaction(depositTransaction, accountHolder.AccountNumber))
+						Console.WriteLine("New Balance: {0}", accountHolder.InitialBalance);
+					else
+						Console.WriteLine("Unable to add transaction");
+
 					break;
+
 				case 3:
 					Console.WriteLine("Transaction History");
 					Console.WriteLine("Transaction Date\t\tTransaction Type\t\tTransaction Amount");
-					foreach(Transaction transaction2 in this.TransactionService.GetCurrentUserTransactions(accountHolder.AccountNumber))
+					foreach(Transaction transaction2 in this.TransactionService.GetTransactionsByAccount(accountHolder.AccountNumber))
                     {
 						Console.WriteLine("{0}\t\t{1}\t\t\t{2}", transaction2.CreatedOn, transaction2.Type,transaction2.Amount);
                     }
+
 					break;
+
 				case 4:
 					Console.WriteLine("Current Balance: {0}", accountHolder.InitialBalance);
 					break;
+
 				case 5:
 					this.TransferFunds(accountHolder);
 					break;
+
 				case 6:
 					this.RevertTransaction(accountHolder);
 					break;
+
 				case 7:
 					this.StaffService.XmlData();
 					this.Logout(accountHolder.Name);
 					this.MainMenu();
+
 					break;
+
 				default:
 					Console.WriteLine("Please select option from the list");
 					break;
@@ -270,7 +304,8 @@ namespace BankApp
 			staff.UserName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter Staff username");
 			staff.Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter Staff password");
 			staff.Name = this.Utility.GetStringInput("^[a-zA-Z ]{3,}$", "Enter Staff Name");
-			this.UserService.CreateEmployee(staff);
+			staff.Type = UserType.Staff;
+			this.UserService.AddEmployee(staff);
 		}
 
 		public void AddAccountHolder()
@@ -279,7 +314,7 @@ namespace BankApp
 			accountHolder.UserName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter Account Holder username");
 			accountHolder.Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter Account Holder password");
 			accountHolder.Name = this.Utility.GetStringInput("^[a-zA-Z ]{3,}$", "Enter Account Holder Name");
-			this.UserService.CreateAccountHolder(accountHolder);
+			this.UserService.AddAccountHolder(accountHolder);
 		}
 		
 		public void UpdateAccount()
@@ -347,7 +382,7 @@ namespace BankApp
 		public void RevertTransaction(AccountHolder accountHolder)
 		{
 			Console.WriteLine("Transactions of users by their ID and date are as follows:-");
-			foreach (Transaction transaction in this.TransactionService.GetCurrentUserTransactions(accountHolder.AccountNumber))
+			foreach (Transaction transaction in this.TransactionService.GetTransactionsByAccount(accountHolder.AccountNumber))
 			{
 				Console.WriteLine("Transaction ID: {0} , Transaction Date: {1}", transaction.ID, transaction.CreatedOn);
 			}

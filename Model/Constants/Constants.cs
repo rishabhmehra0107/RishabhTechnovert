@@ -8,22 +8,26 @@ namespace BankApp.Model
         public static int SameBankIMPS = 5;
         public static int DifferentBankRTGS = 2;
         public static int DifferentBankIMPS = 6;
+
         public enum UserType
         {
             AccountHolder,
             Admin,
             Staff
         }
+
         public enum AccountType
         {
             Savings,
             Current
         }
+
         public enum TransactionType
         {
             Deposit,
             Withdraw
         }
+
         public enum BankType
         {
             Same,

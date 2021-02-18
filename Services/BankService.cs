@@ -18,18 +18,30 @@ namespace BankApp.Services
 			this.Bank.Branches.Add(branch);
 		}
 
-		public double Withdraw(double amount, AccountHolder accountHolder)
+		public double Withdraw(double amount, string accountNumber)
 		{
-			accountHolder.InitialBalance = accountHolder.InitialBalance - amount;
+			var accountHolder = this.Bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
+			if (accountHolder != null && accountHolder.InitialBalance>=amount)
+            {
+				accountHolder.InitialBalance = accountHolder.InitialBalance - amount;
 
-			return accountHolder.InitialBalance;
+				return accountHolder.InitialBalance;
+			}
+
+			return -1;
 		}
 
-		public double Deposit(double amount, AccountHolder accountHolder)
+		public double Deposit(double amount, string accountNumber)
 		{
-			accountHolder.InitialBalance = accountHolder.InitialBalance + amount;
+			var accountHolder = this.Bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
+			if (accountHolder != null)
+			{
+				accountHolder.InitialBalance = accountHolder.InitialBalance + amount;
 
-			return accountHolder.InitialBalance;
+				return accountHolder.InitialBalance;
+			}
+
+			return -1;
 		}
 
 		public void TransferAmount(double amount, AccountHolder accountHolder, AccountHolder accountHolder1)

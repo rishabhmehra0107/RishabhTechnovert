@@ -14,21 +14,21 @@ namespace BankApp.Services
 			this.Bank = bank;
 		}
 
-		public void AddAdmin(Staff admin)
+		public void AddEmployee(Staff staff)
 		{
-			admin.Type = UserType.Admin;
-			admin.Id = $"{UserType.Admin} {this.Bank.Staffs.Count + 1}";
-			this.Bank.Staffs.Add(admin);
+            if (staff.Type.Equals(UserType.Admin))
+            {
+				staff.Id = $"{UserType.Admin} {this.Bank.Staffs.Count + 1}";
+				this.Bank.Staffs.Add(staff);
+			}
+            else if (staff.Type.Equals(UserType.Staff))
+            {
+				staff.Id = $"{UserType.Staff} {this.Bank.Staffs.Count + 1}";
+				this.Bank.Staffs.Add(staff);
+			}
 		}
 
-		public void CreateEmployee(Staff staff)
-		{
-			staff.Type = UserType.Staff;
-			staff.Id = $"{UserType.Staff} {this.Bank.Staffs.Count + 1}";
-			this.Bank.Staffs.Add(staff);
-		}
-
-		public void CreateAccountHolder(AccountHolder accountHolder)
+		public void AddAccountHolder(AccountHolder accountHolder)
 		{
 			accountHolder.Type = UserType.AccountHolder;
 			accountHolder.InitialBalance = Constants.InitialBalance;
