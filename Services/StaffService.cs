@@ -45,16 +45,6 @@ namespace BankApp.Services
 			return newList;
 		}
 
-		public void RevertTransaction(string id, DateTime date)
-        {
-			Transaction transaction = new Transaction();
-			transaction = this.User.Transactions.Find(element => element.ID == id && element.CreateDate == date);
-            {
-				this.User.Transactions.Remove(transaction);
-            }
-
-		}
-
 		public void UpdateChargesSameBank(int srtgs, int simps)
 		{
 			this.Bank.SameBankIMPSCharge = simps;

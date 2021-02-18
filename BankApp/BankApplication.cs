@@ -118,7 +118,7 @@ namespace BankApp
 
 		public void DisplayAdminMenu(User LoggedInUser)
 		{
-			Console.WriteLine("1. Add Staff\n2. Add Account Holder\n3.Display Bank User Details\n4. Update Service Charges\n5. Add New Currency\n6. Update Account\n7. Delete Account\n8.Edit Transactions\n9.Logout");
+			Console.WriteLine("1. Add Staff\n2. Add Account Holder\n3.Display Bank User Details\n4. Update Service Charges\n5. Add New Currency\n6. Update Account\n7. Delete Account\n8. Logout");
 			int option = Convert.ToInt32(Console.ReadLine());
 
 			switch (option)
@@ -151,10 +151,6 @@ namespace BankApp
 					DisplayAdminMenu(LoggedInUser);
 					break;
 				case 8:
-					RevertTransaction();
-					DisplayAdminMenu(LoggedInUser);
-					break;
-				case 9:
 					this.StaffService.XmlData();
 					Logout(this.LoggedInUser.Name);
 					MainMenu();
@@ -169,7 +165,7 @@ namespace BankApp
 
 		public void DisplayStaffMenu(User LoggedInUser)
 		{
-			Console.WriteLine("1. Add Account Holder\n2. Display Bank User Details\n3. Update Service Charges\n4. Add New Currency\n5. Edit Transactions\n6. Logout");
+			Console.WriteLine("1. Add Account Holder\n2. Display Bank User Details\n3. Update Service Charges\n4. Add New Currency\n5. Logout");
 			int option = Convert.ToInt32(Console.ReadLine());
 			switch (option)
 			{
@@ -190,10 +186,6 @@ namespace BankApp
 					DisplayStaffMenu(LoggedInUser);
 					break;
 				case 5:
-					RevertTransaction();
-					DisplayStaffMenu(LoggedInUser);
-					break;
-				case 6:
 					this.StaffService.XmlData();
 					Logout(this.LoggedInUser.Name);
 					MainMenu();
@@ -210,7 +202,7 @@ namespace BankApp
 		public void DisplayUserMenu(AccountHolder LoggedInAccountHolder)
 		{
 			double balance = LoggedInAccountHolder.InitialBalance;
-			Console.WriteLine("1.Withdrawl \n2.Deposit\n3.Transaction History\n4.View Balance\n5.Transfer Funds\n6.Logout");
+			Console.WriteLine("1.Withdrawl \n2.Deposit\n3.Transaction History\n4.View Balance\n5.Transfer Funds\n6.Revert Transaction\n7.Logout");
 			int option = Convert.ToInt32(Console.ReadLine());
 
 			switch (option)
@@ -249,6 +241,10 @@ namespace BankApp
 					DisplayUserMenu(LoggedInAccountHolder);
 					break;
 				case 6:
+					RevertTransaction(LoggedInAccountHolder);
+					DisplayUserMenu(LoggedInAccountHolder);
+					break;
+				case 7:
 					this.StaffService.XmlData();
 					Logout(LoggedInAccountHolder.Name);
 					MainMenu();
@@ -364,18 +360,18 @@ namespace BankApp
 			}
 		}
 
-		public void RevertTransaction()
+		public void RevertTransaction(AccountHolder accountHolder)
 		{
 			Console.WriteLine("Transactions of users by their ID and date are as follows:-");
 
-			foreach (Transaction transaction in this.AccountHolder.Transactions)
+			foreach (Transaction transaction in this.TransactionService.GetCurrentUserTransactions(accountHolder))
 			{
 				Console.WriteLine("Transaction ID: {0} , Transaction Date: {1}", transaction.ID, transaction.CreateDate);
 			}
 			Console.WriteLine("Enter Transaction ID and Transaction Date to revert that transaction");
 			string id = Console.ReadLine();
 			DateTime date = Convert.ToDateTime(Console.ReadLine());
-			this.StaffService.RevertTransaction(id, date);
+			this.TransactionService.RevertTransaction(id, date, accountHolder);
 
 		}
 

@@ -38,6 +38,15 @@ namespace BankApp.Services
 			accountHolder.Transactions.Add(transaction);
 		}
 
+		public bool RevertTransaction(string id, DateTime date, AccountHolder accountHolder)
+		{
+			
+			var transaction = accountHolder.Transactions.Find(element => element.ID == id && element.CreateDate == date);
+
+			return transaction.isReverted = true;
+
+		}
+
 		public List<Transaction> GetCurrentUserTransactions(AccountHolder accountHolder)
         {
 			return accountHolder.Transactions;
