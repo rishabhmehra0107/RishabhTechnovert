@@ -5,7 +5,7 @@ namespace BankApp.Services
 {
 	public class BankService
 	{
-		Bank Bank;
+		public Bank Bank { get; set; }
 
 		public BankService(Bank bank)
 		{

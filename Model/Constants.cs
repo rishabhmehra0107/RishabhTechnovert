@@ -9,49 +9,25 @@ namespace BankApp.Model
         public static int DifferentBankRTGS = 2;
         public static int DifferentBankIMPS = 6;
 
-        public static class UserType
-        {
-            public static string AccountHolder = "AccountHolder";
-            public static string Employee = "Employee";
-        }
-
-        public enum UserTypes
+        public enum UserType
         {
             AccountHolder,
             Employee
         }
 
-        public static class EmployeeType
-        {
-            public static string Staff = "Staff";
-            public static string Admin = "Admin";
-        }
-
-        public enum EmployeeTypes
+        public enum EmployeeType
         {
             Staff,
             Admin
         }
 
-        public static class AccountType
-        {
-            public static string Savings = "Savings";
-            public static string Current = "Current";
-        }
-
-        public enum AccountTypes
+        public enum AccountType
         {
             Savings,
             Current
         }
 
-        public static class TransactionType
-        {
-            public static string Deposit = "Deposit";
-            public static string Withdraw = "Withdraw";
-        }
-
-        public enum TransactionTypes
+        public enum TransactionType
         {
             Deposit,
             Withdraw

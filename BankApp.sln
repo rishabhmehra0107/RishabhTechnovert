@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.808.7
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankApp", "BankApp\BankApp.csproj", "{EA23CFFC-B40D-4E1E-BF7D-0637C407D347}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankApp.Console", "BankApp\BankApp.Console.csproj", "{EA23CFFC-B40D-4E1E-BF7D-0637C407D347}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankApp.Model", "Model\BankApp.Model.csproj", "{057E2E76-FE73-4E6F-9DA4-01F97225BB47}"
 EndProject

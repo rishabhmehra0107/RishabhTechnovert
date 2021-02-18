@@ -7,7 +7,7 @@ namespace BankApp.Services
 {
 	public class UserService
 	{
-		Bank Bank;
+		public Bank Bank { get; set; }
 
 		public UserService(Bank bank)
 		{
@@ -16,7 +16,7 @@ namespace BankApp.Services
 
 		public void AddAdmin(Staff admin)
 		{
-			admin.Type = EmployeeTypes.Admin.ToString();
+			admin.Type = EmployeeType.Admin;
 			admin.Id = "ID_" + this.Bank.Staffs.Count + 1;
 			this.Bank.Staffs.Add(admin);
 		}
@@ -27,7 +27,7 @@ namespace BankApp.Services
 			staff.UserName = username;
 			staff.Password = password;
 			staff.Name = name;
-			staff.Type = EmployeeTypes.Staff.ToString();
+			staff.Type = EmployeeType.Staff;
 			staff.Id = "Staff_" + this.Bank.Staffs.Count + 1;
 			this.Bank.Staffs.Add(staff);
 		}
@@ -38,10 +38,10 @@ namespace BankApp.Services
 			account.UserName = username;
 			account.Password = password;
 			account.Name = name;
-			account.Type = UserTypes.AccountHolder.ToString();
+			account.Type = UserType.AccountHolder;
 			account.InitialBalance = Constants.InitialBalance;
 			account.AccountNumber = account.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyyhhmmss");
-			account.AccountType = AccountTypes.Savings.ToString();
+			account.AccountType = AccountType.Savings;
 			account.Id = "AccountHolder_"+this.Bank.AccountHolders.Count + 1;
 			this.Bank.AccountHolders.Add(account);
 		}

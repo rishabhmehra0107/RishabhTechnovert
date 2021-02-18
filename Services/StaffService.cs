@@ -8,8 +8,8 @@ namespace BankApp.Services
 {
 	public class StaffService
 	{
-		Bank Bank;
-		AccountHolder User;
+		public Bank Bank { get; set; }
+		public AccountHolder User { get; set; }
 
 		public StaffService(Bank bank, AccountHolder user)
 		{
