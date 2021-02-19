@@ -3,37 +3,45 @@
   <Branches>
     <BankBranch1>
       <BankName>HDFC</BankName>
-      <Location>Hyderabad</Location>
-      <BankID>HDF02182021</BankID>
-      <BranchLocation>Kauvri Hills</BranchLocation>
-      <BranchID>HDF02182021 Kauvri Hills021821</BranchID>
+      <Location>hyderabad</Location>
+      <BankID>HDF02192021</BankID>
+      <BranchLocation>kauvri hills</BranchLocation>
+      <BranchID>HDF02192021 kauvri hills021921</BranchID>
     </BankBranch1>
   </Branches>
   <Staffs>
     <Employee1>
-      <Name>RISHABH MEHRA</Name>
+      <Name>RISHABH</Name>
       <Type>Admin</Type>
       <ID>Admin 1</ID>
-      <Username>rishabh</Username>
+      <Username>rishabhmehra</Username>
       <Password>1234</Password>
     </Employee1>
     <Employee2>
-      <Name>Sanjay Reddy</Name>
+      <Name>reddy sanjay</Name>
       <Type>Staff</Type>
       <ID>Staff 2</ID>
-      <Username>sanjayreddy</Username>
-      <Password>san123</Password>
+      <Username>sanjay</Username>
+      <Password>1234</Password>
     </Employee2>
   </Staffs>
   <AccountHolders>
     <AccountHolders1>
-      <Name>Vishnu</Name>
+      <Name>vishnu</Name>
       <Type>AccountHolder</Type>
-      <AccountNumber>Vis02182021014135</AccountNumber>
-      <Username>vishnumm</Username>
-      <Password>vi123</Password>
+      <AccountNumber>vis02192021044337</AccountNumber>
+      <Username>vishnureddy</Username>
+      <Password>vis123</Password>
       <ID>AccountHolder 1</ID>
     </AccountHolders1>
+    <AccountHolders2>
+      <Name>kamna</Name>
+      <Type>AccountHolder</Type>
+      <AccountNumber>kam02192021044554</AccountNumber>
+      <Username>kamnamehra</Username>
+      <Password>1234</Password>
+      <ID>AccountHolder 2</ID>
+    </AccountHolders2>
   </AccountHolders>
   <Currencies>
     <Currencies1>

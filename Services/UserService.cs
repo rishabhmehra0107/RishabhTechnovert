@@ -31,7 +31,7 @@ namespace BankApp.Services
 		public void AddAccountHolder(AccountHolder accountHolder)
 		{
 			accountHolder.Type = UserType.AccountHolder;
-			accountHolder.InitialBalance = Constants.InitialBalance;
+			accountHolder.AvailableBalance = Constants.InitialBalance;
 			accountHolder.AccountNumber = accountHolder.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyyhhmmss");
 			accountHolder.AccountType = AccountType.Savings;
 			accountHolder.Id = $"{UserType.AccountHolder} {this.Bank.AccountHolders.Count + 1}";

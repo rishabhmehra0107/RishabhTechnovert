@@ -21,14 +21,18 @@ namespace BankApp.Services
 		public double Withdraw(double amount, string accountNumber)
 		{
 			var accountHolder = this.Bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
-			if (accountHolder != null && accountHolder.InitialBalance>=amount)
+			if (accountHolder != null && accountHolder.AvailableBalance >= amount)
             {
-				accountHolder.InitialBalance = accountHolder.InitialBalance - amount;
+				accountHolder.AvailableBalance = accountHolder.AvailableBalance - amount;
 
-				return accountHolder.InitialBalance;
+				return accountHolder.AvailableBalance;
 			}
+			else if (accountHolder != null && accountHolder.AvailableBalance < amount)
+            {
+				return -1;
+            }
 
-			return -1;
+			return -2;
 		}
 
 		public double Deposit(double amount, string accountNumber)
@@ -36,18 +40,20 @@ namespace BankApp.Services
 			var accountHolder = this.Bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
 			if (accountHolder != null)
 			{
-				accountHolder.InitialBalance = accountHolder.InitialBalance + amount;
+				accountHolder.AvailableBalance = accountHolder.AvailableBalance + amount;
 
-				return accountHolder.InitialBalance;
+				return accountHolder.AvailableBalance;
 			}
 
 			return -1;
 		}
 
-		public void TransferAmount(double amount, AccountHolder accountHolder, AccountHolder accountHolder1)
+		public void TransferAmount(double amount, string accountNumber1, string accountNumber2)
 		{
-			accountHolder1.InitialBalance += amount;
-			accountHolder.InitialBalance -= amount;
+			var accountHolder1 = this.Bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber1));
+			var accountHolder2 = this.Bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber2));
+			accountHolder1.AvailableBalance -= amount;
+			accountHolder2.AvailableBalance += amount;
 		}
 	}
 }

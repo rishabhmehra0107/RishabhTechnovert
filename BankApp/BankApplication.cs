@@ -34,24 +34,33 @@ namespace BankApp
 		{
 			Console.WriteLine("Welcome to Bank Application\n1. Setup New Bank \n2. User Login\n3. Exit");
 
-			int option = Convert.ToInt32(Console.ReadLine());
-			switch (option)
-			{
-				case 1:
-					this.SetupBank();
-					break;
-				case 2:
-					this.Login();
-					break;
-				case 3:
-					this.Exit();
-					Environment.Exit(0);
-					break;
-				default:
-					Console.WriteLine("Please select option from the list");
-					this.MainMenu();
-					break;
+			try
+            {
+				int option = Convert.ToInt32(Console.ReadLine());
+				switch (option)
+				{
+					case 1:
+						this.SetupBank();
+						break;
+					case 2:
+						this.Login();
+						break;
+					case 3:
+						this.Exit();
+						Environment.Exit(0);
+						break;
+					default:
+						Console.WriteLine("Please select option from the list");
+						this.MainMenu();
+						break;
+				}
 			}
+            catch (Exception)
+            {
+				Console.Clear();
+				Console.WriteLine("Please enter valid number to choose your option");
+				this.MainMenu();
+            }
 		}
 
 		public void SetupBank()
@@ -102,17 +111,16 @@ namespace BankApp
 				}
 				if (this.LoggedInUser.Type.Equals(UserType.Admin))
 				{
-					DisplayAdminMenu(this.LoggedInUser);
+					DisplayAdminMenu();
 				}
 				else if (this.LoggedInUser.Type.Equals(UserType.Staff))
 				{
-					DisplayStaffMenu(this.LoggedInUser);
+					DisplayStaffMenu();
 				}
 				else if (this.LoggedInUser.Type.Equals(UserType.AccountHolder))
 				{
-					var user = new AccountHolder();
-					user = this.Bank.AccountHolders.Find(element => element.UserName.Equals(this.LoggedInUser.UserName));
-					DisplayUserMenu(user);
+					this.AccountHolder = this.Bank.AccountHolders.Find(account => account.UserName.Equals(this.LoggedInUser.UserName));
+					DisplayUserMenu();
 				}
 			}
             catch (Exception)
@@ -121,181 +129,214 @@ namespace BankApp
             }
 		}
 
-		public void DisplayAdminMenu(User LoggedInUser)
+		public void DisplayAdminMenu()
 		{
 			Console.WriteLine("1. Add Staff\n2. Add Account Holder\n3.Display Bank User Details\n4. Update Service Charges\n5. Add New Currency\n6. Update Account\n7. Delete Account\n8. Logout");
+            try
+            {
+				int option = Convert.ToInt32(Console.ReadLine());
+				switch (option)
+				{
+					case 1:
+						this.AddStaff();
+						break;
+					case 2:
+						this.AddAccountHolder();
+						break;
+					case 3:
+						this.DisplayBankEmployees();
+						this.DisplayBankAccountHolders();
+						break;
+					case 4:
+						this.UpdateCharges();
+						break;
+					case 5:
+						this.NewCurrency();
+						break;
+					case 6:
+						this.UpdateAccount();
+						break;
+					case 7:
+						this.DeleteAccount();
+						break;
+					case 8:
+						this.StaffService.XmlData();
+						this.MainMenu();
+						break;
+					default:
+						Console.WriteLine("Please select option from the list");
+						break;
 
-			int option = Convert.ToInt32(Console.ReadLine());
-			switch (option)
-			{
-				case 1:
-					this.AddStaff();
-					break;
-				case 2:
-					this.AddAccountHolder();
-					break;
-				case 3:
-					this.DisplayBankEmployees();
-					this.DisplayBankAccountHolders();
-					break;
-				case 4:
-					this.UpdateCharges();
-					break;
-				case 5:
-					this.NewCurrency();
-					break;
-				case 6:
-					this.UpdateAccount();
-					break;
-				case 7:
-					this.DeleteAccount();
-					break;
-				case 8:
-					this.StaffService.XmlData();
-					this.MainMenu();
-					break;
-				default:
-					Console.WriteLine("Please select option from the list");
-					break;
-
+				}
+				this.DisplayAdminMenu();
 			}
-			DisplayAdminMenu(LoggedInUser);
+            catch (Exception)
+            {
+				Console.WriteLine("Please enter valid number to choose your option");
+				this.DisplayAdminMenu();
+			}
 		}
 
-		public void DisplayStaffMenu(User LoggedInUser)
+		public void DisplayStaffMenu()
 		{
 			Console.WriteLine("1. Add Account Holder\n2. Display Bank User Details\n3. Update Service Charges\n4. Add New Currency\n5. Logout");
-
-			int option = Convert.ToInt32(Console.ReadLine());
-			switch (option)
-			{
-				case 1:
-					this.AddAccountHolder();
-					break;
-				case 2:
-					this.DisplayBankAccountHolders();
-					break;
-				case 3:
-					this.UpdateCharges();
-					break;
-				case 4:
-					this.NewCurrency();
-					break;
-				case 5:
-					this.StaffService.XmlData();
-					this.MainMenu();
-					break;
-				default:
-					Console.WriteLine("Please select option from the list");
-					break;
+            try
+            {
+				int option = Convert.ToInt32(Console.ReadLine());
+				switch (option)
+				{
+					case 1:
+						this.AddAccountHolder();
+						break;
+					case 2:
+						this.DisplayBankAccountHolders();
+						break;
+					case 3:
+						this.UpdateCharges();
+						break;
+					case 4:
+						this.NewCurrency();
+						break;
+					case 5:
+						this.StaffService.XmlData();
+						this.MainMenu();
+						break;
+					default:
+						Console.WriteLine("Please select option from the list");
+						break;
+				}
+				this.DisplayStaffMenu();
 			}
-			DisplayStaffMenu(LoggedInUser);
+            catch (Exception)
+            {
+				Console.WriteLine("Please enter valid number to choose your option");
+				this.DisplayStaffMenu();
+			}
 		}
 
-		public void DisplayUserMenu(AccountHolder accountHolder)
+		public void DisplayUserMenu()
 		{
-			double balance = accountHolder.InitialBalance;
+			double balance = this.AccountHolder.AvailableBalance;
 			Console.WriteLine("1.Withdrawl \n2.Deposit\n3.Transaction History\n4.View Balance\n5.Transfer Funds\n6.Revert Transaction\n7.Logout");
+            try
+            {
+				int option = Convert.ToInt32(Console.ReadLine());
+				switch (option)
+				{
+					case 1:
+						double withdrawAmount = this.Utility.GetDoubleInput("Enter Withdraw Amount");
+						double newBalanceAfterWithdraw = this.BankService.Withdraw(withdrawAmount, this.AccountHolder.AccountNumber);
+						if (newBalanceAfterWithdraw == -1)
+						{
+							Console.WriteLine("Insufficient Balance");
+						}
+						else if (newBalanceAfterWithdraw == -2)
+						{
+							Console.WriteLine("Account Holder Not Found!");
+						}
+						else
+						{
+							this.AccountHolder.AvailableBalance = newBalanceAfterWithdraw;
 
-			int option = Convert.ToInt32(Console.ReadLine());
-			switch (option)
-			{
-				case 1:
-					double withdrawAmount = this.Utility.GetDoubleInput("Enter Withdraw Amount");
-					double newBalanceAfterWithdraw = this.BankService.Withdraw(withdrawAmount, accountHolder.AccountNumber);
-					if (newBalanceAfterWithdraw != -1)
-						accountHolder.InitialBalance = newBalanceAfterWithdraw;
-                    else
-                    {
-						Console.WriteLine("Unable to perform withdraw");
+							Transaction withdrawTransaction = new Transaction();
+							withdrawTransaction.Type = TransactionType.Withdraw;
+							withdrawTransaction.CreatedBy = this.LoggedInUser.Id;
+							withdrawTransaction.Amount = withdrawAmount;
+							if (this.TransactionService.AddTransaction(withdrawTransaction, this.AccountHolder.AccountNumber))
+								Console.WriteLine("New Balance: {0}", this.AccountHolder.AvailableBalance);
+							else
+								Console.WriteLine("Unable to add transaction");
+						}
+
 						break;
-                    }
 
-					Transaction withdrawTransaction = new Transaction();
-					withdrawTransaction.Type = TransactionType.Withdraw;
-					withdrawTransaction.CreatedBy = this.LoggedInUser.Id;
-					withdrawTransaction.Amount = withdrawAmount;
-                    if (this.TransactionService.AddTransaction(withdrawTransaction, accountHolder.AccountNumber))
-						Console.WriteLine("New Balance: {0}", accountHolder.InitialBalance);
-					else
-						Console.WriteLine("Unable to add transaction");
+					case 2:
+						double depositAmount = this.Utility.GetDoubleInput("Enter Deposit Amount");
+						double newBalanceAfterDeposit = this.BankService.Deposit(depositAmount, this.AccountHolder.AccountNumber);
+						if (newBalanceAfterDeposit != -1)
+							this.AccountHolder.AvailableBalance = newBalanceAfterDeposit;
+						else
+						{
+							Console.WriteLine("Account Holder Not Found!");
+							break;
+						}
 
-					break;
+						Transaction depositTransaction = new Transaction();
+						depositTransaction.Type = TransactionType.Deposit;
+						depositTransaction.CreatedBy = this.LoggedInUser.Id;
+						depositTransaction.Amount = depositAmount;
+						if (this.TransactionService.AddTransaction(depositTransaction, this.AccountHolder.AccountNumber))
+							Console.WriteLine("New Balance: {0}", this.AccountHolder.AvailableBalance);
+						else
+							Console.WriteLine("Unable to add transaction");
 
-				case 2:
-					double depositAmount = this.Utility.GetDoubleInput("Enter Deposit Amount");
-					double newBalanceAfterDeposit = this.BankService.Deposit(depositAmount, accountHolder.AccountNumber);
-					if (newBalanceAfterDeposit != -1)
-						accountHolder.InitialBalance = newBalanceAfterDeposit;
-					else
-					{
-						Console.WriteLine("Unable to perform deposit");
 						break;
-					}
 
-					Transaction depositTransaction = new Transaction();
-					depositTransaction.Type = TransactionType.Deposit;
-					depositTransaction.CreatedBy = this.LoggedInUser.Id;
-					depositTransaction.Amount = depositAmount;
-					if(this.TransactionService.AddTransaction(depositTransaction, accountHolder.AccountNumber))
-						Console.WriteLine("New Balance: {0}", accountHolder.InitialBalance);
-					else
-						Console.WriteLine("Unable to add transaction");
+					case 3:
+						Console.WriteLine("Transaction History");
+						Console.WriteLine("Transaction Date\t\tTransaction Type\t\tTransaction Amount");
+						foreach (Transaction transaction2 in this.TransactionService.GetTransactionsByAccount(this.AccountHolder.AccountNumber))
+						{
+							Console.WriteLine("{0}\t\t{1}\t\t\t{2}", transaction2.CreatedOn, transaction2.Type, transaction2.Amount);
+						}
 
-					break;
+						break;
 
-				case 3:
-					Console.WriteLine("Transaction History");
-					Console.WriteLine("Transaction Date\t\tTransaction Type\t\tTransaction Amount");
-					foreach(Transaction transaction2 in this.TransactionService.GetTransactionsByAccount(accountHolder.AccountNumber))
-                    {
-						Console.WriteLine("{0}\t\t{1}\t\t\t{2}", transaction2.CreatedOn, transaction2.Type,transaction2.Amount);
-                    }
+					case 4:
+						Console.WriteLine("Current Balance: {0}", this.AccountHolder.AvailableBalance);
+						break;
 
-					break;
+					case 5:
+						this.TransferFunds();
+						break;
 
-				case 4:
-					Console.WriteLine("Current Balance: {0}", accountHolder.InitialBalance);
-					break;
+					case 6:
+						this.RevertTransaction();
+						break;
 
-				case 5:
-					this.TransferFunds(accountHolder);
-					break;
+					case 7:
+						this.StaffService.XmlData();
+						this.Logout(this.AccountHolder.Name);
+						this.MainMenu();
 
-				case 6:
-					this.RevertTransaction(accountHolder);
-					break;
+						break;
 
-				case 7:
-					this.StaffService.XmlData();
-					this.Logout(accountHolder.Name);
-					this.MainMenu();
-
-					break;
-
-				default:
-					Console.WriteLine("Please select option from the list");
-					break;
+					default:
+						Console.WriteLine("Please select option from the list");
+						break;
+				}
+				this.DisplayUserMenu();
 			}
-			DisplayUserMenu(accountHolder);
+            catch (Exception)
+            {
+				Console.WriteLine("Please enter valid number to choose your option");
+				this.DisplayUserMenu();
+			}
 		}
 
-		public void TransferFunds(AccountHolder accountHolder)
+		public void TransferFunds()
         {
 			string accountNumber = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Please enter vendor's account number to transfer funds.");
+			var user = this.Bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
 
-			var user = new AccountHolder();
-			user = this.Bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
-			double amount = this.Utility.GetDoubleInput("Enter Amount To Transfer");
-			double balance = accountHolder.InitialBalance - amount;
-			if (balance >= 0)
-			{
-				this.BankService.TransferAmount(amount, accountHolder, user);
+            if (user != null)
+            {
+				double amount = this.Utility.GetDoubleInput("Enter Amount To Transfer");
+				double balance = this.AccountHolder.AvailableBalance - amount;
+				if (balance >= 0)
+				{
+					this.BankService.TransferAmount(amount, this.AccountHolder.AccountNumber, user.AccountNumber);
+				}
+				else
+				{
+					Console.WriteLine("Insufficient Balance");
+				}
 			}
-			else
-			{
-				Console.WriteLine("Insufficient Balance");
-			}
+            else
+            {
+				Console.WriteLine("Vendor account not found");
+            }
+			
 		}
 
 		public void AddStaff()
@@ -379,10 +420,10 @@ namespace BankApp
 			}
 		}
 
-		public void RevertTransaction(AccountHolder accountHolder)
+		public void RevertTransaction()
 		{
 			Console.WriteLine("Transactions of users by their ID and date are as follows:-");
-			foreach (Transaction transaction in this.TransactionService.GetTransactionsByAccount(accountHolder.AccountNumber))
+			foreach (Transaction transaction in this.TransactionService.GetTransactionsByAccount(this.AccountHolder.AccountNumber))
 			{
 				Console.WriteLine("Transaction ID: {0} , Transaction Date: {1}", transaction.ID, transaction.CreatedOn);
 			}
@@ -390,7 +431,7 @@ namespace BankApp
 			Console.WriteLine("Enter Transaction ID and Transaction Date to revert that transaction");
 			string id = Console.ReadLine();
 			DateTime date = Convert.ToDateTime(Console.ReadLine());
-			this.TransactionService.RevertTransaction(id, date, accountHolder.AccountNumber);
+			this.TransactionService.RevertTransaction(id, date, this.AccountHolder.AccountNumber);
 
 		}
 

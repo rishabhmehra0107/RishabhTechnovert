@@ -10,7 +10,7 @@ namespace BankApp.Model
             this.Transactions = new List<Transaction>();
         }
         public string AccountNumber { get; set; }
-        public double InitialBalance { get; set; }
+        public double AvailableBalance { get; set; }
         public AccountType AccountType { get; set; }
         public List<Transaction> Transactions { get; set; }
     }
