@@ -7,9 +7,9 @@ namespace BankApp.Model
         public Bank()
         {
             this.AccountHolders = new List<AccountHolder>();
-            this.Branches = new List<Branch>();
             this.Users = new List<User>();
-            this.Staffs = new List<Staff>();
+            this.Branches = new List<Branch>();
+            this.Employees = new List<Employee>();
             this.Currency = new List<Currency>();
         }
         public string Id { get; set; }
@@ -22,7 +22,7 @@ namespace BankApp.Model
         public List<AccountHolder> AccountHolders { get; set; }
         public List<User> Users { get; set; }
         public List<Branch> Branches { get; set; }
-        public List<Staff> Staffs { get; set; }
+        public List<Employee> Employees { get; set; }
         public List<Currency> Currency { get; set; }
     }
 }

@@ -14,17 +14,19 @@ namespace BankApp.Services
 			this.Bank = bank;
 		}
 
-		public void AddEmployee(Staff staff)
+		public void AddEmployee(Employee employee)
 		{
-            if (staff.Type.Equals(UserType.Admin))
+            if (employee.Type.Equals(UserType.Admin))
             {
-				staff.Id = $"{UserType.Admin} {this.Bank.Staffs.Count + 1}";
-				this.Bank.Staffs.Add(staff);
+				employee.Id = $"{UserType.Admin} {this.Bank.Employees.Count + 1}";
+				employee.EmployeeId = $"{this.Bank.Name} {employee.Id}";
+				this.Bank.Employees.Add(employee);
 			}
-            else if (staff.Type.Equals(UserType.Staff))
+            else if (employee.Type.Equals(UserType.Staff))
             {
-				staff.Id = $"{UserType.Staff} {this.Bank.Staffs.Count + 1}";
-				this.Bank.Staffs.Add(staff);
+				employee.Id = $"{UserType.Staff} {this.Bank.Employees.Count + 1}";
+				employee.EmployeeId = $"{this.Bank.Name} {employee.Id}";
+				this.Bank.Employees.Add(employee);
 			}
 		}
 
@@ -41,9 +43,9 @@ namespace BankApp.Services
 		public User LogIn(string username, string password)
 		{
 			var user = new User();
-			if (this.Bank.Staffs.Any(staff => staff.UserName.ToLower() == username.ToLower() && staff.Password == password && (staff.Type.Equals(UserType.Admin)|| staff.Type.Equals(UserType.Staff))))
+			if (this.Bank.Employees.Any(staff => staff.UserName.ToLower() == username.ToLower() && staff.Password == password && (staff.Type.Equals(UserType.Admin)|| staff.Type.Equals(UserType.Staff))))
 			{
-				user = this.Bank.Staffs.Find(staff => staff.UserName.ToLower() == username.ToLower() && staff.Password == password);
+				user = this.Bank.Employees.Find(staff => staff.UserName.ToLower() == username.ToLower() && staff.Password == password);
 			}
 			else if (this.Bank.AccountHolders.Any(account => account.UserName.ToLower() == username.ToLower() && account.Password == password && account.Type.Equals(UserType.AccountHolder)))
 			{

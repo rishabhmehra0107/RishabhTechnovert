@@ -48,12 +48,17 @@ namespace BankApp.Services
 			return -1;
 		}
 
-		public void TransferAmount(double amount, string accountNumber1, string accountNumber2)
+		public bool TransferAmount(double amount, string accountNumber1, string accountNumber2)
 		{
 			var accountHolder1 = this.Bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber1));
 			var accountHolder2 = this.Bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber2));
-			accountHolder1.AvailableBalance -= amount;
-			accountHolder2.AvailableBalance += amount;
+            if (accountHolder1 != null && accountHolder2 != null)
+            {
+				accountHolder1.AvailableBalance -= amount;
+				accountHolder2.AvailableBalance += amount;
+				return true;
+			}
+			return false;
 		}
 	}
 }

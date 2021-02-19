@@ -33,7 +33,7 @@ namespace BankApp.Services
 		public List<string> BankEmployees()
 		{
 			List<string> newList = new List<string>();
-			newList = this.Bank.Staffs.Select(staff => staff.UserName).ToList();
+			newList = this.Bank.Employees.Select(staff => staff.UserName).ToList();
 
 			return newList;
 		}
@@ -79,9 +79,9 @@ namespace BankApp.Services
 			}
 
 			i = 1;
-			foreach (Staff staff in this.Bank.Staffs)
+			foreach (Employee employee in this.Bank.Employees)
             {
-				xElement2.Add(new XElement("Employee"+i, new XElement("Name", staff.Name), new XElement("Type", staff.Type), new XElement("ID", staff.Id), new XElement("Username", staff.UserName), new XElement("Password", staff.Password)));
+				xElement2.Add(new XElement("Employee"+i, new XElement("Name", employee.Name), new XElement("Type", employee.Type), new XElement("ID", employee.Id), new XElement("Username", employee.UserName), new XElement("Password", employee.Password)));
 				xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
 				i++;
 			}

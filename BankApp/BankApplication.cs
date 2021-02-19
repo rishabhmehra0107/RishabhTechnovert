@@ -82,7 +82,7 @@ namespace BankApp
 			this.BankService.AddBranch(branch);
 			Console.WriteLine("Branch details added. Please provide admin username and password to setup");
 
-			Staff admin = new Staff()
+			Employee admin = new Employee()
 			{
 				Name = this.Utility.GetStringInput("^[a-zA-Z ]{3,}$", "Enter admin name").ToUpper(),
 				UserName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter admin username").ToLower(),
@@ -325,7 +325,14 @@ namespace BankApp
 				double balance = this.AccountHolder.AvailableBalance - amount;
 				if (balance >= 0)
 				{
-					this.BankService.TransferAmount(amount, this.AccountHolder.AccountNumber, user.AccountNumber);
+					if(this.BankService.TransferAmount(amount, this.AccountHolder.AccountNumber, user.AccountNumber))
+                    {
+						Console.WriteLine("Funds transferred successfully");
+                    }
+                    else
+                    {
+						Console.WriteLine("Funds transferred failed");
+                    }
 				}
 				else
 				{
@@ -341,7 +348,7 @@ namespace BankApp
 
 		public void AddStaff()
 		{
-			Staff staff = new Staff();
+			Employee staff = new Employee();
 			staff.UserName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter Staff username");
 			staff.Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter Staff password");
 			staff.Name = this.Utility.GetStringInput("^[a-zA-Z ]{3,}$", "Enter Staff Name");
@@ -365,16 +372,19 @@ namespace BankApp
 			{
 				Console.WriteLine(accountHolder.UserName);
 			}
-
+			
 			string userName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter Account username: ");
 			foreach (var account in this.Bank.AccountHolders.Where(account => account.UserName.ToLower() == userName.ToLower()))
 			{
-				Console.WriteLine("Username: {0}. This account can now be updated ", userName);
-				account.UserName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Update username of user: ");
-				account.Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Update password of user: ");
-				account.Name = this.Utility.GetStringInput("^[a-zA-Z ]{3,}$", "Update Account Holder Name");
+                if (account != null)
+                {
+					Console.WriteLine("Username: {0}. This account can now be updated ", userName);
+					account.UserName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Update username of user: ");
+					account.Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Update password of user: ");
+					account.Name = this.Utility.GetStringInput("^[a-zA-Z ]{3,}$", "Update Account Holder Name");
+					Console.WriteLine("User Account updated successfully");
+				}
 			}
-			Console.WriteLine("User Account updated successfully");
 		}
 
 		public void DeleteAccount()
@@ -395,9 +405,17 @@ namespace BankApp
 			string code = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter Currency Code:");
 			string name = this.Utility.GetStringInput("^[a-zA-Z ]+$", "Enter Currency Name:");
 			Console.WriteLine("Enter Currency Value Cnoverted To INR:");
-			int value = Convert.ToInt32(Console.ReadLine());
-			this.StaffService.NewCurrency(code, name, value);
-			Console.WriteLine("New Currency updated Successfully");
+            try
+            {
+				int value = Convert.ToInt32(Console.ReadLine());
+				this.StaffService.NewCurrency(code, name, value);
+				Console.WriteLine("New Currency updated Successfully");
+			}
+            catch (Exception)
+            {
+				Console.WriteLine("Invalid input. Please enter valid credentials");
+				this.NewCurrency();
+            }
 		}
 
 		public void DisplayBankEmployees()
@@ -429,10 +447,17 @@ namespace BankApp
 			}
 
 			Console.WriteLine("Enter Transaction ID and Transaction Date to revert that transaction");
-			string id = Console.ReadLine();
-			DateTime date = Convert.ToDateTime(Console.ReadLine());
-			this.TransactionService.RevertTransaction(id, date, this.AccountHolder.AccountNumber);
-
+            try
+            {
+				string id = Console.ReadLine();
+				DateTime date = Convert.ToDateTime(Console.ReadLine());
+				this.TransactionService.RevertTransaction(id, date, this.AccountHolder.AccountNumber);
+			}
+            catch (Exception)
+            {
+				Console.WriteLine("Please enter valid credentials");
+				this.RevertTransaction();
+            }
 		}
 
 		public void UpdateCharges()
@@ -451,18 +476,34 @@ namespace BankApp
 				if(this.Bank.Branches.Any(bank=>bank.BankId.Equals(bankName.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy"))))
 				{
 					Console.WriteLine("New charges of RTGS and IMPS are:-");
-					int sameBankRTGS =Convert.ToInt32(Console.ReadLine());
-					int sameBankIMPS = Convert.ToInt32(Console.ReadLine());
-					BankType type = BankType.Same;
-					this.StaffService.UpdateCharges(sameBankRTGS, sameBankIMPS, type);
+                    try
+                    {
+						int sameBankRTGS = Convert.ToInt32(Console.ReadLine());
+						int sameBankIMPS = Convert.ToInt32(Console.ReadLine());
+						BankType type = BankType.Same;
+						this.StaffService.UpdateCharges(sameBankRTGS, sameBankIMPS, type);
+					}
+                    catch (Exception)
+                    {
+						Console.WriteLine("Error. Enter credentials again");
+						this.UpdateCharges();
+                    }
 				}
 				else
 				{
 					Console.WriteLine("New charges of RTGS and IMPS are:-");
-					int differentBankRTGS = Convert.ToInt32(Console.ReadLine());
-					int differentBankIMPS = Convert.ToInt32(Console.ReadLine());
-					BankType type = BankType.Different;
-					this.StaffService.UpdateCharges(differentBankRTGS, differentBankIMPS, type);
+                    try
+                    {
+						int differentBankRTGS = Convert.ToInt32(Console.ReadLine());
+						int differentBankIMPS = Convert.ToInt32(Console.ReadLine());
+						BankType type = BankType.Different;
+						this.StaffService.UpdateCharges(differentBankRTGS, differentBankIMPS, type);
+					}
+                    catch (Exception)
+                    {
+						Console.WriteLine("Error. Enter credentials again");
+						this.UpdateCharges();
+					}
 				}
 			}
 		}

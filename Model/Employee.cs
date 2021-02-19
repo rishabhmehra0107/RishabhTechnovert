@@ -2,7 +2,7 @@
 
 namespace BankApp.Model
 {
-    public class Staff : User
+    public class Employee : User
     {
         public string BranchId { get; set; }
         public string EmployeeId { get; set; }
