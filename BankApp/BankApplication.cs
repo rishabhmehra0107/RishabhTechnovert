@@ -348,20 +348,24 @@ namespace BankApp
 
 		public void AddStaff()
 		{
-			Employee staff = new Employee();
-			staff.UserName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter Staff username");
-			staff.Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter Staff password");
-			staff.Name = this.Utility.GetStringInput("^[a-zA-Z ]{3,}$", "Enter Staff Name");
-			staff.Type = UserType.Staff;
+			Employee staff = new Employee()
+			{
+				UserName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter Staff username"),
+				Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter Staff password"),
+				Name = this.Utility.GetStringInput("^[a-zA-Z ]{3,}$", "Enter Staff Name"),
+				Type = UserType.Staff
+			};
 			this.UserService.AddEmployee(staff);
 		}
 
 		public void AddAccountHolder()
 		{
-			AccountHolder accountHolder = new AccountHolder();
-			accountHolder.UserName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter Account Holder username");
-			accountHolder.Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter Account Holder password");
-			accountHolder.Name = this.Utility.GetStringInput("^[a-zA-Z ]{3,}$", "Enter Account Holder Name");
+			AccountHolder accountHolder = new AccountHolder()
+			{
+				UserName = this.Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter Account Holder username"),
+				Password = this.Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter Account Holder password"),
+				Name = this.Utility.GetStringInput("^[a-zA-Z ]{3,}$", "Enter Account Holder Name")
+			};
 			this.UserService.AddAccountHolder(accountHolder);
 		}
 		
