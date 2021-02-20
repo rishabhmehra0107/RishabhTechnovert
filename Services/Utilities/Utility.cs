@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace BankApp.Services.Utilities
 {
     public class Utility
     {
-        public string GetStringInput(string regex, string helpText)
+        public static string GetStringInput(string regex, string helpText)
         {
             Console.WriteLine(helpText);
             var input = Console.ReadLine();
@@ -16,9 +15,10 @@ namespace BankApp.Services.Utilities
             }
             Console.WriteLine("Invalid input");
 
-            return this.GetStringInput(regex, helpText);
+            return GetStringInput(regex, helpText);
         }
-        public double GetDoubleInput(string helpText)
+
+        public static double GetDoubleInput(string helpText)
         {
 
             Console.WriteLine(helpText);
@@ -29,7 +29,21 @@ namespace BankApp.Services.Utilities
             }
             Console.Write("Invalid input");
 
-            return this.GetDoubleInput(helpText);
+            return GetDoubleInput(helpText);
+        }
+
+        public static int GetIntInput(string helpText)
+        {
+
+            Console.WriteLine(helpText);
+            int integerInput = Convert.ToInt32(Console.ReadLine());
+            if (integerInput >= 0)
+            {
+                return integerInput;
+            }
+            Console.Write("Invalid input");
+
+            return GetIntInput(helpText);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using BankApp.Model;
-using static BankApp.Model.Constants;
 
 namespace BankApp.Services
 {
@@ -37,24 +36,39 @@ namespace BankApp.Services
 
 		public bool RevertTransaction(string id, DateTime date, string accountNumber)
 		{
-			var accountHolder = this.Bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
-			var transaction = accountHolder.Transactions.Find(element => element.ID == id && element.CreatedOn == date);
-			if(accountHolder!=null && transaction != null)
+            try
             {
-				return transaction.IsReverted = true;
-			}
+				var accountHolder = this.Bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
+				var transaction = accountHolder.Transactions.Find(element => element.ID == id && element.CreatedOn == date);
+				if (accountHolder != null && transaction != null)
+				{
+					return transaction.IsReverted = true;
+				}
 
-			return transaction.IsReverted = false;
+				return transaction.IsReverted = false;
+			}
+            catch (Exception)
+            {
+				return false;
+            }
 		}
 
 		public List<Transaction> GetTransactionsByAccount(string accountNumber)
         {
-			var accountHolder = this.Bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
-            if (accountHolder != null)
+            try
             {
-				return accountHolder.Transactions;
+				var accountHolder = this.Bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
+				if (accountHolder != null)
+				{
+					return accountHolder.Transactions;
+				}
+
+				return null;
 			}
-			return null;
+            catch (Exception)
+            {
+				return null;
+            }
         }
 	}
 }

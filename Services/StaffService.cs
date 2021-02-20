@@ -18,88 +18,111 @@ namespace BankApp.Services
 			this.User = user;
 		}
 
-		public void NewCurrency(string code,string name,int value)
+		public bool NewCurrency(Currency currency)
 		{
-			Currency currency = new Currency();
-			currency.Code = code;
-			currency.Name = name;
-			currency.Rate = value;
-			if (currency.Rate >= 0 && currency.Rate <= 250)
-			{
-				this.Bank.Currency.Add(currency);
+            try
+            {
+				if (currency.Rate >= 0 && currency.Rate <= 250)
+				{
+					this.Bank.Currency.Add(currency);
+
+					return true;
+				}
+
+				return false;
 			}
+            catch (Exception)
+            {
+				return false;
+            }
 		}
 
 		public List<string> BankEmployees()
 		{
-			List<string> newList = new List<string>();
-			newList = this.Bank.Employees.Select(staff => staff.UserName).ToList();
+            try
+            {
+				List<string> employees = new List<string>();
+				employees = this.Bank.Employees.Select(staff => staff.UserName).ToList();
 
-			return newList;
+				return employees;
+			}
+            catch (Exception)
+            {
+				return null;
+            }
 		}
 
 		public List<string> BankAccountHolders()
 		{
-			List<string> newList = new List<string>();
-			newList = this.Bank.AccountHolders.Select(accountHolder => accountHolder.UserName).ToList();
+			try
+			{
+				List<string> accountHolders = new List<string>();
+				accountHolders = this.Bank.AccountHolders.Select(accountHolder => accountHolder.UserName).ToList();
 
-			return newList;
+				return accountHolders;
+			}
+			catch (Exception)
+			{
+				return null;
+			}
 		}
 
-		public void UpdateCharges(int rtgs, int imps, BankType type)
+		public bool UpdateCharges(int rtgs, int imps, BankType type)
 		{
             if (type.Equals(BankType.Same))
             {
 				this.Bank.SameBankIMPS = imps;
 				this.Bank.SameBankRTGS = rtgs;
+
+				return true;
 			}
 			else if (type.Equals(BankType.Different))
             {
-				this.Bank.DifferentBankIMPS = imps;
-				this.Bank.DifferentBankRTGS = rtgs;
+				this.Bank.DiffBankIMPS = imps;
+				this.Bank.DiffBankRTGS = rtgs;
+
+				return true;
 			}
+
+			return false;
 		}
 
 		public void XmlData()
         {
 			XDocument xDocument = XDocument.Load("/Users/apple/Projects/BankApp/BankApp/Data.xml");
 			XElement xElement = new XElement("Branches");
-			XElement xElement2 = new XElement("Staffs");
+			XElement xElement2 = new XElement("Staff");
 			XElement xElement3 = new XElement("AccountHolders");
 			XElement xElement4 = new XElement("Currencies");
 
 			xDocument = new XDocument(new XElement("Bank",xElement,xElement2,xElement3,xElement4));
 
-			int i = 1;
-			foreach (Branch branch in this.Bank.Branches)
+			for (int i = 0; i < this.Bank.Branches.Count; i++)
 			{
-				xElement.Add(new XElement("BankBranch"+i, new XElement("BankName", this.Bank.Name), new XElement("Location", this.Bank.Location), new XElement("BankID", this.Bank.Id), new XElement("BranchLocation", branch.Location), new XElement("BranchID", branch.Id)));
+				var branch = this.Bank.Branches[i];
+				xElement.Add(new XElement("BankBranch" + (i + 1), new XElement("BankName", this.Bank.Name), new XElement("Location", this.Bank.Location), new XElement("BankID", this.Bank.Id), new XElement("BranchLocation", branch.Location), new XElement("BranchID", branch.Id)));
 				xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
-				i++;
 			}
 
-			i = 1;
-			foreach (Employee employee in this.Bank.Employees)
-            {
-				xElement2.Add(new XElement("Employee"+i, new XElement("Name", employee.Name), new XElement("Type", employee.Type), new XElement("ID", employee.Id), new XElement("Username", employee.UserName), new XElement("Password", employee.Password)));
+			for (int i = 0; i < this.Bank.Employees.Count; i++)
+			{
+				var employee = this.Bank.Employees[i];
+				xElement2.Add(new XElement("Employee" + (i + 1), new XElement("Name", employee.Name), new XElement("Type", employee.Type), new XElement("ID", employee.Id), new XElement("Username", employee.UserName), new XElement("Password", employee.Password)));
 				xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
-				i++;
 			}
 
-			i = 1;
-			foreach (AccountHolder account in this.Bank.AccountHolders)
+			for (int i = 0; i < this.Bank.AccountHolders.Count; i++)
 			{
-				xElement3.Add(new XElement("AccountHolders"+i, new XElement("Name", account.Name), new XElement("Type", account.Type), new XElement("AccountNumber", account.AccountNumber), new XElement("Username", account.UserName), new XElement("Password", account.Password), new XElement("ID", account.Id)));
+				var account = this.Bank.AccountHolders[i];
+				xElement3.Add(new XElement("AccountHolders" + (i + 1), new XElement("Name", account.Name), new XElement("Type", account.Type), new XElement("AccountNumber", account.AccountNumber), new XElement("Username", account.UserName), new XElement("Password", account.Password), new XElement("ID", account.Id)));
 				xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
-				i++;
 			}
 
-			i = 1;
-			foreach (Currency currency in this.Bank.Currency)
+			for (int i = 0; i < this.Bank.Currency.Count; i++)
 			{
-				xElement4.Add(new XElement("Currencies" + i, new XElement("Name", currency.Name), new XElement("Code", currency.Code), new XElement("INRValue", currency.Rate)));
+				var currency = this.Bank.Currency[i];
+				xElement4.Add(new XElement("Currencies" + (i+1), new XElement("Name", currency.Name), new XElement("Code", currency.Code), new XElement("INRValue", currency.Rate)));
 				xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
-				i++;
 			}
 		}
 	}

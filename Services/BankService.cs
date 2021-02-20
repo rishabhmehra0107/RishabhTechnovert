@@ -1,5 +1,6 @@
 ﻿using System;
 using BankApp.Model;
+using static BankApp.Model.Constants;
 
 namespace BankApp.Services
 {
@@ -12,10 +13,18 @@ namespace BankApp.Services
 			this.Bank = bank;
 		}
 
-		public void AddBranch(Branch branch)
+		public bool AddBranch(Branch branch)
         {
-			branch.Id = $"{this.Bank.Id} {branch.Location}{DateTime.UtcNow.ToString("MMddyy")}";
-			this.Bank.Branches.Add(branch);
+            try
+            {
+				branch.Id = $"{this.Bank.Id} {branch.Location}{DateTime.UtcNow.ToString("MMddyy")}";
+				this.Bank.Branches.Add(branch);
+				return true;
+			}
+            catch (Exception)
+            {
+				return false;
+            }
 		}
 
 		public double Withdraw(double amount, string accountNumber)
@@ -24,15 +33,14 @@ namespace BankApp.Services
 			if (accountHolder != null && accountHolder.AvailableBalance >= amount)
             {
 				accountHolder.AvailableBalance = accountHolder.AvailableBalance - amount;
-
 				return accountHolder.AvailableBalance;
 			}
 			else if (accountHolder != null && accountHolder.AvailableBalance < amount)
             {
-				return -1;
+				return (double)TransactionStatus.InsufficientBalance;
             }
 
-			return -2;
+			return (double)TransactionStatus.Null;
 		}
 
 		public double Deposit(double amount, string accountNumber)
@@ -41,11 +49,10 @@ namespace BankApp.Services
 			if (accountHolder != null)
 			{
 				accountHolder.AvailableBalance = accountHolder.AvailableBalance + amount;
-
 				return accountHolder.AvailableBalance;
 			}
 
-			return -1;
+			return (double)TransactionStatus.Null;
 		}
 
 		public bool TransferAmount(double amount, string accountNumber1, string accountNumber2)
@@ -58,6 +65,7 @@ namespace BankApp.Services
 				accountHolder2.AvailableBalance += amount;
 				return true;
 			}
+
 			return false;
 		}
 	}
