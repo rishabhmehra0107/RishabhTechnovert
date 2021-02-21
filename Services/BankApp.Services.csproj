@@ -4,6 +4,9 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DocumentationFile>Data.xml</DocumentationFile>
+  </PropertyGroup>
   <ItemGroup>
     <Folder Include="Utilities\" />
   </ItemGroup>

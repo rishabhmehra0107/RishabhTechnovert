@@ -89,7 +89,7 @@ namespace BankApp.Services
 
 		public void XmlData()
         {
-			XDocument xDocument = XDocument.Load("/Users/apple/Projects/BankApp/BankApp/Data.xml");
+			XDocument xDocument = XDocument.Load("BankApp.Console.xml");
 			XElement xElement = new XElement("Branches");
 			XElement xElement2 = new XElement("Staff");
 			XElement xElement3 = new XElement("AccountHolders");
@@ -101,28 +101,28 @@ namespace BankApp.Services
 			{
 				var branch = this.Bank.Branches[i];
 				xElement.Add(new XElement("BankBranch" + (i + 1), new XElement("BankName", this.Bank.Name), new XElement("Location", this.Bank.Location), new XElement("BankID", this.Bank.Id), new XElement("BranchLocation", branch.Location), new XElement("BranchID", branch.Id)));
-				xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
+				xDocument.Save("BankApp.Console.xml");
 			}
 
 			for (int i = 0; i < this.Bank.Employees.Count; i++)
 			{
 				var employee = this.Bank.Employees[i];
 				xElement2.Add(new XElement("Employee" + (i + 1), new XElement("Name", employee.Name), new XElement("Type", employee.Type), new XElement("ID", employee.Id), new XElement("Username", employee.UserName), new XElement("Password", employee.Password)));
-				xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
+				xDocument.Save("BankApp.Console.xml");
 			}
 
 			for (int i = 0; i < this.Bank.AccountHolders.Count; i++)
 			{
 				var account = this.Bank.AccountHolders[i];
 				xElement3.Add(new XElement("AccountHolders" + (i + 1), new XElement("Name", account.Name), new XElement("Type", account.Type), new XElement("AccountNumber", account.AccountNumber), new XElement("Username", account.UserName), new XElement("Password", account.Password), new XElement("ID", account.Id)));
-				xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
+				xDocument.Save("BankApp.Console.xml");
 			}
 
 			for (int i = 0; i < this.Bank.Currency.Count; i++)
 			{
 				var currency = this.Bank.Currency[i];
 				xElement4.Add(new XElement("Currencies" + (i+1), new XElement("Name", currency.Name), new XElement("Code", currency.Code), new XElement("INRValue", currency.Rate)));
-				xDocument.Save("/Users/apple/Projects/BankApp/BankApp/Data.xml");
+				xDocument.Save("BankApp.Console.xml");
 			}
 		}
 	}
