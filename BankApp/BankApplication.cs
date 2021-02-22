@@ -35,8 +35,7 @@ namespace BankApp
 
 			try
             {
-				int option = Convert.ToInt32(Console.ReadLine());
-				MenuOption menuOption = (MenuOption)option;
+				MenuOption menuOption = (MenuOption)Convert.ToInt32(Console.ReadLine());
 				switch (menuOption)
 				{
 					case MenuOption.Setup:
@@ -192,8 +191,7 @@ namespace BankApp
 			Console.WriteLine("1. Add Account Holder\n2. Display Bank User Details\n3. Update Service Charges\n4. Add New Currency\n5. Logout");
             try
             {
-				int option = Convert.ToInt32(Console.ReadLine());
-				StaffOption staffOption = (StaffOption)option;
+				StaffOption staffOption = (StaffOption)Convert.ToInt32(Console.ReadLine());
 				switch (staffOption)
 				{
 					case StaffOption.AddAccountHolder:
