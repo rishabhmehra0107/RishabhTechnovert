@@ -54,6 +54,8 @@ namespace BankApp
 						this.MainMenu();
 						break;
 				}
+				this.StaffService.XmlData();
+				this.MainMenu();
 			}
             catch (Exception)
             {
@@ -102,7 +104,6 @@ namespace BankApp
 				Console.WriteLine("Error. Admin addition failed");
 
 			Console.WriteLine("Bank Name: {0}, User Name: {1}", Bank.Name, admin.UserName);
-			MainMenu();
 		}
 
 		public void Login()
@@ -120,16 +121,16 @@ namespace BankApp
 				}
 				if (this.LoggedInUser.Type.Equals(UserType.Admin))
 				{
-					DisplayAdminMenu();
+					this.DisplayAdminMenu();
 				}
 				else if (this.LoggedInUser.Type.Equals(UserType.Staff))
 				{
-					DisplayStaffMenu();
+					this.DisplayStaffMenu();
 				}
 				else if (this.LoggedInUser.Type.Equals(UserType.AccountHolder))
 				{
 					this.AccountHolder = this.Bank.AccountHolders.Find(account => account.UserName.Equals(this.LoggedInUser.UserName));
-					DisplayUserMenu();
+					this.DisplayUserMenu();
 				}
 			}
             catch (Exception)
@@ -143,8 +144,7 @@ namespace BankApp
 			Console.WriteLine("1. Add Staff\n2. Add Account Holder\n3.Display Bank User Details\n4. Update Service Charges\n5. Add New Currency\n6. Update Account\n7. Delete Account\n8. Logout");
             try
             {
-				int option = Convert.ToInt32(Console.ReadLine());
-				AdminOption adminOption = (AdminOption)option;
+				AdminOption adminOption = (AdminOption)Convert.ToInt32(Console.ReadLine()); ;
 				switch (adminOption)
 				{
 					case AdminOption.AddStaff:
@@ -170,7 +170,6 @@ namespace BankApp
 						this.DeleteAccount();
 						break;
 					case AdminOption.Logout:
-						this.StaffService.XmlData();
 						this.MainMenu();
 						break;
 					default:
@@ -178,6 +177,7 @@ namespace BankApp
 						break;
 
 				}
+				this.StaffService.XmlData();
 				this.DisplayAdminMenu();
 			}
             catch (Exception)
@@ -209,13 +209,13 @@ namespace BankApp
 						this.NewCurrency();
 						break;
 					case StaffOption.Logout:
-						this.StaffService.XmlData();
 						this.MainMenu();
 						break;
 					default:
 						Console.WriteLine("Please select option from the list");
 						break;
 				}
+				this.StaffService.XmlData();
 				this.DisplayStaffMenu();
 			}
             catch (Exception)
@@ -230,8 +230,7 @@ namespace BankApp
 			Console.WriteLine("1.Withdrawl \n2.Deposit\n3.Transaction History\n4.View Balance\n5.Transfer Funds\n6.Revert Transaction\n7.Logout");
             try
             {
-				int option = Convert.ToInt32(Console.ReadLine());
-				AccountHolderOption accountHolderOption = (AccountHolderOption)option;
+				AccountHolderOption accountHolderOption = (AccountHolderOption)Convert.ToInt32(Console.ReadLine()); ;
 				switch (accountHolderOption)
 				{
 					case AccountHolderOption.Withdraw:
@@ -309,7 +308,6 @@ namespace BankApp
 						break;
 
 					case AccountHolderOption.Logout:
-						this.StaffService.XmlData();
 						this.Logout(this.AccountHolder.Name);
 						this.MainMenu();
 
@@ -319,6 +317,7 @@ namespace BankApp
 						Console.WriteLine("Please select option from the list");
 						break;
 				}
+				this.StaffService.XmlData();
 				this.DisplayUserMenu();
 			}
             catch (Exception)
