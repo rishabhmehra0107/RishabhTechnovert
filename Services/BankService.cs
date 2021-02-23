@@ -4,7 +4,18 @@ using static BankApp.Model.Constants;
 
 namespace BankApp.Services
 {
-	public class BankService
+	public interface IBankService
+	{
+		public bool AddBranch(Branch branch);
+
+		public double Withdraw(double amount, string accountNumber);
+
+		public double Deposit(double amount, string accountNumber);
+
+		public bool TransferAmount(double amount, string accountNumber1, string accountNumber2);
+	}
+
+	public class BankService : IBankService
 	{
 		public Bank Bank { get; set; }
 
@@ -13,7 +24,11 @@ namespace BankApp.Services
 			this.Bank = bank;
 		}
 
-		public bool AddBranch(Branch branch)
+        public BankService()
+        {
+        }
+
+        public bool AddBranch(Branch branch)
         {
             try
             {

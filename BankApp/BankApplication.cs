@@ -5,27 +5,28 @@ using System.Linq;
 using System.Collections.Generic;
 using static BankApp.Model.Constants;
 using BankApp.Services.Utilities;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BankApp
 {
     public class BankApplication
 	{
+		private IBankService IBankService;
 		private UserService UserService { get; set; }
-		private BankService BankService { get; set; }
 		private TransactionService TransactionService { get; set; }
 		private StaffService StaffService { get; set; }
 		public Bank Bank { get; set; }
 		public AccountHolder AccountHolder { get; set; }
 		public User LoggedInUser;
 
-		public BankApplication()
+		public BankApplication(IBankService _iBankService)
 		{
+			this.IBankService = _iBankService;
 			this.Bank = new Bank();
 			this.AccountHolder = new AccountHolder();
 			this.TransactionService = new TransactionService(this.Bank);
 			this.StaffService = new StaffService(this.Bank, this.AccountHolder);
 			this.UserService = new UserService(this.Bank);
-			this.BankService = new BankService(this.Bank);
 			this.MainMenu();
 		}
 
@@ -81,7 +82,7 @@ namespace BankApp
 				Location = Utility.GetStringInput("^[a-zA-Z ]+$", "Enter Branch Location")
 			};
 
-			if(this.BankService.AddBranch(branch))
+			if(this.IBankService.AddBranch(branch))
 				Console.WriteLine("Branch details added. Please provide admin username and password to setup");
             else
             {
@@ -233,7 +234,7 @@ namespace BankApp
 				{
 					case AccountHolderOption.Withdraw:
 						double withdrawAmount = Utility.GetDoubleInput("Enter Withdraw Amount");
-						double newBalance = this.BankService.Withdraw(withdrawAmount, this.AccountHolder.AccountNumber);
+						double newBalance = this.IBankService.Withdraw(withdrawAmount, this.AccountHolder.AccountNumber);
 						if (newBalance == (double)TransactionStatus.InsufficientBalance)
 						{
 							Console.WriteLine("Insufficient Balance");
@@ -260,7 +261,7 @@ namespace BankApp
 
 					case AccountHolderOption.Deposit:
 						double depositAmount = Utility.GetDoubleInput("Enter Deposit Amount");
-						double balance = this.BankService.Deposit(depositAmount, this.AccountHolder.AccountNumber);
+						double balance = this.IBankService.Deposit(depositAmount, this.AccountHolder.AccountNumber);
 						if (balance != (double)TransactionStatus.Null)
                         {
 							this.AccountHolder.AvailableBalance = balance;
@@ -336,7 +337,7 @@ namespace BankApp
 				double balance = this.AccountHolder.AvailableBalance - amount;
 				if (balance >= 0)
 				{
-					if(this.BankService.TransferAmount(amount, this.AccountHolder.AccountNumber, user.AccountNumber))
+					if(this.IBankService.TransferAmount(amount, this.AccountHolder.AccountNumber, user.AccountNumber))
                     {
 						Console.WriteLine("Funds transferred successfully");
                     }
