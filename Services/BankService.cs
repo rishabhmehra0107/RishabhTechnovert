@@ -1,8 +1,8 @@
 ﻿using System;
-using BankApp.Model;
-using static BankApp.Model.Constants;
+using Bank.Model;
+using static Bank.Model.Constants;
 
-namespace BankApp.Services
+namespace Bank.Services
 {
 	public interface IBankService
 	{
@@ -17,9 +17,9 @@ namespace BankApp.Services
 
 	public class BankService : IBankService
 	{
-		public Bank Bank { get; set; }
+		public Banks Bank { get; set; }
 
-		public BankService(Bank bank)
+		public BankService(Banks bank)
 		{
 			this.Bank = bank;
 		}

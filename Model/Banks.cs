@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-namespace BankApp.Model
+namespace Bank.Model
 {
-    public class Bank
+    public class Banks
     {
-        public Bank()
+        public Banks()
         {
             this.AccountHolders = new List<AccountHolder>();
             this.Branches = new List<Branch>();

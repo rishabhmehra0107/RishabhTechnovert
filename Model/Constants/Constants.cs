@@ -1,5 +1,5 @@
 ﻿using System;
-namespace BankApp.Model
+namespace Bank.Model
 {
     public static class Constants
     {
@@ -25,7 +25,8 @@ namespace BankApp.Model
         public enum TransactionType
         {
             Deposit,
-            Withdraw
+            Withdraw,
+            Transfer
         }
 
         public enum BankType

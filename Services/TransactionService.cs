@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using BankApp.Model;
+using Bank.Model;
+using static Bank.Model.Constants;
 
-namespace BankApp.Services
+namespace Bank.Services
 {
     public class TransactionService
 	{
-		private Bank Bank { get; set; }
+		private Banks Bank { get; set; }
 
-		public TransactionService(Bank bank)
+		public TransactionService(Banks bank)
 		{
 			this.Bank = bank;
 		}
@@ -18,8 +19,17 @@ namespace BankApp.Services
             try
             {
 				var accountHolder = this.Bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
+
 				if (accountHolder == null)
 					return false;
+				else if (transaction.Type.Equals(TransactionType.Transfer))
+                {
+					transaction.SourceAccountNumber = accountNumber;
+				}
+				else if (transaction.Type.Equals(TransactionType.Deposit) || transaction.Type.Equals(TransactionType.Withdraw))
+                {
+					transaction.DestinationAccountNumber = accountNumber;
+                }
 
 				transaction.CreatedOn = DateTime.UtcNow;
 				transaction.ID = "TXN" + this.Bank.Id + accountHolder.Transactions.Count + DateTime.UtcNow.ToString("MMDDYYY");

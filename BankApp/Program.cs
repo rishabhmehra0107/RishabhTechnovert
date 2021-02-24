@@ -1,5 +1,5 @@
 ﻿using System;
-using BankApp.Services;
+using Bank.Services;
 
 namespace BankApp
 {

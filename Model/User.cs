@@ -1,6 +1,6 @@
 ﻿using System;
-using static BankApp.Model.Constants;
-namespace BankApp.Model
+using static Bank.Model.Constants;
+namespace Bank.Model
 {
     public class User
     {

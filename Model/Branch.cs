@@ -1,5 +1,5 @@
 ﻿using System;
-namespace BankApp.Model
+namespace Bank.Model
 {
     public class Branch
     {

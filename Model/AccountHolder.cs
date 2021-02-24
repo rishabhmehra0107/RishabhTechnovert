@@ -1,7 +1,7 @@
 ﻿using System;
-using static BankApp.Model.Constants;
+using static Bank.Model.Constants;
 using System.Collections.Generic;
-namespace BankApp.Model
+namespace Bank.Model
 {
     public class AccountHolder : User
     {

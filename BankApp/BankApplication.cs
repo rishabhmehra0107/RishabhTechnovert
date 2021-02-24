@@ -1,10 +1,10 @@
 ﻿using System;
-using BankApp.Model;
-using BankApp.Services;
+using Bank.Model;
+using Bank.Services;
 using System.Linq;
 using System.Collections.Generic;
-using static BankApp.Model.Constants;
-using BankApp.Services.Utilities;
+using static Bank.Model.Constants;
+using Bank.Services.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BankApp
@@ -15,14 +15,14 @@ namespace BankApp
 		private UserService UserService { get; set; }
 		private TransactionService TransactionService { get; set; }
 		private StaffService StaffService { get; set; }
-		public Bank Bank { get; set; }
+		public Banks Bank { get; set; }
 		public AccountHolder AccountHolder { get; set; }
 		public User LoggedInUser;
 
 		public BankApplication(IBankService _iBankService)
 		{
 			this.IBankService = _iBankService;
-			this.Bank = new Bank();
+			this.Bank = new Banks();
 			this.AccountHolder = new AccountHolder();
 			this.TransactionService = new TransactionService(this.Bank);
 			this.StaffService = new StaffService(this.Bank, this.AccountHolder);
@@ -339,7 +339,16 @@ namespace BankApp
 				{
 					if(this.IBankService.TransferAmount(amount, this.AccountHolder.AccountNumber, user.AccountNumber))
                     {
-						Console.WriteLine("Funds transferred successfully");
+						Transaction transferTransaction = new Transaction();
+						transferTransaction.Type = TransactionType.Transfer;
+						transferTransaction.CreatedBy = this.LoggedInUser.Id;
+						transferTransaction.Amount = amount;
+						transferTransaction.SourceAccountNumber = this.AccountHolder.AccountNumber;
+
+						if (this.TransactionService.AddTransaction(transferTransaction, user.AccountNumber))
+							Console.WriteLine("Funds transferred successfully");
+						else
+							Console.WriteLine("Funds transferred failed");
                     }
                     else
                     {

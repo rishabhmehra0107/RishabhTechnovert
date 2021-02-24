@@ -2,17 +2,17 @@
 using System.Xml.Linq;
 using System.Linq;
 using System.Collections.Generic;
-using BankApp.Model;
-using static BankApp.Model.Constants;
+using Bank.Model;
+using static Bank.Model.Constants;
 
-namespace BankApp.Services
+namespace Bank.Services
 {
 	public class StaffService
 	{
-		public Bank Bank { get; set; }
+		public Banks Bank { get; set; }
 		public AccountHolder User { get; set; }
 
-		public StaffService(Bank bank, AccountHolder user)
+		public StaffService(Banks bank, AccountHolder user)
 		{
 			this.Bank = bank;
 			this.User = user;

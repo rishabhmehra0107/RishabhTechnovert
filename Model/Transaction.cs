@@ -1,7 +1,7 @@
 ﻿using System;
-using static BankApp.Model.Constants;
+using static Bank.Model.Constants;
 
-namespace BankApp.Model
+namespace Bank.Model
 {
     public class Transaction
     {
@@ -13,7 +13,9 @@ namespace BankApp.Model
 
         public TransactionType Type { get; set; }
 
-        public string AccountNumber { get; set; }
+        public string DestinationAccountNumber { get; set; }
+
+        public string SourceAccountNumber { get; set; }
 
         public bool IsReverted { get; set; }
 

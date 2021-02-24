@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace BankApp.Services.Utilities
+namespace Bank.Services.Utilities
 {
     public class Utility
     {

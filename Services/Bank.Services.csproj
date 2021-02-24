@@ -11,6 +11,6 @@
     <Folder Include="Utilities\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Model\BankApp.Model.csproj" />
+    <ProjectReference Include="..\Model\Bank.Model.csproj" />
   </ItemGroup>
 </Project>

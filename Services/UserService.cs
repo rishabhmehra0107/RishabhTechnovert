@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Linq;
-using BankApp.Model;
-using static BankApp.Model.Constants;
+using Bank.Model;
+using static Bank.Model.Constants;
 
-namespace BankApp.Services
+namespace Bank.Services
 {
 	public class UserService
 	{
-		public Bank Bank { get; set; }
+		public Banks Bank { get; set; }
 
-		public UserService(Bank bank)
+		public UserService(Banks bank)
 		{
 			this.Bank = bank;
 		}
