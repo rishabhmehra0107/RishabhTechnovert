@@ -1,21 +1,11 @@
 ﻿using System;
 using Bank.Model;
+using Bank.Contracts;
 using static Bank.Model.Constants;
 
 namespace Bank.Services
 {
-	public interface IBankService
-	{
-		public bool AddBranch(Branch branch);
-
-		public double Withdraw(double amount, string accountNumber);
-
-		public double Deposit(double amount, string accountNumber);
-
-		public bool TransferAmount(double amount, string accountNumber1, string accountNumber2);
-	}
-
-	public class BankService : IBankService
+    public class BankService : IBankService
 	{
 		public Banks Bank { get; set; }
 
