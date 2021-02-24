@@ -9,7 +9,7 @@ namespace Bank.Services.Utilities
         {
             Console.WriteLine(helpText);
             var input = Console.ReadLine();
-            if (!string.IsNullOrEmpty(regex) && Regex.IsMatch(input, regex))
+            if (Regex.IsMatch(input, regex))
             {
                 return input;
             }
