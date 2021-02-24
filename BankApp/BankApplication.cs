@@ -343,9 +343,9 @@ namespace BankApp
 						transferTransaction.Type = TransactionType.Transfer;
 						transferTransaction.CreatedBy = this.LoggedInUser.Id;
 						transferTransaction.Amount = amount;
-						transferTransaction.SourceAccountNumber = this.AccountHolder.AccountNumber;
+						transferTransaction.DestinationAccountNumber = user.AccountNumber;
 
-						if (this.TransactionService.AddTransaction(transferTransaction, user.AccountNumber))
+						if (this.TransactionService.AddTransaction(transferTransaction, this.AccountHolder.AccountNumber))
 							Console.WriteLine("Funds transferred successfully");
 						else
 							Console.WriteLine("Funds transferred failed");
