@@ -3,11 +3,12 @@ using System.Xml.Linq;
 using System.Linq;
 using System.Collections.Generic;
 using Bank.Model;
+using Bank.Contracts;
 using static Bank.Model.Constants;
 
 namespace Bank.Services
 {
-	public class StaffService
+	public class StaffService : IStaffService
 	{
 		public Banks Bank { get; set; }
 		public AccountHolder User { get; set; }

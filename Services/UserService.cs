@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Linq;
 using Bank.Model;
+using Bank.Contracts;
 using static Bank.Model.Constants;
 
 namespace Bank.Services
 {
-	public class UserService
+	public class UserService : IUserService
 	{
 		public Banks Bank { get; set; }
 

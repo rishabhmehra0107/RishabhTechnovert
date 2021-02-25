@@ -6,28 +6,35 @@ using System.Collections.Generic;
 using static Bank.Model.Constants;
 using Bank.Services.Utilities;
 using Bank.Contracts;
-using Microsoft.Extensions.DependencyInjection;
+using SimpleInjector;
 
 namespace BankApp
 {
     public class BankApplication
 	{
-		private IBankService IBankService;
-		private UserService UserService { get; set; }
-		private TransactionService TransactionService { get; set; }
-		private StaffService StaffService { get; set; }
+		static Container container;
 		public Banks Bank { get; set; }
-		public AccountHolder AccountHolder { get; set; }
+		public AccountHolder AccountHolder;
 		public User LoggedInUser;
 
-		public BankApplication(IBankService _iBankService)
+		public BankApplication()
 		{
-			this.IBankService = _iBankService;
 			this.Bank = new Banks();
+
 			this.AccountHolder = new AccountHolder();
-			this.TransactionService = new TransactionService(this.Bank);
-			this.StaffService = new StaffService(this.Bank, this.AccountHolder);
-			this.UserService = new UserService(this.Bank);
+
+			container = new Container();
+
+			container.Register<IBankService>(() => new BankService(this.Bank));
+
+			container.Register<IStaffService>(() => new StaffService(this.Bank, this.AccountHolder));
+
+			container.Register<ITransactionService>(() => new TransactionService(this.Bank));
+
+			container.Register<IUserService>(() => new UserService(this.Bank));
+
+			container.Verify();
+
 			this.MainMenu();
 		}
 
@@ -55,7 +62,8 @@ namespace BankApp
 						this.MainMenu();
 						break;
 				}
-				this.StaffService.XmlData();
+				var staffService = container.GetInstance<IStaffService>();
+				staffService.XmlData();
 				this.MainMenu();
 			}
             catch (Exception)
@@ -71,10 +79,10 @@ namespace BankApp
 			this.Bank.Name = Utility.GetStringInput("^[a-zA-Z ]{3,}$", "Enter Bank Name").ToUpper();
 			this.Bank.Location = Utility.GetStringInput("^[a-zA-Z ]+$", "Enter Bank Location");
 			this.Bank.Id = this.Bank.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
-			this.Bank.SameBankIMPS = Constants.SameBankIMPS;
-			this.Bank.SameBankRTGS = Constants.SameBankRTGS;
-			this.Bank.DiffBankIMPS = Constants.DiffBankIMPS;
-			this.Bank.DiffBankRTGS = Constants.DiffBankRTGS;
+			this.Bank.SameBankIMPS = SameBankIMPS;
+			this.Bank.SameBankRTGS = SameBankRTGS;
+			this.Bank.DiffBankIMPS = DiffBankIMPS;
+			this.Bank.DiffBankRTGS = DiffBankRTGS;
 			Console.WriteLine("Bank setup is completed. Please provide branch details");
 
 			Branch branch = new Branch()
@@ -83,7 +91,8 @@ namespace BankApp
 				Location = Utility.GetStringInput("^[a-zA-Z ]+$", "Enter Branch Location")
 			};
 
-			if(this.IBankService.AddBranch(branch))
+			var bankService = container.GetInstance<IBankService>();
+			if (bankService.AddBranch(branch))
 				Console.WriteLine("Branch details added. Please provide admin username and password to setup");
             else
             {
@@ -99,7 +108,8 @@ namespace BankApp
 				Type = UserType.Admin
 			};
 
-			if (this.UserService.AddEmployee(admin))
+			var userService = container.GetInstance<IUserService>();
+			if (userService.AddEmployee(admin))
 				Console.WriteLine("Admin added successfuly");
 			else
 				Console.WriteLine("Error. Admin addition failed");
@@ -112,7 +122,8 @@ namespace BankApp
 			string username = Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter your Username");
 			string password = Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter your Password");
 
-			this.LoggedInUser = this.UserService.LogIn(username, password);
+			var userService = container.GetInstance<IUserService>();
+			this.LoggedInUser = userService.LogIn(username, password);
             try
             {
                 if (this.LoggedInUser.Id == null)
@@ -178,7 +189,8 @@ namespace BankApp
 						break;
 
 				}
-				this.StaffService.XmlData();
+				var staffService = container.GetInstance<IStaffService>();
+				staffService.XmlData();
 				this.DisplayAdminMenu();
 			}
             catch (Exception)
@@ -215,7 +227,8 @@ namespace BankApp
 						Console.WriteLine("Please select option from the list");
 						break;
 				}
-				this.StaffService.XmlData();
+				var staffService = container.GetInstance<IStaffService>();
+				staffService.XmlData();
 				this.DisplayStaffMenu();
 			}
             catch (Exception)
@@ -227,6 +240,9 @@ namespace BankApp
 
 		public void DisplayUserMenu()
 		{
+			var bankService = container.GetInstance<IBankService>();
+			var transactionService = container.GetInstance<ITransactionService>();
+			var staffService = container.GetInstance<IStaffService>();
 			Console.WriteLine("1.Withdrawl \n2.Deposit\n3.Transaction History\n4.View Balance\n5.Transfer Funds\n6.Revert Transaction\n7.Logout");
             try
             {
@@ -235,7 +251,7 @@ namespace BankApp
 				{
 					case AccountHolderOption.Withdraw:
 						double withdrawAmount = Utility.GetDoubleInput("Enter Withdraw Amount");
-						double newBalance = this.IBankService.Withdraw(withdrawAmount, this.AccountHolder.AccountNumber);
+						double newBalance = bankService.Withdraw(withdrawAmount, this.AccountHolder.AccountNumber);
 						if (newBalance == (double)TransactionStatus.InsufficientBalance)
 						{
 							Console.WriteLine("Insufficient Balance");
@@ -252,7 +268,7 @@ namespace BankApp
 							withdrawTransaction.Type = TransactionType.Withdraw;
 							withdrawTransaction.CreatedBy = this.LoggedInUser.Id;
 							withdrawTransaction.Amount = withdrawAmount;
-							if (this.TransactionService.AddTransaction(withdrawTransaction, this.AccountHolder.AccountNumber))
+							if (transactionService.AddTransaction(withdrawTransaction, this.AccountHolder.AccountNumber))
 								Console.WriteLine("New Balance: {0}", this.AccountHolder.AvailableBalance);
 							else
 								Console.WriteLine("Unable to add transaction");
@@ -262,7 +278,7 @@ namespace BankApp
 
 					case AccountHolderOption.Deposit:
 						double depositAmount = Utility.GetDoubleInput("Enter Deposit Amount");
-						double balance = this.IBankService.Deposit(depositAmount, this.AccountHolder.AccountNumber);
+						double balance = bankService.Deposit(depositAmount, this.AccountHolder.AccountNumber);
 						if (balance != (double)TransactionStatus.Null)
                         {
 							this.AccountHolder.AvailableBalance = balance;
@@ -271,7 +287,7 @@ namespace BankApp
 							depositTransaction.Type = TransactionType.Deposit;
 							depositTransaction.CreatedBy = this.LoggedInUser.Id;
 							depositTransaction.Amount = depositAmount;
-							if (this.TransactionService.AddTransaction(depositTransaction, this.AccountHolder.AccountNumber))
+							if (transactionService.AddTransaction(depositTransaction, this.AccountHolder.AccountNumber))
 								Console.WriteLine("New Balance: {0}", this.AccountHolder.AvailableBalance);
 							else
 								Console.WriteLine("Unable to add transaction");
@@ -288,7 +304,7 @@ namespace BankApp
 					case AccountHolderOption.TransactionHistory:
 						Console.WriteLine("Transaction History");
 						Console.WriteLine("Transaction Date\t\tTransaction Type\t\tTransaction Amount");
-						foreach (Transaction transaction2 in this.TransactionService.GetTransactionsByAccount(this.AccountHolder.AccountNumber))
+						foreach (Transaction transaction2 in transactionService.GetTransactionsByAccount(this.AccountHolder.AccountNumber))
 						{
 							Console.WriteLine("{0}\t\t{1}\t\t\t{2}", transaction2.CreatedOn, transaction2.Type, transaction2.Amount);
 						}
@@ -317,7 +333,7 @@ namespace BankApp
 						Console.WriteLine("Please select option from the list");
 						break;
 				}
-				this.StaffService.XmlData();
+				staffService.XmlData();
 				this.DisplayUserMenu();
 			}
             catch (Exception)
@@ -329,6 +345,8 @@ namespace BankApp
 
 		public void TransferFunds()
         {
+			var bankService = container.GetInstance<IBankService>();
+			var transactionService = container.GetInstance<ITransactionService>();
 			string accountNumber = Utility.GetStringInput("^[a-zA-Z0-9]+$", "Please enter vendor's account number to transfer funds.");
 			var user = this.Bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
 
@@ -338,7 +356,7 @@ namespace BankApp
 				double balance = this.AccountHolder.AvailableBalance - amount;
 				if (balance >= 0)
 				{
-					if(this.IBankService.TransferAmount(amount, this.AccountHolder.AccountNumber, user.AccountNumber))
+					if(bankService.TransferAmount(amount, this.AccountHolder.AccountNumber, user.AccountNumber))
                     {
 						Transaction transferTransaction = new Transaction();
 						transferTransaction.Type = TransactionType.Transfer;
@@ -346,7 +364,7 @@ namespace BankApp
 						transferTransaction.Amount = amount;
 						transferTransaction.DestinationAccountNumber = user.AccountNumber;
 
-						if (this.TransactionService.AddTransaction(transferTransaction, this.AccountHolder.AccountNumber))
+						if (transactionService.AddTransaction(transferTransaction, this.AccountHolder.AccountNumber))
 							Console.WriteLine("Funds transferred successfully");
 						else
 							Console.WriteLine("Funds transferred failed");
@@ -370,6 +388,8 @@ namespace BankApp
 
 		public void AddStaff()
 		{
+			var userService = container.GetInstance<IUserService>();
+
 			Employee staff = new Employee()
 			{
 				UserName = Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter Staff username"),
@@ -378,7 +398,7 @@ namespace BankApp
 				Type = UserType.Staff
 			};
 
-            if (this.UserService.AddEmployee(staff))
+            if (userService.AddEmployee(staff))
             {
 				Console.WriteLine("Staff added successfully");
             }
@@ -390,6 +410,8 @@ namespace BankApp
 
 		public void AddAccountHolder()
 		{
+			var userService = container.GetInstance<IUserService>();
+
 			AccountHolder accountHolder = new AccountHolder()
 			{
 				UserName = Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter Account Holder username"),
@@ -398,7 +420,7 @@ namespace BankApp
 				Type = UserType.AccountHolder
 			};
 
-			if(this.UserService.AddAccountHolder(accountHolder))
+			if(userService.AddAccountHolder(accountHolder))
 				Console.WriteLine("Account Holder added successfully");
 			else
 				Console.WriteLine("Error. Account Holder addition failed");
@@ -441,13 +463,14 @@ namespace BankApp
 
 		public void NewCurrency()
 		{
+			var staffService = container.GetInstance<IStaffService>();
 			try
 			{
 				Currency currency = new Currency();
 				currency.Code = Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter Currency Code:");
 				currency.Name = Utility.GetStringInput("^[a-zA-Z ]+$", "Enter Currency Name:");
 				currency.Rate = Utility.GetIntInput("Enter Currency Value Cnoverted To INR: ");
-				if(this.StaffService.NewCurrency(currency))
+				if(staffService.NewCurrency(currency))
 					Console.WriteLine("New Currency updated Successfully");
 				else
 					Console.WriteLine("New Currency Rejected!");
@@ -461,8 +484,9 @@ namespace BankApp
 
 		public void DisplayBankEmployees()
 		{
+			var staffService = container.GetInstance<IStaffService>();
 			Console.WriteLine("Bank Staff Users");
-			List<string> employeeList = this.StaffService.BankEmployees();
+			List<string> employeeList = staffService.BankEmployees();
 			foreach (string staff in employeeList)
 			{
 				Console.WriteLine(staff);
@@ -471,8 +495,9 @@ namespace BankApp
 
 		public void DisplayBankAccountHolders()
 		{
+			var staffService = container.GetInstance<IStaffService>();
 			Console.WriteLine("Bank Account Holders");
-			List<string> accountHolderList = this.StaffService.BankAccountHolders();
+			List<string> accountHolderList = staffService.BankAccountHolders();
 			foreach (string user in accountHolderList)
 			{
 				Console.WriteLine(user);
@@ -481,8 +506,9 @@ namespace BankApp
 
 		public void RevertTransaction()
 		{
+			var transactionService = container.GetInstance<ITransactionService>();
 			Console.WriteLine("Transactions of users by their ID and date are as follows:-");
-			foreach (Transaction transaction in this.TransactionService.GetTransactionsByAccount(this.AccountHolder.AccountNumber))
+			foreach (Transaction transaction in transactionService.GetTransactionsByAccount(this.AccountHolder.AccountNumber))
 			{
 				Console.WriteLine("Transaction ID: {0} , Transaction Date: {1}", transaction.ID, transaction.CreatedOn);
 			}
@@ -492,7 +518,7 @@ namespace BankApp
             {
 				string id = Console.ReadLine();
 				DateTime date = Convert.ToDateTime(Console.ReadLine());
-				if (this.TransactionService.RevertTransaction(id, date, this.AccountHolder.AccountNumber))
+				if (transactionService.RevertTransaction(id, date, this.AccountHolder.AccountNumber))
                 {
 					Console.WriteLine("Transaction reverted successfully");
                 }
@@ -510,6 +536,7 @@ namespace BankApp
 
 		public void UpdateCharges()
 		{
+			var staffService = container.GetInstance<IStaffService>();
 			Console.WriteLine("Select account from the list");
 			foreach (AccountHolder user in this.Bank.AccountHolders)
 			{
@@ -529,7 +556,7 @@ namespace BankApp
 						int sameBankRTGS = Convert.ToInt32(Console.ReadLine());
 						int sameBankIMPS = Convert.ToInt32(Console.ReadLine());
 						BankType type = BankType.Same;
-						if(this.StaffService.UpdateCharges(sameBankRTGS, sameBankIMPS, type))
+						if(staffService.UpdateCharges(sameBankRTGS, sameBankIMPS, type))
 							Console.WriteLine("New charges updated successfully!");
 						else
 							Console.WriteLine("Error!");
@@ -548,7 +575,7 @@ namespace BankApp
 						int differentBankRTGS = Convert.ToInt32(Console.ReadLine());
 						int differentBankIMPS = Convert.ToInt32(Console.ReadLine());
 						BankType type = BankType.Different;
-						if(this.StaffService.UpdateCharges(differentBankRTGS, differentBankIMPS, type))
+						if(staffService.UpdateCharges(differentBankRTGS, differentBankIMPS, type))
 							Console.WriteLine("New charges updated successfully!");
 						else
 							Console.WriteLine("Error!");

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Bank.Model;
+using Bank.Contracts;
 using static Bank.Model.Constants;
 
 namespace Bank.Services
 {
-    public class TransactionService
+    public class TransactionService : ITransactionService
 	{
 		private Banks Bank { get; set; }
 

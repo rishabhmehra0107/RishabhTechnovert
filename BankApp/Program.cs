@@ -1,5 +1,4 @@
 ﻿using System;
-using Bank.Services;
 
 namespace BankApp
 {
@@ -7,7 +6,7 @@ namespace BankApp
     {
         static void Main()
         {
-            new BankApplication(new BankService());
+            new BankApplication();
         }
     }
 }

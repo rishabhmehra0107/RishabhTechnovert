@@ -14,10 +14,6 @@ namespace Bank.Services
 			this.Bank = bank;
 		}
 
-        public BankService()
-        {
-        }
-
         public bool AddBranch(Branch branch)
         {
             try
