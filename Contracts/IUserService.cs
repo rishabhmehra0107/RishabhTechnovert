@@ -4,10 +4,10 @@ namespace Bank.Contracts
 {
     public interface IUserService
     {
-        public bool AddEmployee(Employee employee);
+        public bool AddEmployee(Employee employee, string bankName);
 
-        public bool AddAccountHolder(AccountHolder accountHolder);
+        public bool AddAccountHolder(AccountHolder accountHolder, string bankName);
 
-        public User LogIn(string username, string password);
+        public User LogIn(string bankName, string username, string password);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Bank.Model;
+using Bank.Services.BankStore;
 using Bank.Contracts;
 using static Bank.Model.Constants;
 
@@ -8,27 +9,24 @@ namespace Bank.Services
 {
 	public class UserService : IUserService
 	{
-		public Banks Bank { get; set; }
+		public Banks Banks { get; set; }
 
-		public UserService(Banks bank)
+		public UserService(Banks banks)
 		{
-			this.Bank = bank;
+			this.Banks = banks;
 		}
 
-		public bool AddEmployee(Employee employee)
+		public bool AddEmployee(Employee employee, string bankName)
 		{
-            try
+			try
             {
-				employee.Id = $"{employee.Type} {this.Bank.Employees.Count + 1}";
-				employee.EmployeeId = $"{this.Bank.Name} {employee.Id}";
+				var bank = this.Banks.Bank.Find(bank => bank.Name.ToUpper().Equals(bankName.ToUpper()));
+				employee.Id = $"{employee.Type} {bank.Employees.Count + 1}";
+				employee.EmployeeId = $"{bank.Name} {employee.Id}";
 
-				if (employee.Type.Equals(UserType.Admin))
+				if (employee.Type.Equals(UserType.Admin) || employee.Type.Equals(UserType.Staff))
 				{
-					this.Bank.Employees.Add(employee);
-				}
-				else if (employee.Type.Equals(UserType.Staff))
-				{
-					this.Bank.Employees.Add(employee);
+					bank.Employees.Add(employee);
 				}
 
 				return true;
@@ -39,15 +37,16 @@ namespace Bank.Services
             }
 		}
 
-		public bool AddAccountHolder(AccountHolder accountHolder)
+		public bool AddAccountHolder(AccountHolder accountHolder, string bankName)
 		{
-            try
+			try
             {
+				var bank = this.Banks.Bank.Find(bank => bank.Name.ToUpper().Equals(bankName.ToUpper()));
 				accountHolder.AvailableBalance = Constants.InitialBalance;
 				accountHolder.AccountNumber = accountHolder.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyyhhmmss");
 				accountHolder.AccountType = AccountType.Savings;
-				accountHolder.Id = $"{UserType.AccountHolder} {this.Bank.AccountHolders.Count + 1}";
-				this.Bank.AccountHolders.Add(accountHolder);
+				accountHolder.Id = $"{UserType.AccountHolder} {bank.AccountHolders.Count + 1}";
+				bank.AccountHolders.Add(accountHolder);
 
 				return true;
 			}
@@ -57,18 +56,19 @@ namespace Bank.Services
 			}
 		}
 
-		public User LogIn(string username, string password)
+		public User LogIn(string bankName, string username, string password)
 		{
-            try
+			try
             {
+				var bank = this.Banks.Bank.Find(bank => bank.Name.ToUpper().Equals(bankName.ToUpper()));
 				var user = new User();
-				if (this.Bank.Employees.Any(staff => staff.UserName.ToLower() == username.ToLower() && staff.Password == password && (staff.Type.Equals(UserType.Admin) || staff.Type.Equals(UserType.Staff))))
+				if (bank.Employees.Any(staff => staff.UserName.ToLower() == username.ToLower() && staff.Password == password && (staff.Type.Equals(UserType.Admin) || staff.Type.Equals(UserType.Staff))))
 				{
-					user = this.Bank.Employees.Find(staff => staff.UserName.ToLower() == username.ToLower() && staff.Password == password);
+					user = bank.Employees.Find(staff => staff.UserName.ToLower() == username.ToLower() && staff.Password == password);
 				}
-				else if (this.Bank.AccountHolders.Any(account => account.UserName.ToLower() == username.ToLower() && account.Password == password && account.Type.Equals(UserType.AccountHolder)))
+				else if (bank.AccountHolders.Any(account => account.UserName.ToLower() == username.ToLower() && account.Password == password && account.Type.Equals(UserType.AccountHolder)))
 				{
-					user = this.Bank.AccountHolders.Find(account => account.UserName.ToLower() == username.ToLower() && account.Password == password);
+					user = bank.AccountHolders.Find(account => account.UserName.ToLower() == username.ToLower() && account.Password == password);
 				}
 
 				return user;

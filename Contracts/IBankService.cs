@@ -5,12 +5,14 @@ namespace Bank.Contracts
 {
 	public interface IBankService
 	{
-		public bool AddBranch(Branch branch);
+		public bool AddBank(Bank.Model.Bank bank);
 
-		public double Withdraw(double amount, string accountNumber);
+		public bool AddBranch(Branch branch, string bankName);
 
-		public double Deposit(double amount, string accountNumber);
+		public double Withdraw(double amount, string accountNumber, string bankName);
 
-		public bool TransferAmount(double amount, string accountNumber1, string accountNumber2);
+		public double Deposit(double amount, string accountNumber, string bankName);
+
+		public bool TransferAmount(double amount, string accountNumber1, string accountNumber2, string bankName);
 	}
 }

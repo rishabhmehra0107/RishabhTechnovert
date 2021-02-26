@@ -2,42 +2,49 @@
 using System.Collections.Generic;
 using Bank.Model;
 using Bank.Contracts;
+using Bank.Services.BankStore;
 using static Bank.Model.Constants;
 
 namespace Bank.Services
 {
     public class TransactionService : ITransactionService
 	{
-		private Banks Bank { get; set; }
+		public Banks Banks { get; set; }
 
-		public TransactionService(Banks bank)
+		public TransactionService(Banks banks)
 		{
-			this.Bank = bank;
+			this.Banks = banks;
 		}
 
-		public bool AddTransaction(Transaction transaction, string accountNumber)
+		public bool AddTransaction(Transaction transaction, string accountNumber, string bankName)
         {
-            try
+			try
             {
-				var accountHolder = this.Bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
-
-				if (accountHolder == null)
-					return false;
-				else if (transaction.Type.Equals(TransactionType.Transfer))
+				var bank = this.Banks.Bank.Find(bank => bank.Name.ToUpper().Equals(bankName.ToUpper()));
+                if (bank != null)
                 {
-					transaction.SourceAccountNumber = accountNumber;
+					var accountHolder = bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
+
+					if (accountHolder == null)
+						return false;
+					else if (transaction.Type.Equals(TransactionType.Transfer))
+					{
+						transaction.SourceAccountNumber = accountNumber;
+					}
+					else if (transaction.Type.Equals(TransactionType.Deposit) || transaction.Type.Equals(TransactionType.Withdraw))
+					{
+						transaction.DestinationAccountNumber = accountNumber;
+					}
+
+					transaction.CreatedOn = DateTime.UtcNow;
+					transaction.ID = "TXN" + bank.Id + accountHolder.Transactions.Count + DateTime.UtcNow.ToString("MMDDYYY");
+					transaction.IsReverted = false;
+					accountHolder.Transactions.Add(transaction);
+
+					return true;
 				}
-				else if (transaction.Type.Equals(TransactionType.Deposit) || transaction.Type.Equals(TransactionType.Withdraw))
-                {
-					transaction.DestinationAccountNumber = accountNumber;
-                }
 
-				transaction.CreatedOn = DateTime.UtcNow;
-				transaction.ID = "TXN" + this.Bank.Id + accountHolder.Transactions.Count + DateTime.UtcNow.ToString("MMDDYYY");
-				transaction.IsReverted = false;
-				accountHolder.Transactions.Add(transaction);
-
-				return true;
+				return false;
 			}
             catch (Exception)
             {
@@ -45,18 +52,22 @@ namespace Bank.Services
             }
 		}
 
-		public bool RevertTransaction(string id, DateTime date, string accountNumber)
+		public bool RevertTransaction(string id, DateTime date, string accountNumber, string bankName)
 		{
-            try
+			try
             {
-				var accountHolder = this.Bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
-				var transaction = accountHolder.Transactions.Find(element => element.ID == id && element.CreatedOn == date);
-				if (accountHolder != null && transaction != null)
-				{
-					return transaction.IsReverted = true;
+				var bank = this.Banks.Bank.Find(bank => bank.Name.ToUpper().Equals(bankName.ToUpper()));
+				if (bank != null)
+                {
+					var accountHolder = bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
+					var transaction = accountHolder.Transactions.Find(element => element.ID == id && element.CreatedOn == date);
+					if (accountHolder != null && transaction != null)
+					{
+						return transaction.IsReverted = true;
+					}
 				}
 
-				return transaction.IsReverted = false;
+				return false;
 			}
             catch (Exception)
             {
@@ -64,14 +75,18 @@ namespace Bank.Services
             }
 		}
 
-		public List<Transaction> GetTransactionsByAccount(string accountNumber)
+		public List<Transaction> GetTransactionsByAccount(string accountNumber, string bankName)
         {
-            try
+			try
             {
-				var accountHolder = this.Bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
-				if (accountHolder != null)
-				{
-					return accountHolder.Transactions;
+				var bank = this.Banks.Bank.Find(bank => bank.Name.ToUpper().Equals(bankName.ToUpper()));
+                if (bank != null)
+                {
+					var accountHolder = bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
+					if (accountHolder != null)
+					{
+						return accountHolder.Transactions;
+					}
 				}
 
 				return null;

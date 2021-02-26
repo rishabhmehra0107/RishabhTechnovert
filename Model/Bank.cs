@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 namespace Bank.Model
 {
-    public class Banks
+    public class Bank
     {
-        public Banks()
+        public Bank()
         {
             this.AccountHolders = new List<AccountHolder>();
             this.Branches = new List<Branch>();
