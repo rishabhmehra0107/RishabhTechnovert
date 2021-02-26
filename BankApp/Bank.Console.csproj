@@ -17,4 +17,7 @@
     <ProjectReference Include="..\Services\Bank.Services.csproj" />
     <ProjectReference Include="..\Contracts\Bank.Contracts.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\netcoreapp3.1\BankApp.Console.xml" />
+  </ItemGroup>
 </Project>

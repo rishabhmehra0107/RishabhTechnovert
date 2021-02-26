@@ -124,6 +124,7 @@ namespace BankApp
 				Console.WriteLine("Error. Admin addition failed");
 
 			Console.WriteLine("Bank Name: {0}, User Name: {1}", bank.Name, admin.UserName);
+			this.CurrentBank = bank;
 		}
 
 		public void Login()
