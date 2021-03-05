@@ -16,5 +16,7 @@ namespace Bank.Contracts
         public bool UpdateCharges(int rtgs, int imps, BankType type, string bankName);
 
         public void XmlData(string bankName);
+
+        public void InsertData(string bankName);
     }
 }

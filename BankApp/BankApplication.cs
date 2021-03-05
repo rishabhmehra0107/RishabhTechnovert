@@ -71,6 +71,7 @@ namespace BankApp
 				}
 				var staffService = container.GetInstance<IStaffService>();
 				staffService.XmlData(this.CurrentBank.Name);
+				staffService.InsertData(this.CurrentBank.Name);
 				this.MainMenu();
 			}
             catch (Exception)
@@ -139,7 +140,7 @@ namespace BankApp
 			this.CurrentBank = bank;
             try
             {
-                if (this.LoggedInUser.Id == null)
+                if (this.LoggedInUser.UserId == null)
                 {
 					Console.WriteLine("Invalid Credentials");
 					this.Login();
@@ -279,7 +280,7 @@ namespace BankApp
 
 							Transaction withdrawTransaction = new Transaction();
 							withdrawTransaction.Type = TransactionType.Withdraw;
-							withdrawTransaction.CreatedBy = this.LoggedInUser.Id;
+							withdrawTransaction.CreatedBy = this.LoggedInUser.UserId;
 							withdrawTransaction.Amount = withdrawAmount;
 							if (transactionService.AddTransaction(withdrawTransaction, this.AccountHolder.AccountNumber, this.CurrentBank.Name))
 								Console.WriteLine("New Balance: {0}", this.AccountHolder.AvailableBalance);
@@ -298,7 +299,7 @@ namespace BankApp
 
 							Transaction depositTransaction = new Transaction();
 							depositTransaction.Type = TransactionType.Deposit;
-							depositTransaction.CreatedBy = this.LoggedInUser.Id;
+							depositTransaction.CreatedBy = this.LoggedInUser.UserId;
 							depositTransaction.Amount = depositAmount;
 							if (transactionService.AddTransaction(depositTransaction, this.AccountHolder.AccountNumber, this.CurrentBank.Name))
 								Console.WriteLine("New Balance: {0}", this.AccountHolder.AvailableBalance);
@@ -373,7 +374,7 @@ namespace BankApp
                     {
 						Transaction transferTransaction = new Transaction();
 						transferTransaction.Type = TransactionType.Transfer;
-						transferTransaction.CreatedBy = this.LoggedInUser.Id;
+						transferTransaction.CreatedBy = this.LoggedInUser.UserId;
 						transferTransaction.Amount = amount;
 						transferTransaction.DestinationAccountNumber = user.AccountNumber;
 
@@ -523,7 +524,7 @@ namespace BankApp
 			Console.WriteLine("Transactions of users by their ID and date are as follows:-");
 			foreach (Transaction transaction in transactionService.GetTransactionsByAccount(this.AccountHolder.AccountNumber, this.CurrentBank.Name))
 			{
-				Console.WriteLine("Transaction ID: {0} , Transaction Date: {1}", transaction.ID, transaction.CreatedOn);
+				Console.WriteLine("Transaction ID: {0} , Transaction Date: {1}", transaction.TransactionID, transaction.CreatedOn);
 			}
 
 			Console.WriteLine("Enter Transaction ID and Transaction Date to revert that transaction");
@@ -553,7 +554,7 @@ namespace BankApp
 			Console.WriteLine("Select account from the list");
 			foreach (AccountHolder user in this.CurrentBank.AccountHolders)
 			{
-				Console.WriteLine(user.UserName + " " + user.Id);
+				Console.WriteLine(user.UserName + " " + user.UserId);
 			}
 
 			string userName = Utility.GetStringInput("^[a-zA-Z@._]+$", "Enter username : ");

@@ -19,7 +19,7 @@ namespace Bank.Services
         {
 			try
 			{
-				bank.Id = bank.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
+				bank.BankId = bank.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyy");
 				bank.SameBankIMPS = SameBankIMPS;
 				bank.SameBankRTGS = SameBankRTGS;
 				bank.DiffBankIMPS = DiffBankIMPS;
@@ -38,8 +38,8 @@ namespace Bank.Services
 			try
             {
 				var bank = this.Banks.Bank.Find(bank => bank.Name.ToUpper().Equals(bankName.ToUpper()));
-				branch.BankId = bank.Id;
-				branch.Id = $"{bank.Id} {branch.Location}{DateTime.UtcNow.ToString("MMddyy")}";
+				branch.BankId = bank.BankId;
+				branch.BranchId = $"{bank.BankId} {branch.Location}{DateTime.UtcNow.ToString("MMddyy")}";
 				bank.Branches.Add(branch);
 				return true;
 			}

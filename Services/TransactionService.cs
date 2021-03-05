@@ -37,7 +37,7 @@ namespace Bank.Services
 					}
 
 					transaction.CreatedOn = DateTime.UtcNow;
-					transaction.ID = "TXN" + bank.Id + accountHolder.Transactions.Count + DateTime.UtcNow.ToString("MMDDYYY");
+					transaction.TransactionID = "TXN" + bank.BankId + accountHolder.Transactions.Count + DateTime.UtcNow.ToString("MMDDYYY");
 					transaction.IsReverted = false;
 					accountHolder.Transactions.Add(transaction);
 
@@ -60,7 +60,7 @@ namespace Bank.Services
 				if (bank != null)
                 {
 					var accountHolder = bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
-					var transaction = accountHolder.Transactions.Find(element => element.ID == id && element.CreatedOn == date);
+					var transaction = accountHolder.Transactions.Find(transaction => transaction.TransactionID == id && transaction.CreatedOn == date);
 					if (accountHolder != null && transaction != null)
 					{
 						return transaction.IsReverted = true;

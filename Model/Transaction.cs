@@ -1,11 +1,14 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using static Bank.Model.Constants;
 
 namespace Bank.Model
 {
     public class Transaction
     {
-        public string ID { get; set; }
+        [Key] public int Id { get; set; }
+
+        public string TransactionID { get; set; }
 
         public string CreatedBy { get; set; }
 

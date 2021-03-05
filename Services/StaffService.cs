@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Bank.Model;
 using Bank.Contracts;
 using Bank.Services.BankStore;
+using Bank.Console.Data;
 using static Bank.Model.Constants;
 
 namespace Bank.Services
@@ -93,6 +94,17 @@ namespace Bank.Services
 			return false;
 		}
 
+		public void InsertData(string bankName)
+		{
+			var bank = this.Banks.Bank.Find(bank => bank.Name.ToUpper().Equals(bankName.ToUpper()));
+			using (var db = new DBContext())
+			{
+				db.Add(bank);
+
+				db.SaveChanges();
+			}
+		}
+
 		public void XmlData(string bankName)
         {
 			var bank = this.Banks.Bank.Find(bank => bank.Name.ToUpper().Equals(bankName.ToUpper()));
@@ -107,21 +119,21 @@ namespace Bank.Services
 			for (int i = 0; i < bank.Branches.Count; i++)
 			{
 				var branch = bank.Branches[i];
-				xElement.Add(new XElement("BankBranch" + (i + 1), new XElement("BankName", bank.Name), new XElement("Location", bank.Location), new XElement("BankID", bank.Id), new XElement("BranchLocation", branch.Location), new XElement("BranchID", branch.Id)));
+				xElement.Add(new XElement("BankBranch" + (i + 1), new XElement("BankName", bank.Name), new XElement("Location", bank.Location), new XElement("BankID", bank.BankId), new XElement("BranchLocation", branch.Location), new XElement("BranchID", branch.BranchId)));
 				xDocument.Save("BankApp.Console.xml");
 			}
 
 			for (int i = 0; i < bank.Employees.Count; i++)
 			{
 				var employee = bank.Employees[i];
-				xElement2.Add(new XElement("Employee" + (i + 1), new XElement("Name", employee.Name), new XElement("Type", employee.Type), new XElement("ID", employee.Id), new XElement("Username", employee.UserName), new XElement("Password", employee.Password)));
+				xElement2.Add(new XElement("Employee" + (i + 1), new XElement("Name", employee.Name), new XElement("Type", employee.Type), new XElement("ID", employee.UserId), new XElement("Username", employee.UserName), new XElement("Password", employee.Password)));
 				xDocument.Save("BankApp.Console.xml");
 			}
 
 			for (int i = 0; i < bank.AccountHolders.Count; i++)
 			{
 				var account = bank.AccountHolders[i];
-				xElement3.Add(new XElement("AccountHolders" + (i + 1), new XElement("Name", account.Name), new XElement("Type", account.Type), new XElement("AccountNumber", account.AccountNumber), new XElement("Username", account.UserName), new XElement("Password", account.Password), new XElement("ID", account.Id)));
+				xElement3.Add(new XElement("AccountHolders" + (i + 1), new XElement("Name", account.Name), new XElement("Type", account.Type), new XElement("AccountNumber", account.AccountNumber), new XElement("Username", account.UserName), new XElement("Password", account.Password), new XElement("ID", account.UserId)));
 				xDocument.Save("BankApp.Console.xml");
 			}
 

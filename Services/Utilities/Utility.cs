@@ -7,13 +7,13 @@ namespace Bank.Services.Utilities
     {
         public static string GetStringInput(string regex, string helpText)
         {
-            Console.WriteLine(helpText);
-            var input = Console.ReadLine();
+            System.Console.WriteLine(helpText);
+            var input = System.Console.ReadLine();
             if (Regex.IsMatch(input, regex))
             {
                 return input;
             }
-            Console.WriteLine("Invalid input");
+            System.Console.WriteLine("Invalid input");
 
             return GetStringInput(regex, helpText);
         }
@@ -21,13 +21,13 @@ namespace Bank.Services.Utilities
         public static double GetDoubleInput(string helpText)
         {
 
-            Console.WriteLine(helpText);
-            double inputAmt = Convert.ToDouble(Console.ReadLine());
+            System.Console.WriteLine(helpText);
+            double inputAmt = Convert.ToDouble(System.Console.ReadLine());
             if (inputAmt > 0 && inputAmt <= 10000)
             {
                 return inputAmt;
             }
-            Console.Write("Invalid input");
+            System.Console.Write("Invalid input");
 
             return GetDoubleInput(helpText);
         }
@@ -35,13 +35,13 @@ namespace Bank.Services.Utilities
         public static int GetIntInput(string helpText)
         {
 
-            Console.WriteLine(helpText);
-            int integerInput = Convert.ToInt32(Console.ReadLine());
+            System.Console.WriteLine(helpText);
+            int integerInput = Convert.ToInt32(System.Console.ReadLine());
             if (integerInput >= 0)
             {
                 return integerInput;
             }
-            Console.Write("Invalid input");
+            System.Console.Write("Invalid input");
 
             return GetIntInput(helpText);
         }

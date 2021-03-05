@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
 namespace Bank.Model
 {
     public class Bank
@@ -12,7 +14,9 @@ namespace Bank.Model
             this.Currency = new List<Currency>();
         }
 
-        public string Id { get; set; }
+        [Key] public int Id { get; set; }
+
+        public string BankId { get; set; }
 
         public string Name { get; set; }
 

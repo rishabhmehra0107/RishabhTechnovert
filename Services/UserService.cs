@@ -21,8 +21,8 @@ namespace Bank.Services
 			try
             {
 				var bank = this.Banks.Bank.Find(bank => bank.Name.ToUpper().Equals(bankName.ToUpper()));
-				employee.Id = $"{employee.Type} {bank.Employees.Count + 1}";
-				employee.EmployeeId = $"{bank.Name} {employee.Id}";
+				employee.UserId = $"{employee.Type} {bank.Employees.Count + 1}";
+				employee.EmployeeId = $"{bank.Name} {employee.UserId}";
 
 				if (employee.Type.Equals(UserType.Admin) || employee.Type.Equals(UserType.Staff))
 				{
@@ -45,7 +45,7 @@ namespace Bank.Services
 				accountHolder.AvailableBalance = Constants.InitialBalance;
 				accountHolder.AccountNumber = accountHolder.Name.Substring(0, 3) + DateTime.UtcNow.ToString("MMddyyyyhhmmss");
 				accountHolder.AccountType = AccountType.Savings;
-				accountHolder.Id = $"{UserType.AccountHolder} {bank.AccountHolders.Count + 1}";
+				accountHolder.UserId = $"{UserType.AccountHolder} {bank.AccountHolders.Count + 1}";
 				bank.AccountHolders.Add(accountHolder);
 
 				return true;
