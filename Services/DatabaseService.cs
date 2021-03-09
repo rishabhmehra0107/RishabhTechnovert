@@ -188,5 +188,41 @@ namespace Bank.Services
             }
             db.SaveChanges();
         }
+
+        public List<Transaction> GetTransactions()
+        {
+            try
+            {
+                var db = new DBContext();
+                List<Transaction> transactions = db.Transactions.ToList();
+                return transactions;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public void UpdateTransaction(string transactionId, int type)
+        {
+            var db = new DBContext();
+            Transaction transaction = db.Transactions.Find(transactionId);
+            if (transaction != null)
+            {
+                transaction.Type = (Constants.TransactionType)type;
+            }
+            db.SaveChanges();
+        }
+
+        public void DeleteTransaction(string transactionId)
+        {
+            var db = new DBContext();
+            Transaction transaction = db.Transactions.Find(transactionId);
+            if (transaction != null)
+            {
+                db.Transactions.Remove(transaction);
+            }
+            db.SaveChanges();
+        }
     }
 }

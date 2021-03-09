@@ -35,5 +35,11 @@ namespace Bank.Contracts
         public void UpdateCurrency(string code, string newName);
 
         public void DeleteCurrency(string code);
+
+        public List<Transaction> GetTransactions();
+
+        public void UpdateTransaction(string transactionId, int type);
+
+        public void DeleteTransaction(string transactionId);
     }
 }

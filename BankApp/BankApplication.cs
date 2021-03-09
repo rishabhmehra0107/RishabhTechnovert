@@ -97,7 +97,7 @@ namespace BankApp
 
 		public void Database()
         {
-			Console.WriteLine("Welcome to Bank Application\n1. Access Banks \n2. Access AccountHolders\n3. Access Employees\n4. Access Branches\n5. Access Currencies\n6. Exit");
+			Console.WriteLine("Welcome to Bank Application\n1. Access Banks \n2. Access AccountHolders\n3. Access Employees\n4. Access Branches\n5. Access Currencies\n6. Access Transactions\n7. Exit");
 
 			try
 			{
@@ -118,6 +118,9 @@ namespace BankApp
 						break;
 					case DatabaseOption.CurrenciesTable:
 						this.AccessCurrencies();
+						break;
+					case DatabaseOption.TransactionsTable:
+						this.AccessTransactions();
 						break;
 					case DatabaseOption.Exit:
 						this.MainMenu();
@@ -368,6 +371,52 @@ namespace BankApp
 				Console.Clear();
 				Console.WriteLine("Please enter valid number to choose your option");
 				this.AccessCurrencies();
+			}
+		}
+
+		public void AccessTransactions()
+		{
+			Console.WriteLine("1. GetDetails \n2. UpdateTransaction\n3. DeleteTransaction\n4. Exit");
+
+			try
+			{
+				AccessOptions accessOptions = (AccessOptions)Convert.ToInt32(Console.ReadLine());
+				switch (accessOptions)
+				{
+					case AccessOptions.GetDetails:
+						Console.WriteLine("Transaction Details\n");
+						List<Transaction> transactions = DatabaseService.GetTransactions();
+						foreach (Transaction transaction in transactions)
+						{
+							System.Console.WriteLine("TransactionID:{0} , Amount:{1} , Type:{2}", transaction.TransactionID, transaction.Amount, transaction.Type);
+						}
+						break;
+					case AccessOptions.Update:
+						Console.WriteLine("Update Transaction");
+						string transactionId = Utility.GetStringInput("^[a-zA-Z0-9 ]{3,}$", "Enter Transaction ID");
+						int type = Utility.GetIntInput("Change Transaction Type");
+						DatabaseService.UpdateTransaction(transactionId, type);
+						break;
+					case AccessOptions.Delete:
+						Console.WriteLine("Delete Currency");
+						string transactionID = Utility.GetStringInput("^[a-zA-Z0-9 ]{3,}$", "Enter Transaction ID");
+						DatabaseService.DeleteTransaction(transactionID);
+						break;
+					case AccessOptions.Exit:
+						this.Database();
+						break;
+					default:
+						Console.WriteLine("Please select option from the list");
+						this.AccessTransactions();
+						break;
+				}
+				this.AccessTransactions();
+			}
+			catch (Exception)
+			{
+				Console.Clear();
+				Console.WriteLine("Please enter valid number to choose your option");
+				this.AccessTransactions();
 			}
 		}
 

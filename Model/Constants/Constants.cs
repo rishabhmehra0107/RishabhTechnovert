@@ -64,7 +64,8 @@ namespace Bank.Model
             EmployeesTable = 3,
             BranchesTable = 4,
             CurrenciesTable=5,
-            Exit = 6
+            TransactionsTable = 6,
+            Exit = 7
         }
 
         public enum AdminOption
