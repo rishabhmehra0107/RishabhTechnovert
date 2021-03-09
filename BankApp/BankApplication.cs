@@ -5,7 +5,6 @@ using System.Linq;
 using System.Collections.Generic;
 using static Bank.Model.Constants;
 using Bank.Services.Utilities;
-using Bank.Services.BankStore;
 using Bank.Contracts;
 using SimpleInjector;
 using Bank.Console.Data;
@@ -258,11 +257,11 @@ namespace BankApp
 					case AccountHolderOption.Withdraw:
 						double withdrawAmount = Utility.GetDoubleInput("Enter Withdraw Amount");
 						double newBalance = bankService.Withdraw(withdrawAmount, this.AccountHolder.AccountId, this.CurrentBank.BankId, this.LoggedInUser.AccountId);
-						if (newBalance == (double)TransactionStatus.InsufficientBalance)
+						if (newBalance == (double)TransactionStatus.Failure)
 						{
 							Console.WriteLine("Insufficient Balance");
 						}
-						else if (newBalance == (double)TransactionStatus.Null)
+						else if (newBalance == (double)TransactionStatus.NotFound)
 						{
 							Console.WriteLine("Account Holder Not Found!");
 						}
@@ -276,7 +275,7 @@ namespace BankApp
 					case AccountHolderOption.Deposit:
 						double depositAmount = Utility.GetDoubleInput("Enter Deposit Amount");
 						double balance = bankService.Deposit(depositAmount, this.AccountHolder.AccountId, this.CurrentBank.BankId, this.LoggedInUser.AccountId);
-						if (balance != (double)TransactionStatus.Null)
+						if (balance != (double)TransactionStatus.NotFound)
                         {
 							Console.WriteLine("Deposit Successfull");
 
