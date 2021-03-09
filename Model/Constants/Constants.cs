@@ -29,15 +29,7 @@ namespace Bank.Model
             Transfer
         }
 
-        public enum AccessOptions
-        {
-            GetDetails=1,
-            Update=2,
-            Delete=3,
-            Exit=4
-        }
-
-        public enum BankType
+        public enum TransferTo
         {
             Same,
             Different
@@ -53,19 +45,7 @@ namespace Bank.Model
         {
             Setup = 1,
             Login = 2,
-            Exit = 3,
-            Database=4
-        }
-
-        public enum DatabaseOption
-        {
-            BanksTable = 1,
-            AccountHoldersTable = 2,
-            EmployeesTable = 3,
-            BranchesTable = 4,
-            CurrenciesTable=5,
-            TransactionsTable = 6,
-            Exit = 7
+            Exit = 3
         }
 
         public enum AdminOption
@@ -97,7 +77,7 @@ namespace Bank.Model
             Balance = 4,
             TransferFund = 5,
             RevertTransaction = 6,
-            Logout = 7,
+            Logout = 7
         }
     }
 }

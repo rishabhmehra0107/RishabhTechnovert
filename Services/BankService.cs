@@ -9,13 +9,13 @@ namespace Bank.Services
 {
     public class BankService : IBankService
 	{
-		public Banks Banks { get; set; }
 		public DBContext DB { get; set; }
+		public ITransactionService TransactionService { get; set; }
 
-		public BankService(Banks banks)
+		public BankService(ITransactionService transactionService)
 		{
-			this.Banks = banks;
 			this.DB = new DBContext();
+			this.TransactionService = transactionService;
 		}
 
 		public bool AddBank(Model.Bank bank)
@@ -27,9 +27,8 @@ namespace Bank.Services
 				bank.SameBankRTGS = SameBankRTGS;
 				bank.DiffBankIMPS = DiffBankIMPS;
 				bank.DiffBankRTGS = DiffBankRTGS;
-				this.Banks.Bank.Add(bank);
-				DB.Banks.Add(bank);
-				DB.SaveChanges();
+				this.DB.Banks.Add(bank);
+				this.DB.SaveChanges();
 				return true;
 			}
 			catch (Exception)
@@ -38,16 +37,15 @@ namespace Bank.Services
 			}
 		}
 
-		public bool AddBranch(Branch branch, string bankName)
+		public bool AddBranch(Branch branch, string bankId)
         {
 			try
             {
-				var bank = this.Banks.Bank.Find(bank => bank.Name.ToUpper().Equals(bankName.ToUpper()));
+				var bank = this.DB.Banks.Find(bankId);
 				branch.BankId = bank.BankId;
 				branch.BranchId = $"{bank.BankId} {branch.Location}{DateTime.UtcNow.ToString("MMddyy")}";
-				bank.Branches.Add(branch);
-				DB.Branches.Add(branch);
-				DB.SaveChanges();
+				this.DB.Branches.Add(branch);
+				this.DB.SaveChanges();
 				return true;
 			}
             catch (Exception)
@@ -56,15 +54,21 @@ namespace Bank.Services
             }
 		}
 
-		public double Withdraw(double amount, string accountNumber, string bankName)
+		public double Withdraw(double amount, string accountNumber, string bankId, string id)
 		{
-			var bank = this.Banks.Bank.Find(bank => bank.Name.ToUpper().Equals(bankName.ToUpper()));
+			var bank = this.DB.Banks.Find(bankId);
             if (bank != null)
             {
-				var accountHolder = bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
+				var accountHolder = this.DB.AccountHolders.Find(accountNumber);
 				if (accountHolder != null && accountHolder.AvailableBalance >= amount)
 				{
 					accountHolder.AvailableBalance = accountHolder.AvailableBalance - amount;
+					Transaction withdrawTransaction = new Transaction();
+					withdrawTransaction.Type = TransactionType.Withdraw;
+					withdrawTransaction.CreatedBy = id;
+					withdrawTransaction.Amount = amount;
+					this.TransactionService.AddTransaction(withdrawTransaction, accountNumber, bankId);
+					this.DB.SaveChanges();
 					return accountHolder.AvailableBalance;
 				}
 				else if (accountHolder != null && accountHolder.AvailableBalance < amount)
@@ -76,15 +80,21 @@ namespace Bank.Services
 			return (double)TransactionStatus.Null;
 		}
 
-		public double Deposit(double amount, string accountNumber, string bankName)
+		public double Deposit(double amount, string accountNumber, string bankId, string id)
 		{
-			var bank = this.Banks.Bank.Find(bank => bank.Name.ToUpper().Equals(bankName.ToUpper()));
+			var bank = this.DB.Banks.Find(bankId);
             if (bank != null)
             {
-				var accountHolder = bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber));
+				var accountHolder = this.DB.AccountHolders.Find(accountNumber);
 				if (accountHolder != null)
 				{
 					accountHolder.AvailableBalance = accountHolder.AvailableBalance + amount;
+					Transaction depositTransaction = new Transaction();
+					depositTransaction.Type = TransactionType.Deposit;
+					depositTransaction.CreatedBy = id;
+					depositTransaction.Amount = amount;
+					this.TransactionService.AddTransaction(depositTransaction, accountNumber, bankId);
+					this.DB.SaveChanges();
 					return accountHolder.AvailableBalance;
 				}
 			}
@@ -92,17 +102,18 @@ namespace Bank.Services
 			return (double)TransactionStatus.Null;
 		}
 
-		public bool TransferAmount(double amount, string accountNumber1, string accountNumber2, string bankName)
+		public bool TransferAmount(double amount, string accountNumber1, string accountNumber2, string bankId)
 		{
-			var bank = this.Banks.Bank.Find(bank => bank.Name.ToUpper().Equals(bankName.ToUpper()));
+			var bank = this.DB.Banks.Find(bankId);
             if (bank != null)
             {
-				var accountHolder1 = bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber1));
-				var accountHolder2 = bank.AccountHolders.Find(account => account.AccountNumber.Equals(accountNumber2));
+				var accountHolder1 = this.DB.AccountHolders.Find(accountNumber1);
+				var accountHolder2 = this.DB.AccountHolders.Find(accountNumber2);
 				if (accountHolder1 != null && accountHolder2 != null)
 				{
 					accountHolder1.AvailableBalance -= amount;
 					accountHolder2.AvailableBalance += amount;
+					this.DB.SaveChanges();
 					return true;
 				}
 			}

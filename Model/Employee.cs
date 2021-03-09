@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Bank.Model
 {
@@ -6,6 +7,6 @@ namespace Bank.Model
     {
         public string BranchId { get; set; }
 
-        public string EmployeeId { get; set; }
+        public string BankId { get; set; }
     }
 }

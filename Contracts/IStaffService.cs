@@ -7,12 +7,12 @@ namespace Bank.Contracts
 {
     public interface IStaffService
     {
-        public bool NewCurrency(Currency currency, string bankName);
+        public bool NewCurrency(Currency currency, string bankId);
 
-        public List<string> BankEmployees(string bankName);
+        public List<Employee> BankEmployees();
 
-        public List<string> BankAccountHolders(string bankName);
+        public List<AccountHolder> BankAccountHolders();
 
-        public bool UpdateCharges(int rtgs, int imps, BankType type, string bankName);
+        public bool UpdateCharges(int rtgs, int imps, TransferTo type, string bankId);
     }
 }

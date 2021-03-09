@@ -7,12 +7,12 @@ namespace Bank.Contracts
 	{
 		public bool AddBank(Bank.Model.Bank bank);
 
-		public bool AddBranch(Branch branch, string bankName);
+		public bool AddBranch(Branch branch, string bankId);
 
-		public double Withdraw(double amount, string accountNumber, string bankName);
+		public double Withdraw(double amount, string accountNumber, string bankId, string id);
 
-		public double Deposit(double amount, string accountNumber, string bankName);
+		public double Deposit(double amount, string accountNumber, string bankId, string id);
 
-		public bool TransferAmount(double amount, string accountNumber1, string accountNumber2, string bankName);
+		public bool TransferAmount(double amount, string accountNumber1, string accountNumber2, string bankId);
 	}
 }
