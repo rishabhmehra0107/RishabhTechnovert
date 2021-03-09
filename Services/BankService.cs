@@ -3,16 +3,19 @@ using Bank.Model;
 using Bank.Services.BankStore;
 using Bank.Contracts;
 using static Bank.Model.Constants;
+using Bank.Console.Data;
 
 namespace Bank.Services
 {
     public class BankService : IBankService
 	{
 		public Banks Banks { get; set; }
+		public DBContext DB { get; set; }
 
 		public BankService(Banks banks)
 		{
 			this.Banks = banks;
+			this.DB = new DBContext();
 		}
 
 		public bool AddBank(Model.Bank bank)
@@ -25,6 +28,8 @@ namespace Bank.Services
 				bank.DiffBankIMPS = DiffBankIMPS;
 				bank.DiffBankRTGS = DiffBankRTGS;
 				this.Banks.Bank.Add(bank);
+				DB.Banks.Add(bank);
+				DB.SaveChanges();
 				return true;
 			}
 			catch (Exception)
@@ -41,6 +46,8 @@ namespace Bank.Services
 				branch.BankId = bank.BankId;
 				branch.BranchId = $"{bank.BankId} {branch.Location}{DateTime.UtcNow.ToString("MMddyy")}";
 				bank.Branches.Add(branch);
+				DB.Branches.Add(branch);
+				DB.SaveChanges();
 				return true;
 			}
             catch (Exception)

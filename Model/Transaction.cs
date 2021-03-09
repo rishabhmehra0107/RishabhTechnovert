@@ -6,9 +6,7 @@ namespace Bank.Model
 {
     public class Transaction
     {
-        [Key] public int Id { get; set; }
-
-        public string TransactionID { get; set; }
+        [Key] public string TransactionID { get; set; }
 
         public string CreatedBy { get; set; }
 

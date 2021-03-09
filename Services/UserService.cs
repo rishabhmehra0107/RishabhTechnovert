@@ -4,16 +4,19 @@ using Bank.Model;
 using Bank.Services.BankStore;
 using Bank.Contracts;
 using static Bank.Model.Constants;
+using Bank.Console.Data;
 
 namespace Bank.Services
 {
 	public class UserService : IUserService
 	{
 		public Banks Banks { get; set; }
+		public DBContext DB { get; set; }
 
 		public UserService(Banks banks)
 		{
 			this.Banks = banks;
+			this.DB = new DBContext();
 		}
 
 		public bool AddEmployee(Employee employee, string bankName)
@@ -27,6 +30,8 @@ namespace Bank.Services
 				if (employee.Type.Equals(UserType.Admin) || employee.Type.Equals(UserType.Staff))
 				{
 					bank.Employees.Add(employee);
+					DB.Employees.Add(employee);
+					DB.SaveChanges();
 				}
 
 				return true;
@@ -47,6 +52,8 @@ namespace Bank.Services
 				accountHolder.AccountType = AccountType.Savings;
 				accountHolder.UserId = $"{UserType.AccountHolder} {bank.AccountHolders.Count + 1}";
 				bank.AccountHolders.Add(accountHolder);
+				DB.AccountHolders.Add(accountHolder);
+				DB.SaveChanges();
 
 				return true;
 			}

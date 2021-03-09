@@ -4,16 +4,19 @@ using Bank.Model;
 using Bank.Contracts;
 using Bank.Services.BankStore;
 using static Bank.Model.Constants;
+using Bank.Console.Data;
 
 namespace Bank.Services
 {
     public class TransactionService : ITransactionService
 	{
 		public Banks Banks { get; set; }
+		public DBContext DB { get; set; }
 
 		public TransactionService(Banks banks)
 		{
 			this.Banks = banks;
+			this.DB = new DBContext();
 		}
 
 		public bool AddTransaction(Transaction transaction, string accountNumber, string bankName)
@@ -40,6 +43,8 @@ namespace Bank.Services
 					transaction.TransactionID = "TXN" + bank.BankId + accountHolder.Transactions.Count + DateTime.UtcNow.ToString("MMDDYYY");
 					transaction.IsReverted = false;
 					accountHolder.Transactions.Add(transaction);
+					DB.Transactions.Add(transaction);
+					DB.SaveChanges();
 
 					return true;
 				}

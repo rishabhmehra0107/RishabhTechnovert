@@ -14,9 +14,7 @@ namespace Bank.Model
             this.Currency = new List<Currency>();
         }
 
-        [Key] public int Id { get; set; }
-
-        public string BankId { get; set; }
+        [Key] public string BankId { get; set; }
 
         public string Name { get; set; }
 

@@ -12,6 +12,13 @@ namespace Bank.Console.Data
             optionsBuilder.UseSqlServer(connectionString);
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<AccountHolder>().HasKey(x => new { x.UserName, x.Password });
+            modelBuilder.Entity<Employee>().HasKey(x => new { x.UserName, x.Password });
+        }
+
         public DbSet<AccountHolder> AccountHolders { get; set; }
         public DbSet<Model.Bank> Banks { get; set; }
         public DbSet<Branch> Branches { get; set; }
