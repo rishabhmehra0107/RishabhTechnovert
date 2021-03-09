@@ -43,8 +43,6 @@ namespace BankApp
 
 			container.Register<IUserService, UserService>();
 
-			container.Register<IDatabaseService, DatabaseService>(Lifestyle.Singleton);
-
 			container.Verify();
 		}
 
@@ -132,7 +130,7 @@ namespace BankApp
 		{
 			var userService = container.GetInstance<IUserService>();
 			string bankId = Utility.GetStringInput("^[a-zA-Z0-9]+$", "Enter your Bank ID");
-			string employeeId = Utility.GetStringInput("^[a-zA-Z0-9 ]+$", "Enter your Employee ID");
+			string employeeId = Utility.GetStringInput("^[a-zA-Z0-9 ]+$", "Enter your Account ID");
 
 			var bank = this.DB.Banks.Find(bankId);
 			this.LoggedInUser = userService.LogIn(employeeId);
@@ -270,7 +268,7 @@ namespace BankApp
 						}
 						else
 						{
-							this.AccountHolder.AvailableBalance = newBalance;
+							Console.WriteLine("Withdraw Successfull");
 						}
 
 						break;
@@ -280,7 +278,7 @@ namespace BankApp
 						double balance = bankService.Deposit(depositAmount, this.AccountHolder.AccountId, this.CurrentBank.BankId, this.LoggedInUser.AccountId);
 						if (balance != (double)TransactionStatus.Null)
                         {
-							this.AccountHolder.AvailableBalance = balance;
+							Console.WriteLine("Deposit Successfull");
 
 						}
 						else
@@ -302,6 +300,8 @@ namespace BankApp
 						break;
 
 					case AccountHolderOption.Balance:
+						double getBalance = bankService.GetBalance(this.AccountHolder.AccountId);
+						this.AccountHolder.AvailableBalance = getBalance;
 						Console.WriteLine("Current Balance: {0}", this.AccountHolder.AvailableBalance);
 						break;
 

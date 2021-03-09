@@ -14,5 +14,7 @@ namespace Bank.Contracts
 		public double Deposit(double amount, string accountNumber, string bankId, string id);
 
 		public bool TransferAmount(double amount, string accountNumber1, string accountNumber2, string bankId);
+
+		public double GetBalance(string accountId);
 	}
 }

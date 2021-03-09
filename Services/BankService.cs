@@ -69,7 +69,7 @@ namespace Bank.Services
 					withdrawTransaction.Amount = amount;
 					this.TransactionService.AddTransaction(withdrawTransaction, accountNumber, bankId);
 					this.DB.SaveChanges();
-					return accountHolder.AvailableBalance;
+					return (double)TransactionStatus.SufficientBalance;
 				}
 				else if (accountHolder != null && accountHolder.AvailableBalance < amount)
 				{
@@ -95,12 +95,18 @@ namespace Bank.Services
 					depositTransaction.Amount = amount;
 					this.TransactionService.AddTransaction(depositTransaction, accountNumber, bankId);
 					this.DB.SaveChanges();
-					return accountHolder.AvailableBalance;
+					return (double)TransactionStatus.SufficientBalance;
 				}
 			}
 
 			return (double)TransactionStatus.Null;
 		}
+
+		public double GetBalance(string accountId)
+        {
+			var account = this.DB.AccountHolders.Find(accountId);
+			return account.AvailableBalance;
+        }
 
 		public bool TransferAmount(double amount, string accountNumber1, string accountNumber2, string bankId)
 		{

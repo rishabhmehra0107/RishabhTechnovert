@@ -37,8 +37,9 @@ namespace Bank.Model
 
         public enum TransactionStatus
         {
-            InsufficientBalance = -1,
-            Null = -2
+            SufficientBalance = 2,
+            InsufficientBalance = 1,
+            Null = 0
         }
 
         public enum MenuOption
