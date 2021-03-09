@@ -5,7 +5,7 @@ namespace Bank.Console.Data
 {
     public class DBContext: DbContext
     {
-        private const string connectionString = "Server=localhost,1401;Database=BankingApp;User= sa;Password=omsairam@1234;";
+        private const string connectionString = "Server=localhost,1401;Database=BankingApp;User= sa;Password=;";
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
